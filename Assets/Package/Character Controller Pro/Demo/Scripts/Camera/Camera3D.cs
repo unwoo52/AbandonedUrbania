@@ -31,6 +31,7 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         [SerializeField]
         Vector3 offsetFromHead = Vector3.zero;
+        public Vector3 OffsetFromHead { get { return offsetFromHead; } set { offsetFromHead = value; } }
 
         [Tooltip("The interpolation speed used when the height of the character changes.")]
         [SerializeField]
@@ -215,7 +216,6 @@ namespace Lightbug.CharacterControllerPro.Demo
 
             lerpedHeight = characterActor.BodySize.y;
         }
-
 
         void Update()
         {
