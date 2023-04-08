@@ -336,6 +336,14 @@ MonoBehaviour:
   CenterPos: 0.001
   MinMax: 50
   SensitivityMouseAim: 0.1
+  ZoomMaterial: {fileID: 2100000, guid: a7e4fcdf1e6108247a0b8b65490a78d4, type: 2}
+  dotsiteSize: 0
+  ZoomSize: 0
+  zoomdefault: 0.5
+  DotsiteMinMax: {x: 0.5, y: 1.5}
+  ZoomAreaMinMax: {x: 0.02, y: 0.5}
+  ZoomMinMax: {x: 0, y: 1}
+  ZoomSpeed: 0.001
 --- !u!4 &218522402
 Transform:
   m_ObjectHideFlags: 0
