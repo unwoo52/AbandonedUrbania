@@ -1,7 +1,4 @@
-using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 
