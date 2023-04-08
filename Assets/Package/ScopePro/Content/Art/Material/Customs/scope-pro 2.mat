@@ -88,10 +88,10 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_0424c9a8ddce4ccdbf3d5f8554d8f20e: 0.94
-    - Vector1_0bb2c494708d4e73aed6ec3922b741ac: 0.61
-    - Vector1_3b802a5540e846d4a53a0d6005786cf0: 1.147
-    - Vector1_4abd5c557bba4b8fa1cf9a49390e8d46: 0.8
-    - Vector1_5da8ee3542eb4d3695e8727ffd19ec6f: -0.344
+    - Vector1_0bb2c494708d4e73aed6ec3922b741ac: 1.458
+    - Vector1_3b802a5540e846d4a53a0d6005786cf0: 1.2
+    - Vector1_4abd5c557bba4b8fa1cf9a49390e8d46: 1.47
+    - Vector1_5da8ee3542eb4d3695e8727ffd19ec6f: -0.302
     - Vector1_6e8ddb266980421a85931d26cc58bae0: 1.01
     - Vector1_81e10acd6d7d454b97cbcfbc1a6524b7: 0.5
     - _AppertureBasedDistance: 0
@@ -116,7 +116,7 @@ Material:
     - _QueueOffset: 0
     - _RedDotDist: 2
     - _RedDotSize: 0
-    - _RenderSize: 0.5
+    - _RenderSize: 0.03
     - _ReticleSize: 1.2
     - _ReticleSizeBDistance: 0
     - _ScopeApperture: -0.743

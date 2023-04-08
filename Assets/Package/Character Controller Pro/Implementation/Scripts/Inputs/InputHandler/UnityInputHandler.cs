@@ -76,7 +76,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
 
             try
             {
-                output = new Vector2(Input.GetAxis(vector2Action.x), Input.GetAxis(vector2Action.y));
+                output = new Vector2(Input.GetAxis(vector2Action.x), Input.GetAxis(vector2Action.y)); //vector2(Input.GetAxis("camera X"),Input.GetAxis("Camera Y"))
             }
             catch (System.Exception)
             {

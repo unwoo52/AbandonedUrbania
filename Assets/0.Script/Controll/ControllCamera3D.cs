@@ -31,10 +31,7 @@ namespace Urban_KimHyeonWoo
         }
         private void Update()
         {
-            if (Input.GetMouseButtonDown(1))
-            {
-                ChangeView();
-            }
+            //if (Input.GetMouseButtonDown(1)) ChangeView();
         }
 
         void ChangeView()
