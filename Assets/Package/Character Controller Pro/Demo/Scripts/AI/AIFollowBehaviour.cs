@@ -12,6 +12,7 @@ namespace Lightbug.CharacterControllerPro.Demo
     [AddComponentMenu("Character Controller Pro/Demo/Character/AI/Follow Behaviour")]
     public class AIFollowBehaviour : CharacterAIBehaviour
     {
+        public bool IsTrackingState = false;
 
         [Tooltip("The target transform used by the follow behaviour.")]
         [SerializeField]
@@ -83,9 +84,31 @@ namespace Lightbug.CharacterControllerPro.Demo
             if (followTarget == null)
                 return;
 
+            if (!IsTrackingState)
+            {
+                characterActions.Reset();
+                return;
+            }
+
             characterActions.Reset();
 
+
+
+
             NavMesh.CalculatePath(transform.position, followTarget.position, NavMesh.AllAreas, navMeshPath);
+
+            if (navMeshPath.status == NavMeshPathStatus.PathInvalid)
+            {
+                RaycastHit hitInfo;
+                if (Physics.Raycast(followTarget.position, Vector3.down, out hitInfo, Mathf.Infinity, LayerMask.GetMask("Hitable")))
+                {
+                    NavMesh.CalculatePath(transform.position, hitInfo.point, NavMesh.AllAreas, navMeshPath);
+                }
+                else
+                {
+                    return;
+                }
+            }
 
             if (navMeshPath.corners.Length < 2)
                 return;

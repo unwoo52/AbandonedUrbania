@@ -132,7 +132,7 @@ Material:
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SoftParticlesEnabled: 1
-    - _SoftParticlesFarFadeDistance: 14.92
+    - _SoftParticlesFarFadeDistance: 42.8
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5
@@ -140,11 +140,11 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.5764706, g: 0.5803922, b: 0.5568628, a: 0.36862746}
+    - _BaseColor: {r: 0.31412423, g: 0.33845904, b: 0.3679245, a: 1}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.57647055, g: 0.5803921, b: 0.5568628, a: 0.36862746}
+    - _Color: {r: 0.3141242, g: 0.338459, b: 0.36792448, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _SoftParticleFadeParams: {r: 0, g: 0.06702413, b: 0, a: 0}
+    - _SoftParticleFadeParams: {r: 0, g: 0.023364486, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

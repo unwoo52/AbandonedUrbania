@@ -133,7 +133,6 @@ namespace Lightbug.CharacterControllerPro.Demo
             if (!IsValidLedge(CharacterActor.Position))
                 return false;
 
-
             return true;
         }
 
@@ -268,7 +267,6 @@ namespace Lightbug.CharacterControllerPro.Demo
         {
             if (!CharacterActor.WallCollision)
                 return false;
-
             DetectLedge(
                 characterPosition,
                 out leftHitInfo,

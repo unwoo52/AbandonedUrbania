@@ -8,16 +8,20 @@ TagManager:
   - Mud
   - Grass
   - Boost
+  - WallSlide
+  - Water
+  - Ledge
+  - Honey
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Hitable
   - Water
   - UI
   - 
   - 
-  - 
+  - upable
   - 
   - 
   - 

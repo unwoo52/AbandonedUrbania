@@ -15,6 +15,10 @@ namespace Urban_KimHyeonWoo
         bool isCloseViewState = false;
         Vector3 OriginViewOffsetValue;
         [SerializeField] Vector3 CloseViewOffsetValue;
+        [SerializeField] Animator animator;
+        [SerializeField] GameObject Weapon;
+        [SerializeField] GameObject HandHip;
+        [SerializeField] GameObject HudeHip;
         private void Start()
         {
             if (cam == null)
@@ -25,6 +29,8 @@ namespace Urban_KimHyeonWoo
 
             OriginViewOffsetValue = cam.OffsetFromHead;
             OriginZoomMinMax = new Vector2(cam.minZoom, cam.maxZoom);
+
+            UnCloseToPlayer();
         }
         private void Update()
         {
@@ -44,18 +50,38 @@ namespace Urban_KimHyeonWoo
 
             if (isCloseViewState)
             {
-                cam.OffsetFromHead = OriginViewOffsetValue;
-                cam.minZoom = OriginZoomMinMax.x;
-                cam.maxZoom = OriginZoomMinMax.y;
-                isCloseViewState = false;
+                UnCloseToPlayer();
             }
             else
             {
-                cam.OffsetFromHead = CloseViewOffsetValue;
-                cam.minZoom = CloseZoomMinMax.x;
-                cam.maxZoom = CloseZoomMinMax.y;
-                isCloseViewState = true;
+                CloseToPlayer();
             }
+        }
+
+        void CloseToPlayer()
+        {
+            cam.OffsetFromHead = CloseViewOffsetValue;
+            cam.minZoom = CloseZoomMinMax.x;
+            cam.maxZoom = CloseZoomMinMax.y;
+            isCloseViewState = true;
+            animator.SetLayerWeight(1, 0.33f);
+            animator.SetFloat("State_Wepon", 1);
+            Weapon.transform.SetParent(HandHip.transform, false);
+            Weapon.transform.localPosition = Vector3.zero;
+            Weapon.transform.localRotation = Quaternion.identity;
+        }
+
+        void UnCloseToPlayer()
+        {
+            cam.OffsetFromHead = OriginViewOffsetValue;
+            cam.minZoom = OriginZoomMinMax.x;
+            cam.maxZoom = OriginZoomMinMax.y;
+            isCloseViewState = false;
+            animator.SetLayerWeight(1, 0);
+            animator.SetFloat("State_Wepon", 0);
+            Weapon.transform.SetParent(HudeHip.transform, false);
+            Weapon.transform.localPosition = Vector3.zero;
+            Weapon.transform.localRotation = Quaternion.identity;
         }
     }
 }
