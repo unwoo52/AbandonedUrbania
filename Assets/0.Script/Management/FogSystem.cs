@@ -48,55 +48,14 @@ public class FogSystem : MonoBehaviour
             float t = timer / fogTime;
 
             // Set Lighting++
-            UnityEngine.RenderSettings.ambientIntensity = lightIntensityMultiplier.Evaluate(t);
-
-            UnityEngine.RenderSettings.reflectionIntensity = ReflectionIntensityMultiplierMultiplier.Evaluate(t);
-
-            //set direction light++
-            directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(t);
-            float flot = directionalLightCurve.Evaluate(t);
-            directionalLight.color = new Color(flot, flot, flot, 1);
-
-
-
-            // Set fog alpha
-            Color fogColor = fogMaterial.color;
-            fogColor.a = fogAlphaCurve.Evaluate(t);
-            fogMaterial.color = fogColor;
-
-            // Set window smoothness
-            float windowSmoothness = windowSmoothnessCurve.Evaluate(t);
-            windowMaterial.SetFloat("_Smoothness", windowSmoothness);
-
-            // Set ground fog alpha
-            Color groundFogColor = groundFogMeterial.color;
-            groundFogColor.a = groundFogAlphaCurve.Evaluate(t);
-            groundFogMeterial.color = groundFogColor;
+            SetValue(t);
 
             timer += Time.deltaTime;
             yield return null;
         }
 
 
-        UnityEngine.RenderSettings.reflectionIntensity = ReflectionIntensityMultiplierMultiplier.Evaluate(1);
-
-        //set direction light++
-        directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(1);
-        float value = directionalLightCurve.Evaluate(1);
-        directionalLight.color = new Color(value, value, value, 1);
-
-        // Set final values
-        Color fogFinalColor = fogMaterial.color;
-        fogFinalColor.a = fogAlphaCurve.Evaluate(1f);
-        fogMaterial.color = fogFinalColor;
-
-        windowMaterial.SetFloat("_Smoothness", windowSmoothnessCurve.Evaluate(1f));
-
-        Color groundFogFinalColor = groundFogMeterial.color;
-        groundFogFinalColor.a = groundFogAlphaCurve.Evaluate(1f);
-        groundFogMeterial.color = groundFogFinalColor;
-
-        UnityEngine.RenderSettings.ambientIntensity = lightIntensityMultiplier.Evaluate(1);
+        SetValue(1);
     }
 
     public void ResetFog()
@@ -104,25 +63,7 @@ public class FogSystem : MonoBehaviour
         if (ClearFog != null) StopCoroutine(ClearFog);
 
 
-        UnityEngine.RenderSettings.reflectionIntensity = ReflectionIntensityMultiplierMultiplier.Evaluate(0);
-
-        //set direction light++
-        directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(0);
-        float value = directionalLightCurve.Evaluate(0);
-        directionalLight.color = new Color(value, value, value, 1);
-
-
-        Color fogColor = fogMaterial.color;
-        fogColor.a = fogAlphaCurve.Evaluate(0f);
-        fogMaterial.color = fogColor;
-
-        windowMaterial.SetFloat("_Smoothness", windowSmoothnessCurve.Evaluate(0f));
-
-        UnityEngine.RenderSettings.ambientIntensity = lightIntensityMultiplier.Evaluate(0);
-
-        Color groundFogColor = groundFogMeterial.color;
-        groundFogColor.a = groundFogAlphaCurve.Evaluate(0f);
-        groundFogMeterial.color = groundFogColor;
+        SetValue(0);
     }
     void SetValue(float v)
     {
@@ -161,9 +102,21 @@ public class FogSystem : MonoBehaviour
 
     private void Update()
     {
-        if(Player.transform.position.y > CeilingHeightLimit)
+    }
+    [Header("Follow Player Speed")]
+    [SerializeField] private float followSpeed = 10f;
+
+    private void FixedUpdate()
+    {
+        if (Player == null) return;
+
+        Vector3 newPos = Vector3.Lerp(transform.position, Player.transform.position, Time.fixedDeltaTime * followSpeed);
+        transform.position = new Vector3(newPos.x, 0, newPos.z);
+
+
+        if (Player.transform.position.y > CeilingHeightLimit)
         {
-            // -hp and effect
+            Debug.Log("High!!");
         }
     }
 }
