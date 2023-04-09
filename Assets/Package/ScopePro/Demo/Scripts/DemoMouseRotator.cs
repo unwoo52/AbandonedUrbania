@@ -23,8 +23,8 @@ namespace Lovatto.Demo.ScopePro
 
         //default size
         Vector3 defaultRot;
-        Vector3 camOriginRot;
-        Vector3 CenterOriginPos;
+        Vector3 defaultcamRot;
+        Vector3 defaultCenterPos;
 
         float zoomValue = 0.5f; // 0 ~ 1
         Vector2 ZoomMinMax = new Vector2(0, 1);
@@ -32,9 +32,9 @@ namespace Lovatto.Demo.ScopePro
 
         private void Awake()
         {
-            defaultRot = transform.eulerAngles;
-            camOriginRot = m_Camera.transform.eulerAngles;
-            CenterOriginPos = ScopeFocus.transform.position;
+            defaultRot = transform.localEulerAngles;
+            defaultcamRot = m_Camera.transform.localEulerAngles;
+            defaultCenterPos = ScopeFocus.transform.localPosition;
         }
 
         private void Start()
@@ -120,13 +120,13 @@ namespace Lovatto.Demo.ScopePro
             euler.y = VerticalMouseInput;
 
             //add Scope Angle
-            ScopeFocus.transform.eulerAngles = defaultRot + euler * CenterAngle;
+            ScopeFocus.transform.localEulerAngles = defaultRot + euler * CenterAngle;
             //add Cam Angle
-            m_Camera.transform.eulerAngles = (camOriginRot + euler) * CameraAngle;
+            m_Camera.transform.localEulerAngles = (defaultcamRot + euler) * CameraAngle;
 
             //add Cam Transform
             Vector3 newver = new Vector3(euler.y, -euler.x, 0);
-            ScopeFocus.transform.position = (CenterOriginPos + newver * CenterPos);
+            ScopeFocus.transform.localPosition = (defaultCenterPos + newver * CenterPos);
         }
     }
 }
