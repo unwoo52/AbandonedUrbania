@@ -325,25 +325,79 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cc37e85a0138ed458ea8abd2c37ae9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VerticalMinMax: {x: -10, y: 10}
-  HorizontalMinMax: {x: -10, y: 10}
-  RotCenter: {fileID: 767393415}
+  ScopeFocus: {fileID: 767393415}
   m_Camera: {fileID: 1525071333}
-  testA: 0
-  testB: 0
+  m_CameraFocus: {fileID: 1276893790}
+  ZoomMaterial: {fileID: 2100000, guid: a7e4fcdf1e6108247a0b8b65490a78d4, type: 2}
   CameraAngle: 0.2
   CenterAngle: 0.5
   CenterPos: 0.001
   MinMax: 50
-  SensitivityMouseAim: 0.1
-  ZoomMaterial: {fileID: 2100000, guid: a7e4fcdf1e6108247a0b8b65490a78d4, type: 2}
-  dotsiteSize: 0
-  ZoomSize: 0
-  zoomdefault: 0.5
   DotsiteMinMax: {x: 0.5, y: 1.5}
-  ZoomAreaMinMax: {x: 0.02, y: 0.5}
-  ZoomMinMax: {x: 0, y: 1}
-  ZoomSpeed: 0.001
+  ZoomAreaMinMax: {x: 1, y: 10}
+  CamFieldofView: {x: 21, y: 29}
+  aimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.34999084
+      inSlope: 0.6200104
+      outSlope: 0.6200104
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.9700012
+      inSlope: 0.6200104
+      outSlope: 0.6200104
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZoomWheelSpeed: 0.827
+  zoomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00030136108
+      value: 0.07456303
+      inSlope: 0.047430024
+      outSlope: 0.047430024
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.40531793
+    - serializedVersion: 3
+      time: 0.6952745
+      value: 0.19094713
+      inSlope: 0.41999334
+      outSlope: 0.41999334
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26541457
+      outWeight: 0.49392796
+    - serializedVersion: 3
+      time: 1
+      value: 1.0032177
+      inSlope: 4.939679
+      outSlope: 4.939679
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.068387814
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  zoomSpeed: 0
+  SensitivityMouseAim: 0.1
+  HorizonMouseInput: 0
+  VerticalMouseInput: 0
 --- !u!4 &218522402
 Transform:
   m_ObjectHideFlags: 0
@@ -390,6 +444,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1261829628}
   - {fileID: 1754271316}
   - {fileID: 2060175956}
   m_Father: {fileID: 767393416}
@@ -3159,6 +3214,89 @@ Transform:
   m_Father: {fileID: 2062573367514023394}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1261829627
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1261829628}
+  - component: {fileID: 1261829630}
+  - component: {fileID: 1261829629}
+  m_Layer: 0
+  m_Name: Rifle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1261829628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261829627}
+  m_LocalRotation: {x: -0.7083398, y: 0, z: 0, w: 0.70587164}
+  m_LocalPosition: {x: 0, y: -0.231, z: 0}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 225256563}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: -90.2, y: 0, z: 0}
+--- !u!23 &1261829629
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261829627}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 8b91047244ae6504f95c7c160c2ae5e1, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1261829630
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1261829627}
+  m_Mesh: {fileID: 4300000, guid: b5742c35cad19b945bc129c719875b2d, type: 3}
 --- !u!1 &1274333653
 GameObject:
   m_ObjectHideFlags: 0
@@ -4030,7 +4168,7 @@ Camera:
   m_FOVAxisMode: 0
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 50
+  m_FocalLength: 54.1285
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -4042,7 +4180,7 @@ Camera:
   field of view: 25
   orthographic: 0
   orthographic size: 5
-  m_Depth: 2
+  m_Depth: 5
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4423,7 +4561,7 @@ GameObject:
   - component: {fileID: 1754271318}
   - component: {fileID: 1754271317}
   m_Layer: 0
-  m_Name: default
+  m_Name: Scope
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4442,7 +4580,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 225256563}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1754271317
 MeshRenderer:
@@ -4464,7 +4602,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 139ca4bec1ff2154aa06aceea518b0af, type: 2}
+  - {fileID: 2100000, guid: 944463113244f4bf8b05c1757cd838a4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5558,7 +5696,7 @@ Transform:
   - {fileID: 1667288861}
   - {fileID: 1276893788}
   m_Father: {fileID: 225256563}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2065036492
 GameObject:
