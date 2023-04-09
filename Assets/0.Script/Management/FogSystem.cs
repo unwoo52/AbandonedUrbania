@@ -59,7 +59,7 @@ namespace Urban_KimHyeonWoo
 
             SetValue(1);
         }
-
+        [ContextMenu("Reset")]
         public void ResetFog()
         {
             if (ClearFog != null) StopCoroutine(ClearFog);
@@ -69,16 +69,12 @@ namespace Urban_KimHyeonWoo
         }
         void SetValue(float v)
         {
+
             //light reflectionIntensity
             UnityEngine.RenderSettings.reflectionIntensity = ReflectionIntensityMultiplierMultiplier.Evaluate(v);
             //light Intensity
             UnityEngine.RenderSettings.ambientIntensity = lightIntensityMultiplier.Evaluate(v);
 
-            //direction light shadow
-            directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(v);
-            //direction light color
-            float flo = directionalLightCurve.Evaluate(v);
-            directionalLight.color = new Color(flo, flo, flo, 1);
 
 
             //window
@@ -93,9 +89,25 @@ namespace Urban_KimHyeonWoo
             Color groundFogColor = groundFogMeterial.color;
             groundFogColor.a = groundFogAlphaCurve.Evaluate(v);
             groundFogMeterial.color = groundFogColor;
+            try
+            {
+
+
+                //direction light shadow
+                directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(v);
+                //direction light color
+                float flo = directionalLightCurve.Evaluate(v);
+                directionalLight.color = new Color(flo, flo, flo, 1);
+            }
+            catch
+            {
+
+            }
         }
 
         Coroutine ClearFog;
+
+        [ContextMenu("Clear Fog")]
         public void SkyMakeClear()
         {
             if (ClearFog != null) StopCoroutine(ClearFog);
