@@ -227,20 +227,26 @@ namespace Lightbug.CharacterControllerPro.Demo
 
             Vector2 cameraAxes = inputHandlerSettings.InputHandler.GetVector2(axes); //getVector2("camera")
 
-            if (updatePitch)
-                deltaPitch = -cameraAxes.y;
 
-            if (updateYaw)
-                deltaYaw = cameraAxes.x;
-
-            if (updateZoom)
-                deltaZoom = -inputHandlerSettings.InputHandler.GetFloat(zoomAxis);
+            if (cameraMode != CameraMode.FirstPerson)
+            {
+                if (updatePitch)
+                    deltaPitch = -cameraAxes.y;
+                if (updateYaw)
+                    deltaYaw = cameraAxes.x;
+                if (updateZoom)
+                    deltaZoom = -inputHandlerSettings.InputHandler.GetFloat(zoomAxis);
+            }
+            else
+            {
+                deltaPitch = 0;
+                deltaYaw = 0;
+            }
 
             // An input axis value (e.g. mouse x) usually gets accumulated over time. So, the higher the frame rate the smaller the value returned.
             // In order to prevent inconsistencies due to frame rate changes, the camera movement uses a fixed delta time, instead of the old regular
             // delta time.
             float dt = Time.fixedDeltaTime;
-
             UpdateCamera(dt);
         }
 

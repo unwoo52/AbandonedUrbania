@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Lovatto.Demo.ScopePro
+namespace Urban_KimHyeonWoo
 {
     public class DemoManager : MonoBehaviour
     {

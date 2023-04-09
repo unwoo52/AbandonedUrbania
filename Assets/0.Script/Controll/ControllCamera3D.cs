@@ -16,6 +16,7 @@ namespace Urban_KimHyeonWoo
         [SerializeField] GameObject Weapon;
         [SerializeField] GameObject HandHip;
         [SerializeField] GameObject HudeHip;
+        [SerializeField] GameObject Sniper;
         private void Start()
         {
             if (cam == null)
@@ -28,10 +29,18 @@ namespace Urban_KimHyeonWoo
             OriginZoomMinMax = new Vector2(cam.minZoom, cam.maxZoom);
 
             UnCloseToPlayer();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
         private void Update()
         {
             //if (Input.GetMouseButtonDown(1)) ChangeView();
+            if (Input.GetButtonDown("EnterRunView"))
+            {
+                cam.ToggleCameraMode();
+                Sniper.SetActive(!Sniper.activeSelf);
+            }
         }
 
         void ChangeView()

@@ -1,13 +1,20 @@
 ﻿using Lightbug.CharacterControllerPro.Implementation;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using Urban_KimHyeonWoo;
 using static UnityEditor.Rendering.CameraUI;
 
 namespace Lovatto.Demo.ScopePro
 {
     public class DemoMouseRotator : MonoBehaviour
     {
+        //Key InPut Field
+        float MousX;
+        float MousY;
+        float MouseWheel;
+        bool Fire1;
         /// <summary>
         /// scope focus : 스코프의 로테이션을 입체적으로 만들기 위한 부모오브젝트 원점.
         /// 스코프와 가까울수록 스코프는 제자리에서 회전하고,
@@ -26,28 +33,22 @@ namespace Lovatto.Demo.ScopePro
         Vector3 defaultcamRot;
         Vector3 defaultCenterPos;
 
-        float zoomValue = 0.5f; // 0 ~ 1
-        Vector2 ZoomMinMax = new Vector2(0, 1);
 
-
+        
         private void Awake()
         {
             defaultRot = transform.localEulerAngles;
             defaultcamRot = m_Camera.transform.localEulerAngles;
             defaultCenterPos = ScopeFocus.transform.localPosition;
         }
-
-        private void Start()
+        
+        private void OnEnable()
         {
-            TESTmakeMouseUnvisible();
+            HorizonMouseInput = 0;
+            VerticalMouseInput = 0;
+            zoomValue = 0.5f;
         }
-        void TESTmakeMouseUnvisible()
-        {
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-
+        
         [Header("스코프 움직임 조절")]
         [Tooltip("값이 클수록 마우스를 움직일 때 카메라가 크게 회전합니다.")]
         public float CameraAngle;
@@ -80,18 +81,66 @@ namespace Lovatto.Demo.ScopePro
         [Header("모니터링")]
         [Tooltip("줌 속도입니다.")]
         public float zoomSpeed;
+
         [Tooltip("에임의 감도입니다.")]
         public float SensitivityMouseAim;
 
+        [Tooltip("줌 수치입니다.")]
+        [SerializeField] float zoomValue = 0.5f; // 0 ~ 1
+        Vector2 ZoomMinMax = new Vector2(0, 1);
 
         //default mouse input field
         public float HorizonMouseInput = 0;
         public float VerticalMouseInput = 0;
         private void Update()
         {
+            GetInput();
+            Scope(MousX, MousY, MouseWheel);
+            if (Fire1) Fire();
+        }
+        [Header("bullet")]
+        [SerializeField] GameObject Bullet;
+        [SerializeField] Transform muzzleTransform;
+        [SerializeField] float MaxShotDistance = 1000f;
+        [SerializeField] LayerMask hitableMask;
+        void Fire()
+        {
+            Ray ray = m_CameraFocus.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
+            Vector3 direction;
+
+            if (Physics.Raycast(ray, out RaycastHit hit, MaxShotDistance, hitableMask))
+            {
+                Debug.Log($"hitObject ::: {hit.transform.name}");
+
+                Debug.DrawRay(m_CameraFocus.transform.position, hit.point - m_CameraFocus.transform.position, Color.red, 3f);
+
+                direction = (hit.point - muzzleTransform.transform.position).normalized;
+            }
+            else
+            {
+                direction = (ray.GetPoint(MaxShotDistance) - muzzleTransform.transform.position).normalized;
+            }
+
+            
+            GameObject bullet = Instantiate(Bullet);
+            bullet.transform.position = muzzleTransform.position;
+            bullet.transform.rotation = Quaternion.LookRotation(direction);
+        }
+
+
+        void GetInput()
+        {
+            MouseWheel = Input.GetAxis("Camera Zoom");
+            MousX = Input.GetAxis("Camera X");
+            MousY = Input.GetAxis("Camera Y");
+            Fire1 = Input.GetButtonDown("Fire1");
+        }
+
+        void Scope(float mousex, float mousey, float mouseWheel)
+        {
             //get wheelup value
             zoomSpeed = zoomCurve.Evaluate(zoomValue);
-            float v = Input.GetAxis("Camera Zoom") * zoomSpeed * 0.02f * ZoomWheelSpeed;
+            float v = mouseWheel * zoomSpeed * 0.02f * ZoomWheelSpeed;
             zoomValue = Mathf.Clamp(zoomValue - v, ZoomMinMax.x, ZoomMinMax.y);
 
 
@@ -110,7 +159,7 @@ namespace Lovatto.Demo.ScopePro
 
 
             //add camPos camAngle scopeAngle
-            Vector2 output = new Vector2(Input.GetAxis("Camera X"), Input.GetAxis("Camera Y")) * SensitivityMouseAim;
+            Vector2 output = new Vector2(mousex, mousey) * SensitivityMouseAim;
             Vector3 euler = transform.eulerAngles;
 
             HorizonMouseInput = Mathf.Clamp(HorizonMouseInput + output.y, -MinMax, MinMax);
