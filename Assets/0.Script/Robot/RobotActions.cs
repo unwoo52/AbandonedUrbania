@@ -5,9 +5,6 @@ namespace Urban_KimHyeonWoo
 {
     public class RobotActions : MonoBehaviour
     {
-        [SerializeField] private GameObject robotGun;
-        [SerializeField] private GameObject robotEye;
-
         //shake
         [Header("shake")]
         [SerializeField] private float shakeFrequency = 0.02f;
@@ -41,50 +38,73 @@ namespace Urban_KimHyeonWoo
 
         private Coroutine shakeCoroutine;
 
+        [SerializeField] RobotComponenetManager robotComponenetManager;
 
         private void Start()
         {
             waitForSeconds = new WaitForSeconds(shakeFrequency);
             // 코루틴을 시작합니다.
             shakeCoroutine = StartCoroutine(ShakeRobotBody());
+            if (robotComponenetManager == null) robotComponenetManager = GetComponent<RobotComponenetManager>();
+        }
+        public void LookTarget_ControllWithInputManager(float horizonInput, float verticalInput, float controllSpeed)
+        {
+            //현재 로봇이 바라보고 있는 각도 구하기
+            Quaternion currentRotation = robotComponenetManager.RobotBody.rotation;
+
+            //currentRotation에 horizonInput과 verticalInput더하기
+            Quaternion targetRotation = Quaternion.Euler(currentRotation.eulerAngles + new Vector3(verticalInput * controllSpeed, horizonInput * controllSpeed, 0f));
+
+            //갱신된 currentRotation를 바라보게 하기
+            lookAngle(targetRotation);
+        }
+        public void lookAngle(Quaternion rot)
+        {
+            Vector3 direction = rot * Vector3.forward;
+            Vector3 GunVec = robotComponenetManager.RobotBody.position;
+
+            float distance = new Vector3(direction.x, 0f, direction.z).magnitude;
+            distance = rot.eulerAngles.y < 180f ? distance : -distance;
+            float high = Mathf.Abs(direction.y);
+
+            float targetAngleX = high >= 0 ? Mathf.Atan(high / distance) * Mathf.Rad2Deg : (Mathf.Atan(high / distance) * Mathf.Rad2Deg);
+            float targetAngleY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+
+            robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);
         }
         public void looktarget(Vector3 pos)
         {
-            Vector3 GunVec = robotGun.transform.position;
+            Vector3 GunVec = robotComponenetManager.RobotBody.position;
             Vector3 direction = pos - GunVec;
 
             float distance = new Vector3(direction.x, 0f, direction.z).magnitude;
             distance = pos.y < GunVec.y ? -distance : distance;
             float high = Mathf.Abs(direction.y);
 
-            float targetAngleX = high >= 0 ? Mathf.Atan(high / distance) * Mathf.Rad2Deg : (Mathf.Atan(high / distance) * Mathf.Rad2Deg);
+            float targetAngleX = Mathf.Atan(high / distance) * Mathf.Rad2Deg;
             float targetAngleY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
 
-            //if (Mathf.Abs(targetAngleY) <= 90)
-            if (true)
-            {
-                robotGun.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);
-            }
+            robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);            
         }
         [ContextMenu("LookRandom")]
         public void RandomLook()
         {
             // 로봇을 기준으로 랜덤한 방향으로 10만큼 떨어진 거리의 포지션(lookposition)을 얻어옵니다.
-            Vector3 lookposition = robotGun.transform.position + Random.insideUnitSphere * 1000f;
-            Debug.DrawRay(robotGun.transform.position, robotGun.transform.position - lookposition, Color.red, 5f);
+            Vector3 lookposition = robotComponenetManager.RobotBody.position + Random.insideUnitSphere * 1000f;
+            Debug.DrawRay(robotComponenetManager.RobotBody.position, robotComponenetManager.RobotBody.position - lookposition, Color.red, 5f);
             // 얻은 포지션을 RobotLook 함수로 전달합니다.
 
             StartCoroutine(RobotLook(lookposition));
         }
-
+        [SerializeField] bool shakebody = true;
         IEnumerator ShakeRobotBody()
         {
-            while (true)
+            while (shakebody)
             {
                 Vector3 newPosition = Random.insideUnitSphere * shakeAmplitude;
                 if (RecoilCor != null) newPosition += recoilvector;
-                robotGun.transform.localPosition = newPosition;
+                robotComponenetManager.RobotBody.localPosition = newPosition;
                 yield return waitForSeconds;
             }
         }
@@ -94,7 +114,7 @@ namespace Urban_KimHyeonWoo
         {
 
             // 덜컹거리는 움직임
-            Quaternion originRotation = robotGun.transform.rotation;
+            Quaternion originRotation = robotComponenetManager.RobotBody.rotation;
             float elapsed = 0f;
             while (elapsed < lookDuration)
             {
@@ -102,28 +122,28 @@ namespace Urban_KimHyeonWoo
                 float t = elapsed / lookDuration;
                 float angle1 = Mathf.Lerp(jitterAngle, 0f, t);
                 float speed = Mathf.Lerp(maxAngleSpeed, minAngleSpeed, lookCurve.Evaluate(t));
-                robotGun.transform.rotation = originRotation * Quaternion.AngleAxis(angle1 * Mathf.Sin(speed * t), Vector3.right);
+                robotComponenetManager.RobotBody.rotation = originRotation * Quaternion.AngleAxis(angle1 * Mathf.Sin(speed * t), Vector3.right);
                 yield return null;
             }
 
 
-            Vector3 targetDirection = targetGameObject.position - robotEye.transform.position;
+            Vector3 targetDirection = targetGameObject.position - robotComponenetManager.RobotEye.position;
             float targetAngleY = Mathf.Atan2(targetDirection.x, targetDirection.z) * Mathf.Rad2Deg;
             float targetAngleX = Mathf.Atan2(targetDirection.y, targetDirection.z) * Mathf.Rad2Deg;
 
-            Quaternion fromRotation = robotGun.transform.rotation;
+            Quaternion fromRotation = robotComponenetManager.RobotBody.rotation;
             Quaternion toRotation = Quaternion.Euler(-targetAngleX, targetAngleY, -90f);
 
             float elapsedTime = 0f;
 
             while (elapsedTime < rotateTime)
             {
-                robotGun.transform.rotation = Quaternion.Slerp(fromRotation, toRotation, (elapsedTime / rotateTime));
+                robotComponenetManager.RobotBody.rotation = Quaternion.Slerp(fromRotation, toRotation, (elapsedTime / rotateTime));
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
-            robotGun.transform.rotation = toRotation;
+            robotComponenetManager.RobotBody.rotation = toRotation;
 
 
 
@@ -137,7 +157,7 @@ namespace Urban_KimHyeonWoo
             {
                 // recoil backward
                 float curveValue = recoilCurve.Evaluate(elapsedTime / recoilTime);
-                recoilvector = robotGun.transform.forward * curveValue * recoilPower;
+                recoilvector = robotComponenetManager.RobotBody.forward * curveValue * recoilPower;
 
                 elapsedTime += Time.deltaTime;
                 yield return null;

@@ -28,6 +28,7 @@ namespace Lightbug.CharacterControllerPro.Demo
         [Tooltip("Select the graphics root object as your target, the one containing all the meshes, sprites, animated models, etc. \n\nImportant: This will be the considered as the actual target (visual element).")]
         [SerializeField]
         Transform targetTransform = null;
+        public Transform TargetTransform { get { return targetTransform; } set { targetTransform = value; } }
 
         [SerializeField]
         Vector3 offsetFromHead = Vector3.zero;
@@ -140,7 +141,6 @@ namespace Lightbug.CharacterControllerPro.Demo
         {
             cameraMode = cameraMode == CameraMode.FirstPerson ? CameraMode.ThirdPerson : CameraMode.FirstPerson;
         }
-
         
         
         void OnValidate()

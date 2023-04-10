@@ -5,39 +5,31 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Urban_KimHyeonWoo
 {
-    public class CharacterControll : MonoBehaviour
+    public interface IBindPlayer
+    {
+        void BindPlayer(bool setvalue);
+    }
+    public class CharacterControll : MonoBehaviour, IBindPlayer
     {
         [SerializeField] Animator animator;
         [SerializeField] float bulletMaxDistance;
         [SerializeField] Camera3D camera3D;
         [SerializeField] GameObject Scope;
         bool EnterRunView = false;
+
+        public void BindPlayer(bool setvalue)
+        {
+            Transform actionsObject = transform.Find("Actions");
+            if (actionsObject != null)
+            {
+                actionsObject.gameObject.SetActive(!setvalue);
+            }
+            else Debug.LogError("cannot find \"Actions\" Object!");
+        }
+
         void Update()
         {
-            //GetInput();
-            //InPutBehaviour();
         }
-        public void Zoom()
-        {
-            camera3D.ToggleCameraMode();
-            EnterRunView = !EnterRunView;
-            Scope.SetActive(EnterRunView);
-        }
-        void GetInput()
-        {
-            EnterRunView = Input.GetKey(KeyCode.Mouse1);
-        }
-        void InPutBehaviour()
-        {
-            EnterRun(EnterRunView);
-        }
-        void EnterRun(bool EnterRunView)
-        {
-            camera3D.cameraMode = EnterRunView ? Camera3D.CameraMode.FirstPerson : Camera3D.CameraMode.ThirdPerson;
-            Scope.SetActive(EnterRunView);
-        }
-
-
     }
 }
 

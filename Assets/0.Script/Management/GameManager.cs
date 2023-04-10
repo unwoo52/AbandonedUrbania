@@ -6,7 +6,23 @@ namespace Urban_KimHyeonWoo
 {
     public class GameManager : MonoBehaviour
     {
+        #region singleton
+        public static GameManager instance;
 
+        private void Awake()
+        {
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+        #endregion
+        public List<GameObject> Players;
 
         void Update()
         {

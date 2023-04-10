@@ -19,8 +19,8 @@ TagManager:
   - Hitable
   - Water
   - UI
-  - 
-  - 
+  - Interactable
+  - Player
   - upable
   - 
   - 
