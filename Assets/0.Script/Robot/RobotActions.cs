@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 namespace Urban_KimHyeonWoo
 {
@@ -49,15 +50,21 @@ namespace Urban_KimHyeonWoo
         }
         public void LookTarget_ControllWithInputManager(float horizonInput, float verticalInput, float controllSpeed)
         {
-            //현재 로봇이 바라보고 있는 각도 구하기
-            Quaternion currentRotation = robotComponenetManager.RobotBody.rotation;
+            Vector3 currentAngle = robotComponenetManager.RobotBody.transform.rotation.eulerAngles;
+            float newYAngle = currentAngle.y + horizonInput * controllSpeed;
 
-            //currentRotation에 horizonInput과 verticalInput더하기
-            Quaternion targetRotation = Quaternion.Euler(currentRotation.eulerAngles + new Vector3(verticalInput * controllSpeed, horizonInput * controllSpeed, 0f));
 
-            //갱신된 currentRotation를 바라보게 하기
-            lookAngle(targetRotation);
+            float newXAngle = currentAngle.x + verticalInput * controllSpeed; // -90
+            if (89 < newXAngle && newXAngle < 271) newXAngle = currentAngle.x;
+
+            Debug.Log($"{newYAngle} ::: {newXAngle}");
+            Quaternion newRotation = Quaternion.Euler(newXAngle, newYAngle, 0f + 90);
+
+
+            robotComponenetManager.RobotBody.transform.rotation = newRotation;
+            //lookAngle(newRotation);
         }
+
         public void lookAngle(Quaternion rot)
         {
             Vector3 direction = rot * Vector3.forward;

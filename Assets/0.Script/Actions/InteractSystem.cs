@@ -101,6 +101,7 @@ public class InteractSystem : MonoBehaviour
 
     void InputProcsee_InteractKey_Up()
     {
+        if (curInteractObject == null) return;
         if (curInteractTime >= 0) // cancel Interact.
         {
             curInteractObject.OnCancelInteract?.Invoke();
