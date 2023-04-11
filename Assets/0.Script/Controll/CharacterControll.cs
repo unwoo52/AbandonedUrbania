@@ -15,7 +15,6 @@ namespace Urban_KimHyeonWoo
         [SerializeField] float bulletMaxDistance;
         [SerializeField] Camera3D camera3D;
         [SerializeField] GameObject Scope;
-        bool EnterRunView = false;
 
         public void BindPlayer(bool setvalue)
         {

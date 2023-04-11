@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Experimental.GlobalIllumination;
 
 namespace Urban_KimHyeonWoo
 {
     public class FogSystem : MonoBehaviour
     {
+        [SerializeField] UnityEvent Callback;
+
         [Header("안개가 사라지는 시간")]
         [SerializeField]
         float fogTime = 3f;
@@ -26,7 +29,8 @@ namespace Urban_KimHyeonWoo
 
 
         [Header("Direction Light")]
-        [SerializeField] Light directionalLight;
+        [SerializeField] Light directionalLightShadow;
+        [SerializeField] Light directionalLightSun;
         [SerializeField] AnimationCurve directionalLightCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
         [SerializeField] AnimationCurve ShadowStrengthCurve = AnimationCurve.Linear(0f, 0.5f, 1f, 1f);
 
@@ -94,10 +98,12 @@ namespace Urban_KimHyeonWoo
 
 
                 //direction light shadow
-                directionalLight.shadowStrength = ShadowStrengthCurve.Evaluate(v);
+                directionalLightShadow.intensity = ShadowStrengthCurve.Evaluate(v);
+                directionalLightSun.intensity = directionalLightCurve.Evaluate(v);
+                /*
                 //direction light color
                 float flo = directionalLightCurve.Evaluate(v);
-                directionalLight.color = new Color(flo, flo, flo, 1);
+                directionalLight.color = new Color(flo, flo, flo, 1);*/
             }
             catch
             {
@@ -112,10 +118,12 @@ namespace Urban_KimHyeonWoo
         {
             if (ClearFog != null) StopCoroutine(ClearFog);
             ClearFog = StartCoroutine(LowerEnvironmentLightingIntensity());
+            Callback?.Invoke();
         }
 
-        private void Update()
+        private void Start()
         {
+            ResetFog();
         }
         [Header("Follow Player Speed")]
         [SerializeField] private float followSpeed = 10f;
