@@ -48,6 +48,10 @@ namespace Urban_KimHyeonWoo
             shakeCoroutine = StartCoroutine(ShakeRobotBody());
             if (robotComponenetManager == null) robotComponenetManager = GetComponent<RobotComponenetManager>();
         }
+        public Vector3 GetRobotLookDir()
+        {
+            return robotComponenetManager.RobotBody.transform.rotation.eulerAngles;
+        }
         public void LookTarget_ControllWithInputManager(float horizonInput, float verticalInput, float controllSpeed)
         {
             Vector3 currentAngle = robotComponenetManager.RobotBody.transform.rotation.eulerAngles;
@@ -57,7 +61,6 @@ namespace Urban_KimHyeonWoo
             float newXAngle = currentAngle.x + verticalInput * controllSpeed; // -90
             if (89 < newXAngle && newXAngle < 271) newXAngle = currentAngle.x;
 
-            Debug.Log($"{newYAngle} ::: {newXAngle}");
             Quaternion newRotation = Quaternion.Euler(newXAngle, newYAngle, 0f + 90);
 
 

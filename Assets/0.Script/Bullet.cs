@@ -1,30 +1,36 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace Urban_KimHyeonWoo
 {
+    public interface ITestDamageSystem
+    {
+        void OnDam(float dmg);
+    }
     public class Bullet : MonoBehaviour
     {
         [SerializeField] private float speed = 10f;
         [SerializeField] private LayerMask canHit;
         [SerializeField] GameObject Effect;
+        [SerializeField] float Damage;
 
 
         private void Update()
         {
-            transform.Translate(Vector3.forward * speed * Time.deltaTime);
-
             RaycastHit hitInfo;
             if (Physics.Raycast(transform.position, transform.forward, out hitInfo, speed * Time.deltaTime, canHit))
             {
                 Hit(hitInfo.transform.gameObject, hitInfo.point);
             }
+            transform.Translate(Vector3.forward * speed * Time.deltaTime);
         }
 
 
         void Hit(GameObject gameObject, Vector3 vetor3)
         {
             Instantiate(Effect, vetor3, Quaternion.identity);
+            if (gameObject.TryGetComponent(out ITestDamageSystem testDamageSystem))
+            {
+                testDamageSystem.OnDam(Damage);
+            }
             Destroy(this.gameObject);
         }
 

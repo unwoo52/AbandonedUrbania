@@ -184,8 +184,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f26f119005f7de94a91d05665becc2a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10000
+  speed: 4000
   canHit:
     serializedVersion: 2
     m_Bits: 8
-  Effect: {fileID: 6497072022067581020, guid: 36b227cb49ef0954a908c8dd592f0a80, type: 3}
+  Effect: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d, type: 3}
+  Damage: 50

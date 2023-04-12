@@ -1,32 +1,58 @@
 using Lightbug.CharacterControllerPro.Demo;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Urban_KimHyeonWoo
 {
     public class RobotBehavior : MonoBehaviour
     {
-        [SerializeField] float WeaponArrange = 100;
-
-        [Header("Tracking Player")]
         private List<GameObject> targets = new List<GameObject>();
-        public float detectionRange = 10f;  // 일정 거리
         private float detectionInterval = 1f;
         //StartCoroutine(DetectTargets());
         Coroutine DetectTargetsCorutine;
         [SerializeField] AIFollowBehaviour aIFollowBehaviour;
         RobotActions robotActions;
         robotWeaponSystem robotWeaponSystem;
+        [SerializeField] Animator animator;
+
+
+        //controlled field
+        public float WeaponInputKey;
+
+        [Header("플레이어 추적 변수")]
+        [SerializeField] float detectionRange = 50;  // 일정 거리
+        [SerializeField] float WeaponRange = 20;
+        [SerializeField] float WeaponincreaseRange = 4;
+
+        [Header("변수 모니터링")]
+        GameObject trackTarget;
+
+
+        #region MonobehaviorCallbacks
+        private void Start()
+        {
+            robotActions = GetComponent<RobotActions>();
+            robotWeaponSystem = GetComponent<robotWeaponSystem>();
+        }
+        private void Update()
+        {
+            StateProcess();
+        }
+        #endregion
+
+
+        //================
+
 
         #region FSM
         public enum RobotState
         {
-            Sleep, Wait, Tracking, InBattle, OnControll, Destroy
+            Sleep, WakeUp, SearchingTarget, Tracking, InBattle, OnControll, Destroy
         }
-        public RobotState currentState = RobotState.Sleep;
-        void ChangeFSM(RobotState robotState)
+        [SerializeField] RobotState currentState = RobotState.Sleep;
+        public RobotState CurrentState => currentState;
+        public void ChangeFSM(RobotState robotState)
         {
             if(currentState == robotState) { return; }
 
@@ -37,7 +63,8 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.Wait:
+                case RobotState.SearchingTarget:
+                    StopCoroutine(DetectTargetsCorutine);
                     // Do wait behavior
                     break;
 
@@ -50,6 +77,12 @@ namespace Urban_KimHyeonWoo
                     break;
 
                 case RobotState.OnControll:
+                    //임시 코드. 노트북 컨트롤로 실행한 로봇이 AnimEvent로 SearchingTarget전환되는것을 막기 위함
+                    //현재 상태는 OnControll이고, 바꿀 상태가 SearchingTarget이면 즉시 return
+                    if (robotState == RobotState.SearchingTarget)
+                    {
+                        return;
+                    }
                     // Do on-control behavior
                     break;
 
@@ -68,23 +101,46 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.Wait:
-                    StartCoroutine(DetectTargets());
+                case RobotState.WakeUp:
+                    // Do sleep behavior
+                    break;
+
+                case RobotState.SearchingTarget:
+                    aIFollowBehaviour.DisableFollowTarget();
+                    if (DetectTargetsCorutine != null) StopCoroutine(DetectTargetsCorutine);
+                    DetectTargetsCorutine = StartCoroutine(DetectTargets());
                     break;
 
                 case RobotState.Tracking:
+                    float minDistance = Mathf.Infinity;
+                    foreach (GameObject target in targets)
+                    {
+                        float dis = Vector3.Distance(transform.position, target.transform.position);
+                        if (dis < minDistance)
+                        {
+                            minDistance = dis;
+                            trackTarget = target;
+                        }
+                    }
+                    aIFollowBehaviour.SetFollowTarget(trackTarget.transform);
+
+                    aIFollowBehaviour.IsTrackingState = true;
                     // Do tracking behavior
                     break;
 
                 case RobotState.InBattle:
+                    aIFollowBehaviour.DisableFollowTarget();
                     // Do in-battle behavior
                     break;
 
                 case RobotState.OnControll:
                     // Do on-control behavior
+                    aIFollowBehaviour.DisableFollowTarget();
+                    GetComponent<RobotComponenetManager>().ControllPanel.gameObject.SetActive(true);
                     break;
 
                 case RobotState.Destroy:
+                    animator.SetTrigger("Trigger_Destroy");
                     // Do destroy behavior
                     break;
 
@@ -101,20 +157,24 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.Wait:
+                case RobotState.WakeUp:
+                    // Do sleep behavior
+                    break;
+
+                case RobotState.SearchingTarget:
                     // Do wait behavior
                     break;
 
                 case RobotState.Tracking:
-                    //TrackingBehavior();
+                    TrackingBehavior();
                     break;
 
                 case RobotState.InBattle:
-                    //InBattleBehavior();
+                    InBattleBehavior();
                     break;
 
                 case RobotState.OnControll:
-                    // Do on-control behavior
+                    InControllBehavior();
                     break;
 
                 case RobotState.Destroy:
@@ -126,73 +186,90 @@ namespace Urban_KimHyeonWoo
             }
         }
         #endregion
+
+
+        //================
+
+
         #region FSMBehaviors
-        void SearchTarget()
+        void TrackingBehavior()
         {
-            //if get,
-
-            
-            ChangeFSM(RobotState.Tracking);
-        }
-        void WaitBehavior()
-        {
-            if(targets.Count != 0)
-            {
-                StopCoroutine(DetectTargetsCorutine);
-                ChangeFSM(RobotState.Tracking);
-            }
-        }
-        void TrackingBehavior(GameObject Target)
-        {
-            
-            robotActions.looktarget(Target.transform.position);
-
-            float distance = Vector3.Distance(transform.position, Target.transform.position);
-            if (distance < WeaponArrange)
+            robotActions.looktarget(trackTarget.transform.position);
+            float distance = Vector3.Distance(transform.position, trackTarget.transform.position);
+            if (distance < WeaponRange)
             {
                 ChangeFSM(RobotState.InBattle);
             }
-
-            TrackingTarget();
+            if (distance > detectionRange)
+            {
+                ChangeFSM(RobotState.SearchingTarget);
+            }
         }
-        void InBattleBehavior(GameObject Target)
+        void InBattleBehavior()
         {
-            ChekcTargetIsNull();
-            float distance = Vector3.Distance(transform.position, Target.transform.position);
-            if (distance > WeaponArrange)
+            robotActions.looktarget(trackTarget.transform.position);
+            robotWeaponSystem.AllWeaponFire(trackTarget.transform.position);
+            //만약 사거리 내 플레이어가 없으면
+            float distance = Vector3.Distance(transform.position, trackTarget.transform.position);
+            if (distance > WeaponRange + WeaponincreaseRange)
             {
                 ChangeFSM(RobotState.Tracking);
             }
-            AttackTarget(Target);
-        }
-        #endregion
-        #region MonobehaviorCallbacks
-        private void Start()
-        {
-            robotActions = GetComponent<RobotActions>();
-            robotWeaponSystem = GetComponent<robotWeaponSystem>();
-        }
-        private void Update()
-        {
-            StateProcess();
-        }
-        #endregion
-        void TrackingTarget()
-        {
-            ChekcTargetIsNull();
-            aIFollowBehaviour.IsTrackingState = true;
-        }
 
-        void AttackTarget(GameObject Target)
-        {
-            aIFollowBehaviour.IsTrackingState = false;
-            robotWeaponSystem.AllWeaponFire(Target.transform.position);
-        }
-        void ChekcTargetIsNull()
-        {
             if (targets.Count == 0)
             {
-                ChangeFSM(RobotState.Wait);
+                ChangeFSM(RobotState.SearchingTarget);
+            }
+        }
+        void InControllBehavior()
+        {
+            if(WeaponInputKey > 0)
+            {
+                Vector3 robotEyeForward = GetComponent<RobotComponenetManager>().RobotEye.transform.forward;
+                Vector3 targetPosition = GetComponent<RobotComponenetManager>().RobotEye.transform.position + robotEyeForward * 100f;
+                robotWeaponSystem.AllWeaponFire(targetPosition);
+            }
+        }
+        #endregion
+
+
+        //================
+
+        /*public methods*/
+        public void OrderToRobot_WakeUp()
+        {
+            animator.SetTrigger("Trigger_Awake");
+        }
+        public void WakeUpRobot()
+        {
+            ChangeFSM(RobotState.SearchingTarget);
+        }
+
+
+        public void MoveToDir(float h, float v)
+        {
+            aIFollowBehaviour.SetMoveDir(h, v);
+        }
+        /*codes*/
+        void SearchingCloseTarget()
+        {
+            for (int i = targets.Count - 1; i >= 0; i--)
+            {
+                if (Vector3.Distance(transform.position, targets[i].transform.position) > detectionRange)
+                {
+                    targets.RemoveAt(i);
+                }
+            }
+
+            foreach (GameObject player in GameManager.instance.Players)
+            {
+                if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
+                {
+                    if (!targets.Contains(player))
+                    {
+                        targets.Add(player);
+                    }
+                }
             }
         }
         IEnumerator DetectTargets()
@@ -201,26 +278,16 @@ namespace Urban_KimHyeonWoo
             {
                 yield return new WaitForSeconds(detectionInterval);
 
-                for (int i = targets.Count - 1; i >= 0; i--)
-                {
-                    if (Vector3.Distance(transform.position, targets[i].transform.position) > detectionRange)
-                    {
-                        targets.RemoveAt(i);
-                    }
-                }
+                SearchingCloseTarget();
 
-                foreach (GameObject player in GameManager.instance.Players)
+                if (targets.Count > 0)
                 {
-                    if (Vector3.Distance(transform.position, player.transform.position) <= detectionRange)
-                    {
-                        if (!targets.Contains(player))
-                        {
-                            targets.Add(player);
-                        }
-                    }
+                    ChangeFSM(RobotState.Tracking);
+                    break;
                 }
             }
         }
+
 
     }
 

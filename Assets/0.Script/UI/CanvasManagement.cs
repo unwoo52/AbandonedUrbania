@@ -5,7 +5,6 @@ using Urban_KimHyeonWoo;
 
 public class CanvasManagement : MonoBehaviour
 {
-
     #region singleton
     private static CanvasManagement _instance = null;
     void Awake()
@@ -32,5 +31,10 @@ public class CanvasManagement : MonoBehaviour
     }
     #endregion
     [SerializeField] GameObject interactUI;
+    [SerializeField] GameObject healthDisplay;
+    [SerializeField] GameObject hitEffectImage;
+
     public GameObject InteractUI => interactUI;
+    public GameObject HealthDisplay => healthDisplay;
+    public GameObject HitEffectImage => hitEffectImage;
 }

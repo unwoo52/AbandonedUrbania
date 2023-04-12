@@ -43,12 +43,6 @@ namespace Urban_KimHyeonWoo
                 }
             }
         }
-        [SerializeField] private float lightIntensityMultiplier = 1.0f;
-        void setFog()
-        {
-            RenderSettings.ambientIntensity = lightIntensityMultiplier;
-
-        }
     }
 
 }

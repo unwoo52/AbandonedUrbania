@@ -6,7 +6,11 @@ using TMPro;
 
 namespace Urban_KimHyeonWoo
 {
-    public class HealthDisplay : MonoBehaviour
+    public interface ISetHealthDisplay
+    {
+        void SetHealthDisplay(float hp);
+    }
+    public class HealthDisplay : MonoBehaviour, ISetHealthDisplay
     {
         public bool lerp;
         public float smoothness = 5;
@@ -41,6 +45,11 @@ namespace Urban_KimHyeonWoo
             this.health = health;
             slider.value = health;
             if (backgroundSlider) backgroundSlider.value = health;
+        }
+
+        public void SetHealthDisplay(float hp)
+        {
+            UpdateHealth(hp);
         }
     }
 }

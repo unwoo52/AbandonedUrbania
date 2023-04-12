@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4407783502736544256}
   - component: {fileID: 7767508048453404794}
   - component: {fileID: 4224709342136384482}
+  - component: {fileID: 1256803117}
   m_Layer: 3
   m_Name: CCP Character (model)
   m_TagString: Untagged
@@ -67,6 +68,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b24a8f06539258c41887e7e69f8b1754, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1256803117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3918209821093923002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aebbeafcbc8cc0b47a6f404f0c7ec198, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wakeupEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4224709340721213695}
+        m_TargetAssemblyTypeName: Urban_KimHyeonWoo.RobotBehavior, Assembly-CSharp
+        m_MethodName: WakeUpRobot
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &3941484863803960997
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6089286371074918914}
+  m_Layer: 3
+  m_Name: CannonPos (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6089286371074918914
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3941484863803960997}
+  m_LocalRotation: {x: -0.00000004371138, y: 6.850418e-15, z: -2.103122e-15, w: 1}
+  m_LocalPosition: {x: 0.0004, y: -0.00008, z: 0.02042}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4224709340593248640}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4224709340503760314
 GameObject:
   m_ObjectHideFlags: 0
@@ -493,7 +552,8 @@ Transform:
   m_LocalPosition: {x: -0.014902065, y: -0.009692971, z: 0.013879908}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 6089286371074918914}
   m_Father: {fileID: 4224709342044082001}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -655,6 +715,8 @@ GameObject:
   - component: {fileID: 7246925006711462510}
   - component: {fileID: 4224709340721213694}
   - component: {fileID: 4224709340721213695}
+  - component: {fileID: 432850450}
+  - component: {fileID: 3309315814700801834}
   m_Layer: 3
   m_Name: ------AI Character - Follow TREST (1)
   m_TagString: Untagged
@@ -773,7 +835,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -877,13 +939,17 @@ MonoBehaviour:
     type: 3}
   Cannonball: {fileID: 5507075023355163739, guid: 128d1a01cb2c2a0498787d2acfe84370,
     type: 3}
-  CannonPos: {fileID: 4224709342450330998}
+  CannonPos1: {fileID: 3941484863803960997}
+  CannonPos2: {fileID: 4224709342450330998}
+  IsTimeToShotWithCannonPos1: 0
   BigShotEffect: {fileID: 8611011314610715747, guid: 843afec6253e0694f98dc96304fc620e,
     type: 3}
-  ShotEffect: {fileID: 1239411695585881303, guid: f455e0b2ed5eebc4a8e879e53824dd12,
-    type: 3}
-  bigCannonCooldown: 3
-  smallCannonCooldown: 0.5
+  ShotEffect:
+  - {fileID: 6631087918505611698, guid: 21087934ed795984d9839b7810e03269, type: 3}
+  - {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
+  bigCannonCooldown: 7
+  smallCannonCooldown: 0.13
+  Inaccuracy: 1
 --- !u!114 &4224709340721213694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -896,8 +962,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4b54fceef52cbf42b9f485dc6d1c42f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  robotGun: {fileID: 4224709340957872734}
-  robotEye: {fileID: 4224709340671897511}
   shakeFrequency: 0.03
   shakeAmplitude: 0.00008
   lookDuration: 1
@@ -974,6 +1038,7 @@ MonoBehaviour:
   recoilTime: 0.2
   recoilPower: 50
   rotateTime: 1
+  robotComponenetManager: {fileID: 0}
   shakebody: 0
 --- !u!114 &4224709340721213695
 MonoBehaviour:
@@ -987,9 +1052,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a87f38fff85384ca87d508713bd040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WeaponArrange: 5
-  Target: {fileID: 0}
   aIFollowBehaviour: {fileID: 4224709340503760316}
+  animator: {fileID: 7767508048453404794}
+  WeaponInputKey: 0
+  detectionRange: 50
+  WeaponRange: 20
+  WeaponincreaseRange: 5
+  currentState: 0
+--- !u!114 &432850450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224709340721213689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fe9e7f6780cbaa4caac2f701e23a898, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RobotBody: {fileID: 4224709340957872705}
+  RobotEye: {fileID: 4224709340671897510}
+  CannonMuzzle: {fileID: 4224709342450331001}
+  Target: {fileID: 0}
+  ControllPanel: {fileID: 1746063477506227387}
+--- !u!114 &3309315814700801834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4224709340721213689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b240269fee7d6a84490ec89d3189882b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: 1000
+  Explosion: {fileID: 6497072022067581020, guid: 038b444c19ba6a349934a0c29af5fcee,
+    type: 3}
 --- !u!1 &4224709340721836266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,7 +2928,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1746063477506227387
 Transform:
   m_ObjectHideFlags: 0

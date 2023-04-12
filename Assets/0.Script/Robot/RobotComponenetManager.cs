@@ -10,6 +10,7 @@ namespace Urban_KimHyeonWoo
         public Transform RobotEye;
         public Transform CannonMuzzle;
         public Transform Target;
+        public Transform ControllPanel;
     }
 }
 

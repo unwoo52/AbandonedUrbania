@@ -1,4 +1,6 @@
+using System.Globalization;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace Urban_KimHyeonWoo
 {
@@ -19,6 +21,9 @@ namespace Urban_KimHyeonWoo
 
         [Header("플레이어 화면 고정 세팅")]
         [SerializeField] Vector2 playerBindZoomMinMax;
+
+        RobotActions robotActions;
+        RobotBehavior robotBehavior;
         public void OnStartInteract()
         {
         }
@@ -55,14 +60,21 @@ namespace Urban_KimHyeonWoo
         }
 
         //input field
-        float moveHorizonKey;
-        float moveVerticalKey;
+        float MoveHorizonKey;
+        float MoveVerticalKey;
+        float LookHorizonKey;
+        float LookVerticalKey;
         bool CancelInteractKey;
         bool ShotKey;
         void GetInput()
         {
-            moveHorizonKey = Input.GetAxis("Movement X");
-            moveVerticalKey = Input.GetAxis("Movement Y");
+            //moveHorizonKey = Input.GetAxis("Movement X");
+            //moveVerticalKey = Input.GetAxis("Movement Y");
+            LookHorizonKey = Input.GetAxis("Horizontal");
+            LookVerticalKey = Input.GetAxis("Vertical");
+            MoveHorizonKey = Input.GetAxis("Movement X");
+            MoveVerticalKey = Input.GetAxis("Movement Y");
+            ShotKey = Input.GetButton("QE");
 
             CancelInteractKey = (
                 Input.GetButtonDown("Interact") ||
@@ -72,12 +84,48 @@ namespace Urban_KimHyeonWoo
                 Input.GetButtonDown("Run")
                 );
         }
+        //키값 보간 필드
+        public int test = 1;
+        public Vector3 testvec;
         void InputProcess()
         {
-            if (Robot.TryGetComponent(out RobotActions robotActions))
+            robotActions.LookTarget_ControllWithInputManager(LookHorizonKey, LookVerticalKey, RobotRotateSpeed);
+            robotBehavior.MoveToDir(MoveVerticalKey, -MoveHorizonKey);
+            /*
+            Vector3 dir = robotActions.GetRobotLookDir() + testvec;
+            Vector3 direction = Quaternion.Euler(0f, dir.y, 0f) * new Vector3(MoveHorizonKey, 0f, MoveVerticalKey);
+            Debug.Log($"{dir} :::: {direction}");
+            switch (test)
             {
-                robotActions.LookTarget_ControllWithInputManager(moveHorizonKey, moveVerticalKey, RobotRotateSpeed);
+                case 1:
+                    robotBehavior.MoveToDir(direction.z, direction.x);
+                    break;
+                case 2:
+                    robotBehavior.MoveToDir(-direction.z, direction.x);
+                    break;
+                case 3:
+                    robotBehavior.MoveToDir(direction.z, -direction.x);
+                    break;
+                case 4:
+                    robotBehavior.MoveToDir(-direction.z, -direction.x);
+                    break;
+                case 5:
+                    robotBehavior.MoveToDir(direction.x, direction.z);
+                    break;
+                case 6:
+                    robotBehavior.MoveToDir(-direction.x, direction.z);
+                    break;
+                case 7:
+                    robotBehavior.MoveToDir(direction.x, -direction.z);
+                    break;
+                case 8:
+                    robotBehavior.MoveToDir(-direction.x, -direction.z);
+                    break;
             }
+            */
+
+
+            robotBehavior.WeaponInputKey = ShotKey ? 1 : 0;
             if (CancelInteractKey)
             {
                 EndControllRobot();
@@ -89,6 +137,21 @@ namespace Urban_KimHyeonWoo
             PlayerCam = GetComponent<InteractObject>().InteractCam;
             IsControllState = true;
             SetBindstatePlayerAndCam(true);
+            if (Robot.TryGetComponent(out RobotActions robotActions))
+            {
+                this.robotActions = robotActions;
+            }
+
+            if (Robot.TryGetComponent(out RobotBehavior robotBehavior))
+            {
+                this.robotBehavior = robotBehavior;
+            }
+
+            if (robotBehavior.CurrentState == RobotBehavior.RobotState.Sleep)
+            {
+                robotBehavior.OrderToRobot_WakeUp();
+            }
+            robotBehavior.ChangeFSM(RobotBehavior.RobotState.OnControll);
         }
         void EndControllRobot()
         {

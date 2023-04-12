@@ -9,13 +9,16 @@ namespace Urban_KimHyeonWoo
     {
         void BindPlayer(bool setvalue);
     }
-    public class CharacterControll : MonoBehaviour, IBindPlayer
+    public class CharacterControll : MonoBehaviour, IBindPlayer, ITestDamageSystem
     {
-        [SerializeField] Animator animator;
-        [SerializeField] float bulletMaxDistance;
-        [SerializeField] Camera3D camera3D;
-        [SerializeField] GameObject Scope;
-
+        private void Start()
+        {
+            if (CanvasManagement.Instance.HealthDisplay.TryGetComponent(out ISetHealthDisplay setHealthDisplay))
+            {
+                setHealthDisplay.SetHealthDisplay(hp);
+            }
+        }
+        [SerializeField] float hp = 1000;
         public void BindPlayer(bool setvalue)
         {
             Transform actionsObject = transform.Find("Actions");
@@ -26,8 +29,22 @@ namespace Urban_KimHyeonWoo
             else Debug.LogError("cannot find \"Actions\" Object!");
         }
 
-        void Update()
+        public void OnDam(float dmg)
         {
+            hp -= dmg;
+            PlayDamageEffect();
+        }
+        
+        void PlayDamageEffect()
+        {
+            if(CanvasManagement.Instance.HitEffectImage.TryGetComponent(out IEffectHitUI effectHitUI))
+            {
+                effectHitUI.EffectHitUI();
+            }
+            if (CanvasManagement.Instance.HealthDisplay.TryGetComponent(out ISetHealthDisplay setHealthDisplay))
+            {
+                setHealthDisplay.SetHealthDisplay(hp);
+            }
         }
     }
 }

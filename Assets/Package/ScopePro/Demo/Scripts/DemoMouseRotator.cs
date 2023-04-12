@@ -28,6 +28,9 @@ namespace Lovatto.Demo.ScopePro
         [Tooltip("스코프 렌즈 메테리얼")]
         public Material ZoomMaterial;
 
+        public AudioClip FireSound;
+        public AudioSource audioSource;
+
         //default size
         Vector3 defaultRot;
         Vector3 defaultcamRot;
@@ -105,6 +108,9 @@ namespace Lovatto.Demo.ScopePro
         [SerializeField] LayerMask hitableMask;
         void Fire()
         {
+
+            audioSource.PlayOneShot(FireSound);
+
             Ray ray = m_CameraFocus.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
             Vector3 direction;
 

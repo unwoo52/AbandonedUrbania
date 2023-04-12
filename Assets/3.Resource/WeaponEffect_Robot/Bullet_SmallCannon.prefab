@@ -190,8 +190,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   Effect: {fileID: 3257463349609084909, guid: 662f1ef0f948c2746a4a8c4117723556, type: 3}
-  audioSource: {fileID: 1743030585226385203}
-  clip: {fileID: 8300000, guid: 958408b32ccf3714ea02821877b0870c, type: 3}
+  Damage: 100
 --- !u!82 &1743030585226385203
 AudioSource:
   m_ObjectHideFlags: 0
