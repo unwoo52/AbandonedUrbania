@@ -8004,6 +8004,7 @@ GameObject:
   - component: {fileID: 5962069268660161231}
   - component: {fileID: 1005021694}
   - component: {fileID: 1005021703}
+  - component: {fileID: 1306840254}
   m_Layer: 7
   m_Name: States
   m_TagString: Untagged
@@ -8445,6 +8446,65 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   ignoreSpeedMultipliers: 0
+  TESTRotateSpeed: 500
+  cancelOnContact: 1
+  contactVelocityTolerance: 5
+--- !u!114 &1306840254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962069268660161229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b64e3ec6417ddc4595e942b3a55861d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  initialUpVelocity: 1
+  duration: 1
+  inJumpGrabity: 1
+  upforceCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: -1
+      inSlope: -1
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreSpeedMultipliers: 0
+  FootPositionR: {fileID: 5630130540556286222}
+  FootPositionL: {fileID: 5666635110364080489}
+  EffectPrefab: {fileID: 5579294459320639047, guid: 5301a0ede3056ed4399ab4e4adafa963,
+    type: 3}
+  JumpUp_UpPower: 1
+  JumpUp_FrameCount: 20
+  JumpUp_UpperPowerCurv:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  BehindExitRoll_MultipleRollVelocity: 1
+  BehindExitRoll_JumpDirForce: 1
   cancelOnContact: 1
   contactVelocityTolerance: 5
 --- !u!1 &5962069268750157856
@@ -8520,6 +8580,7 @@ MonoBehaviour:
   rootMotionVelocityType: 0
   UpdateRootRotation: 1
   rootMotionRotationType: 1
+  curCam: {fileID: 5962069268888564645}
   oneWayPlatformsLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -12458,7 +12519,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6656363414137715296
 Transform:
   m_ObjectHideFlags: 0

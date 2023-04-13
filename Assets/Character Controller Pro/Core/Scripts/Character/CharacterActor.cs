@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Lightbug.Utilities;
+using Lightbug.CharacterControllerPro.Demo;
 
 namespace Lightbug.CharacterControllerPro.Core
 {
@@ -26,6 +27,10 @@ namespace Lightbug.CharacterControllerPro.Core
     [DefaultExecutionOrder(ExecutionOrder.CharacterActorOrder)]
     public class CharacterActor : PhysicsActor
     {
+        [Header("My field")]
+        [SerializeField]Camera3D curCam;
+        public Camera3D CurCam => curCam;
+
         [Header("One way platforms")]
 
         

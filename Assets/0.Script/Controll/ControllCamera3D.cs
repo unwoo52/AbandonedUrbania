@@ -131,12 +131,10 @@ namespace Urban_KimHyeonWoo
 
         void Swap_FirstOrThirdView(bool isClose)
         {
-            Debug.Log("SWAP");
             ChangeViewState(isClose ? CameraViewState.ThirdPersonView_Close : CameraViewState.ThirdPersonView_Far);
         }
         void Enter_AmingView()
         {
-            Debug.Log("Enter Aim");
             ChangeViewState(currentViewState == CameraViewState.AmingView? CameraViewState.ThirdPersonView_Close : CameraViewState.AmingView);            
         }
 

@@ -238,6 +238,7 @@ namespace Urban_KimHyeonWoo
         }
 
         // Write your update code here
+        [SerializeField] float TESTRotateSpeed = 1;
         public override void UpdateBehaviour(float dt)
         {
             Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * movementCurve.Evaluate(rollCursor) * rollDirection;
@@ -247,7 +248,18 @@ namespace Urban_KimHyeonWoo
 
             //===개선한 중력 적용 코드===
             CharacterActor.PlanarVelocity = dashVelocity; // + 마우스 방향 정면 * VelocityForceToMouseDirection
-            //CharacterActor.RotateYaw(); //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
+
+            //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
+            //다음과 같은 코드를 완성해줘. actorDir는 내 캐릭터의 정면 방향이고, mouseDir은 내 마우스가 바라보고 있는 방향이야.
+            //이 코드는 UpdateBehaviour에 작성되고 있어. CharacterActor.RotateYaw(); 를 이용해서 myRotateSpeed속도로 캐릭터가 마우스 방향으로 회전하기를 원해
+            Vector3 actorDir = CharacterActor.Forward;
+            Vector3 mouseDir = CharacterActor.CurCam.gameObject.transform.forward;
+            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(mouseDir.x, 0f, mouseDir.z));
+            Quaternion newRotation = Quaternion.RotateTowards(CharacterActor.transform.rotation, targetRotation, TESTRotateSpeed * Time.deltaTime);
+            CharacterActor.RotateYaw(newRotation.eulerAngles.y - CharacterActor.transform.rotation.eulerAngles.y);
+
+
+
             CharacterActor.VerticalVelocity += -CharacterActor.Up * rollGrabity * dt;
             //===========================
 
@@ -272,6 +284,7 @@ namespace Urban_KimHyeonWoo
         {
             isDone |= CheckContacts();
         }
+        [Header("Cancel On Contact Fields")]
         [Tooltip("다른 리지드바디와 충돌했을 때, 캐릭터를 정지시킬지에 대한 여부.. true면, 접촉한 대상과 ")]
         [SerializeField]
         protected bool cancelOnContact = true;

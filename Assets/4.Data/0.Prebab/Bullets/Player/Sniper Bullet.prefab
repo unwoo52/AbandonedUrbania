@@ -188,5 +188,5 @@ MonoBehaviour:
   canHit:
     serializedVersion: 2
     m_Bits: 8
-  Effect: {fileID: 1000010355441670, guid: 02a509a7fa70ed740ba4197e20c5d32d, type: 3}
+  Effect: {fileID: 809592595256374293, guid: ac99af3f551957f43a5cbe49dbed9396, type: 3}
   Damage: 50

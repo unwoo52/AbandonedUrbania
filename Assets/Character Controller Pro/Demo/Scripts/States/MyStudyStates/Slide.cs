@@ -259,6 +259,7 @@ namespace Urban_KimHyeonWoo
         {
             isDone |= CheckContacts();
         }
+        [Header("Cancel On Contact Fields")]
         [Tooltip("다른 리지드바디와 충돌했을 때, 캐릭터를 정지시킬지에 대한 여부.. true면, 접촉한 대상과 ")]
         [SerializeField]
         protected bool cancelOnContact = true;

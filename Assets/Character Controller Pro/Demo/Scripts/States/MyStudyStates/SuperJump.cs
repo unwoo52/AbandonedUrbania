@@ -35,6 +35,35 @@ namespace Urban_KimHyeonWoo
         [Tooltip("속도에 지형값을 곱하는 것을 무시할지에 대한 여부")]
         protected bool ignoreSpeedMultipliers = false;
 
+        //-----------
+        [Header("슈퍼점프 이펙트에 관련된 field")]
+        [Tooltip("이펙트가 발생하는 위치")]
+        [SerializeField] Transform FootPositionR;
+        [SerializeField] Transform FootPositionL;
+        [SerializeField] GameObject EffectPrefab;
+
+
+
+        //-----------
+        [Header("슈퍼점프 시작 시 발생하는 폭팔적인 점프에 관련된 field")]
+        [Tooltip("슈퍼 점프 시작 시 폭팔적으로 위로 가려는 힘")]
+        [SerializeField] float JumpUp_UpPower;
+
+        [Tooltip("슈퍼 점프시 폭팔적으로 위로 가는 힘이 가해질 프레임들. 만약 20이면 20프레임동안 폭팔적인 상승을 \'CharacterActor.Position = \'으로 JumpUp_UpperPowerCurv만큼 실행")]
+        [SerializeField] int JumpUp_FrameCount;
+
+        [Tooltip("슈퍼 점프시 폭팔적으로 위로 가는 힘의 곡선")]
+        [SerializeField] AnimationCurve JumpUp_UpperPowerCurv;
+        int JumpUp_currFrameCount;
+
+        //-----------
+        [Header("이전 롤 state에서 넘어온 힘을 관리하는 field")]
+        [Tooltip("이전 롤 state에서 넘어온 Velocity가 남아있는 양. 높으면 롤 속도만큼 멀리 밀려나고, 적으면 WASD키방향의 힘만 온전히 적용.")]
+        [SerializeField] float BehindExitRoll_MultipleRollVelocity = 1;
+        // 롤 이후 점프할 때, 앞 방향으로 가해지는 힘
+        [Tooltip("롤 이후 점프할 때, WASD키 방향으로 가해지는 힘.")]
+        [SerializeField] float BehindExitRoll_JumpDirForce = 1;
+
         //[SerializeField]
         //[Tooltip("true면 플레이어의 alwaysNotGrounded을 true로 설정해서 State도중 플레이어 상태를 항상 공중으로 처리")]
         //슬라이드는 공중에서 안쓰므로 주석처리
@@ -145,12 +174,14 @@ namespace Urban_KimHyeonWoo
         #region STATE METHOD - Behavior
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
-            //===testcode== 프레임카운터 실험하고 삭제할 것 =============<<<<<<<<<<<<<<<<<<
-            currFrameCount = FrameCount;
             //==== My code ====
 
+            JumpUp_currFrameCount = 0;
             if (CharacterActor.IsGrounded)
                 CharacterActor.ForceNotGrounded();
+
+            Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
+            Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
 
             //==== Legacy Demo Code ====
             //항상 땅에 안닿은 처리
@@ -190,7 +221,14 @@ namespace Urban_KimHyeonWoo
 
             //ResetDash(); <<===================================================수정해야 할지도, 점프 이전의 가속도 영향을 받을지 말지 결정
             Debug.Log($"{CharacterActor.Velocity.x} , {CharacterActor.Velocity.y}, {CharacterActor.Velocity.z}");
-            //CharacterActor.Velocity = Vector3.zero;
+
+            //wasd 입력으로 벡터 생성. w만 누르면 x1, s누르면 x-1, a,d도 y값을 동일하게 조정
+            Vector3 newJumpDir = 
+                CharacterActor.Right * Input.GetAxisRaw("Movement X") + 
+                CharacterActor.Forward * Input.GetAxisRaw("Movement Y");
+            Debug.Log(newJumpDir);
+
+            CharacterActor.Velocity = CharacterActor.Velocity * BehindExitRoll_MultipleRollVelocity + newJumpDir * BehindExitRoll_JumpDirForce;
             isDone = false;
             SuperJumpCursor = 0;
 
@@ -198,6 +236,7 @@ namespace Urban_KimHyeonWoo
             if (OnSuperJumpStart != null)
                 OnSuperJumpStart(JumpProgressDirection);
         }
+
 
         public override void ExitBehaviour(float dt, CharacterState toState)
         {
@@ -217,22 +256,14 @@ namespace Urban_KimHyeonWoo
             //alwaysNotGrounde를 false로 설정함으로써, 플레이어가 다시 땅에 닿으면, 땅에 닿은것으로 처리될 수 있도록 함
             //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
-        public Scrollbar TESTSCROLLBAR;
-        public RawImage Up;
-        public RawImage Down;
-        Vector3 JumpVelocity;
-        public float testupperPositionY;
-        public int FrameCount;
-        int currFrameCount;
         // Write your update code here
         public override void UpdateBehaviour(float dt)
         {
             //기존의 dashVelocity  코드
             //Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
             //===개선한 점프 방향 코드
-            JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
+            Vector3 JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
             
-            TESTSCROLLBAR.size = JumpVelocity.y * 10;
 
             //기존의 Velocity 고정 코드
             //CharacterActor.Velocity = dashVelocity;
@@ -240,14 +271,14 @@ namespace Urban_KimHyeonWoo
             //===개선한 중력 적용 코드===
             //CharacterActor.PlanarVelocity = initialForwardVelocity * currentSpeedMultiplier * JumpDirection; // + 마우스 방향 정면 * VelocityForceToMouseDirection
             //CharacterActor.RotateYaw(); //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
-            if(currFrameCount > 0)
+            if(JumpUp_currFrameCount <= JumpUp_FrameCount)
             {
-                float temf = (1.0f / currFrameCount) - 1.0f;
+                float temf = JumpUp_UpperPowerCurv.Evaluate(JumpUp_currFrameCount / JumpUp_FrameCount);
                 //Debug.Log(temf);
 
                 
-                CharacterActor.Position = CharacterActor.Position + new Vector3(0, testupperPositionY * -temf, 0);
-                currFrameCount--;
+                CharacterActor.Position = CharacterActor.Position + new Vector3(0, JumpUp_UpPower * temf, 0);
+                JumpUp_currFrameCount++;
             }
             CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabity;
 
@@ -269,22 +300,6 @@ namespace Urban_KimHyeonWoo
                     SuperJumpCursor = 1;
                 }
             }
-
-
-            //==tsetcode
-            if (isDone)
-            {
-                Up.gameObject.SetActive(false);
-                Down.gameObject.SetActive(true);
-            }
-            else
-            {
-                Up.gameObject.SetActive(true);
-                Down.gameObject.SetActive(false);
-            }
-            //===
-
-
         }
 
 
@@ -296,6 +311,7 @@ namespace Urban_KimHyeonWoo
         {
             isDone |= CheckContacts();
         }
+        [Header("Cancel On Contact Fields")]
         [Tooltip("다른 리지드바디와 충돌했을 때, 캐릭터를 정지시킬지에 대한 여부.. true면, 접촉한 대상과 ")]
         [SerializeField]
         protected bool cancelOnContact = true;
