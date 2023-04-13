@@ -1,36 +1,34 @@
 using UnityEngine;
 using Lightbug.CharacterControllerPro.Implementation;
-using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Core;
+using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.Utilities;
+using UnityEngine.UI;
 
 namespace Urban_KimHyeonWoo
 {
-    public class Slide : CharacterState
+    public class SuperJump : CharacterState
     {
         [Min(0f)]
         [SerializeField]
-        [Tooltip("시작될 때 슬라이드 속도")]
-        protected float initialVelocity = 12f;
+        [Tooltip("시작될 때 점프 파워 속도")]
+        protected float initialUpVelocity = 12f;
+        protected float initialForwardVelocity = 12f;
 
 
         [Min(0f)]
         [SerializeField]
-        [Tooltip("지속시간")]
-        protected float duration = 0.4f;
-
-        [Range(0, 0.9f)]
-        [SerializeField]
-        [Tooltip("애니메이션이 끝나는 지점. 0 ~ 1")]
-        protected float endPointAnimation = 0.8f;
+        [Tooltip("공중 채류시간")]
+        protected float duration = 1;
 
         [SerializeField]
-        [Tooltip("슬라이드 중 중력")]
-        protected float slideGrabity = 1;
+        [Tooltip("점프 중 중력")]
+        protected float inJumpGrabity = 1;
+
 
         [SerializeField]
-        [Tooltip("슬라이드 속도의 커브 그래프")]
-        protected AnimationCurve movementCurve = AnimationCurve.Linear(0, 1, 1, 0);
+        [Tooltip("캐릭터의 위로 작용하는 힘 커브 그래프")] // 처음에 파격적으로 높았다가 점점 줄어듬
+        protected AnimationCurve upforceCurve = AnimationCurve.Linear(0, 1, 1, 0);
 
 
         [SerializeField]
@@ -59,14 +57,16 @@ namespace Urban_KimHyeonWoo
         //공중에서 남은 사용 횟수
         //protected int airDashesLeft;
 
-        protected float slideCursor = 0;
+        protected float SuperJumpCursor = 0;
 
-        protected Vector3 slideDirection = Vector2.right;
+        protected Vector3 JumpProgressDirection = Vector2.right;
+        protected Vector3 JumpDirection = Vector2.right;
 
-        protected bool isDone = true;
+        protected bool isDone = false;
 
         protected float currentSpeedMultiplier = 1f;
 
+        //===mycode
 
         //protected Vector3 slideDirection2 = Vector2.right;
 
@@ -77,14 +77,14 @@ namespace Urban_KimHyeonWoo
         /// 
         /// The direction of the dash is passed as an argument.
         /// </summary>
-        public event System.Action<Vector3> OnSlideStart;
+        public event System.Action<Vector3> OnSuperJumpStart;
 
         /// <summary>
         /// This event is called when the dash action has ended.
         /// 
         /// The direction of the dash is passed as an argument.
         /// </summary>
-        public event System.Action<Vector3> OnSlideEnd;
+        public event System.Action<Vector3> OnSuperJumpEnd;
 
         #endregion
 
@@ -111,6 +111,7 @@ namespace Urban_KimHyeonWoo
 
             materialController = this.GetComponentInBranch<CharacterActor, MaterialController>();
 
+
             //공중에서 대시 가능 횟수를 availableNotGroundedDashes(1)로 초기화
             //airDashesLeft = availableNotGroundedDashes;
         }
@@ -121,40 +122,35 @@ namespace Urban_KimHyeonWoo
         // Write your transitions here
         public override bool CheckEnterTransition(CharacterState fromState)
         {
-            //===my code ===
-            if (!CharacterActor.IsGrounded)
-                return false;
-            //===
-
             return true;
         }
         public override void CheckExitTransition()
         {
-            if (isDone)
+            if(CharacterActor.IsGrounded && CharacterActor.IsStable && isDone)
             {
-                //update behavior에서 지속시간이 endPointAnimation(8/10) 남았을 때 false가 호출됌
-                //CharacterStateController.Animator.SetBool("IsSlide", false);
-                CharacterStateController.EnqueueTransition<NormalMovement>();
-            }
-            else if (CharacterActions.crouch.value)
-            {
-                CharacterStateController.Animator.SetBool("IsSlide", false);
+                //roll
+                CharacterStateController.Animator.SetBool("IsSuperJump", false);
                 CharacterStateController.Animator.SetBool("IsRoll", true);
-
                 CharacterStateController.EnqueueTransition<Roll>();
+            }
+            else if (CharacterActor.IsGrounded && !CharacterActor.IsStable && isDone)
+            {
+                //normal
+                CharacterStateController.Animator.SetBool("IsSuperJump", false);
+                CharacterStateController.EnqueueTransition<NormalMovement>();
             }
         }
         #endregion
 
         #region STATE METHOD - Behavior
-        // Write your transitions here
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
+            //===testcode== 프레임카운터 실험하고 삭제할 것 =============<<<<<<<<<<<<<<<<<<
+            currFrameCount = FrameCount;
             //==== My code ====
-            CharacterStateController.Animator.SetTrigger("Trigger_Slide");
-            CharacterStateController.Animator.SetBool("IsSlide", true);
 
-
+            if (CharacterActor.IsGrounded)
+                CharacterActor.ForceNotGrounded();
 
             //==== Legacy Demo Code ====
             //항상 땅에 안닿은 처리
@@ -189,24 +185,24 @@ namespace Urban_KimHyeonWoo
             }
 
             //Set the dash direction
-            slideDirection = CharacterActor.Forward;
+            JumpProgressDirection = CharacterActor.Up;
+            JumpDirection = CharacterActor.Forward;
 
-
-            //ResetDash();
-            CharacterActor.Velocity = Vector3.zero;
+            //ResetDash(); <<===================================================수정해야 할지도, 점프 이전의 가속도 영향을 받을지 말지 결정
+            Debug.Log($"{CharacterActor.Velocity.x} , {CharacterActor.Velocity.y}, {CharacterActor.Velocity.z}");
+            //CharacterActor.Velocity = Vector3.zero;
             isDone = false;
-            slideCursor = 0;
+            SuperJumpCursor = 0;
 
             //Execute the event
-            if (OnSlideStart != null)
-                OnSlideStart(slideDirection);
-
+            if (OnSuperJumpStart != null)
+                OnSuperJumpStart(JumpProgressDirection);
         }
 
         public override void ExitBehaviour(float dt, CharacterState toState)
         {
-            if (OnSlideEnd != null)
-                OnSlideEnd(slideDirection);
+            if (OnSuperJumpStart != null)
+                OnSuperJumpStart(JumpProgressDirection);
             //forceNotGrounded(항상 땅에 안닿게 처리하는 필드) 가 true이면
 
             /*
@@ -221,35 +217,76 @@ namespace Urban_KimHyeonWoo
             //alwaysNotGrounde를 false로 설정함으로써, 플레이어가 다시 땅에 닿으면, 땅에 닿은것으로 처리될 수 있도록 함
             //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
-
+        public Scrollbar TESTSCROLLBAR;
+        public RawImage Up;
+        public RawImage Down;
+        Vector3 JumpVelocity;
+        public float testupperPositionY;
+        public int FrameCount;
+        int currFrameCount;
         // Write your update code here
         public override void UpdateBehaviour(float dt)
         {
-            Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * movementCurve.Evaluate(slideCursor) * slideDirection;
+            //기존의 dashVelocity  코드
+            //Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
+            //===개선한 점프 방향 코드
+            JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
+            
+            TESTSCROLLBAR.size = JumpVelocity.y * 10;
 
             //기존의 Velocity 고정 코드
             //CharacterActor.Velocity = dashVelocity;
 
             //===개선한 중력 적용 코드===
-            CharacterActor.PlanarVelocity = dashVelocity;
-            CharacterActor.VerticalVelocity += -CharacterActor.Up * slideGrabity * dt;
+            //CharacterActor.PlanarVelocity = initialForwardVelocity * currentSpeedMultiplier * JumpDirection; // + 마우스 방향 정면 * VelocityForceToMouseDirection
+            //CharacterActor.RotateYaw(); //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
+            if(currFrameCount > 0)
+            {
+                float temf = (1.0f / currFrameCount) - 1.0f;
+                //Debug.Log(temf);
+
+                
+                CharacterActor.Position = CharacterActor.Position + new Vector3(0, testupperPositionY * -temf, 0);
+                currFrameCount--;
+            }
+            CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabity;
+
+
+            
+
+
+
             //===========================
 
-
-            slideCursor += dt / duration;
-
-            if (slideCursor >= 1)
+            if (!isDone)
             {
-                isDone = true;
-                slideCursor = 0;
-                CharacterStateController.Animator.SetBool("IsSlide", false);
+                float animationDt = dt / duration;
+                SuperJumpCursor += animationDt;
+
+                if (SuperJumpCursor >= 1)
+                {
+                    isDone = true;
+                    SuperJumpCursor = 1;
+                }
             }
 
-            if(slideCursor > endPointAnimation)
+
+            //==tsetcode
+            if (isDone)
             {
-                CharacterStateController.Animator.SetBool("IsSlide", false);
+                Up.gameObject.SetActive(false);
+                Down.gameObject.SetActive(true);
             }
+            else
+            {
+                Up.gameObject.SetActive(true);
+                Down.gameObject.SetActive(false);
+            }
+            //===
+
+
         }
+
 
 
         #endregion

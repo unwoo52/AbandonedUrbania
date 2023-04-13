@@ -107,24 +107,32 @@ namespace Urban_KimHyeonWoo
 
         //Input Fields
         bool AmingKey = false;
-        bool SwapViewKey = false;
+        float SwapViewKey;
 
         void GetInput()
         {
-            AmingKey = Input.GetButtonDown("Fire2");
-            SwapViewKey = Input.GetButtonDown("EnterRunView");
+            AmingKey = Input.GetButtonDown("Fire2");            
+            SwapViewKey = Mathf.Clamp(Input.GetAxisRaw("Camera Zoom"), -1f, 1f);
         }
         void InputProcsee()
         {
             if (AmingKey) Enter_AmingView();
-            if (SwapViewKey) Swap_FirstOrThirdView();
+
+            if (SwapViewKey == 1)
+            {
+                Swap_FirstOrThirdView(true);
+            }
+            else if (SwapViewKey == -1)
+            {
+                Swap_FirstOrThirdView(false);
+            }
         }
 
 
-        void Swap_FirstOrThirdView()
+        void Swap_FirstOrThirdView(bool isClose)
         {
             Debug.Log("SWAP");
-            ChangeViewState(currentViewState == CameraViewState.ThirdPersonView_Close ? CameraViewState.ThirdPersonView_Far : CameraViewState.ThirdPersonView_Close);
+            ChangeViewState(isClose ? CameraViewState.ThirdPersonView_Close : CameraViewState.ThirdPersonView_Far);
         }
         void Enter_AmingView()
         {

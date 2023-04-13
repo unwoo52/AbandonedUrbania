@@ -115,6 +115,7 @@ namespace Lightbug.CharacterControllerPro.Demo
         Rigidbody characterRigidbody = null;
 
         float currentDistanceToTarget;
+        public float CurrentDistanceToTarget => currentDistanceToTarget;
         float smoothedDistanceToTarget;
 
         float deltaYaw = 0f;
@@ -224,7 +225,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                 this.enabled = false;
                 return;
             }
-
+                        
             Vector2 cameraAxes = inputHandlerSettings.InputHandler.GetVector2(axes); //getVector2("camera")
 
 
@@ -234,14 +235,19 @@ namespace Lightbug.CharacterControllerPro.Demo
                     deltaPitch = -cameraAxes.y;
                 if (updateYaw)
                     deltaYaw = cameraAxes.x;
+
+                //휠업으로 줌 하는 코드. 휠업을 close view <=> far view로 바꾸면서 주석처리함 2023-04-12
+                /*
                 if (updateZoom)
                     deltaZoom = -inputHandlerSettings.InputHandler.GetFloat(zoomAxis);
+                */
             }
             else
             {
                 deltaPitch = 0;
                 deltaYaw = 0;
             }
+            
 
             // An input axis value (e.g. mouse x) usually gets accumulated over time. So, the higher the frame rate the smaller the value returned.
             // In order to prevent inconsistencies due to frame rate changes, the camera movement uses a fixed delta time, instead of the old regular

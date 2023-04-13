@@ -77,7 +77,7 @@ namespace Lightbug.CharacterControllerPro.Demo
         /// The direction of the dash is passed as an argument.
         /// </summary>
         public event System.Action<Vector3> OnDashEnd;
-
+        
         #endregion
 
         void OnEnable() => CharacterActor.OnGroundedStateEnter += OnGroundedStateEnter;
@@ -173,8 +173,11 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         public override void ExitBehaviour(float dt, CharacterState toState)
         {
+            //땅이 아니라면
             if (forceNotGrounded)
                 CharacterActor.alwaysNotGrounded = false;
+                //위를 false로 설정함으로써, 플레이어가 다시 땅에 닿으면, 땅에 닿은것으로 처리될 수 있도록 함
+                //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
 
 

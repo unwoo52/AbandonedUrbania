@@ -4485,6 +4485,7 @@ MonoBehaviour:
   overrideAnimatorController: 1
   runtimeAnimatorController: {fileID: 9100000, guid: 08c0b59bd286c494d91436a4cee38c66,
     type: 2}
+  cam3d: {fileID: 0}
   planarMovementParameters:
     baseSpeedLimit: 6
     canRun: 1
@@ -6036,6 +6037,7 @@ MonoBehaviour:
   overrideAnimatorController: 1
   runtimeAnimatorController: {fileID: 9100000, guid: 08c0b59bd286c494d91436a4cee38c66,
     type: 2}
+  cam3d: {fileID: 0}
   planarMovementParameters:
     baseSpeedLimit: 6
     canRun: 1
@@ -7680,16 +7682,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2350974430381687204, guid: d77c839416498b648bd8f660f864a81a,
+    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: -6437923277489693469, guid: f2c836f3e5c029140a0cc913d7df766a,
+      propertyPath: m_TranslationOffsets.Array.data[0].x
+      value: 0.055725098
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-    - target: {fileID: 2350974430381687204, guid: d77c839416498b648bd8f660f864a81a,
+      propertyPath: m_TranslationOffsets.Array.data[0].y
+      value: 0.075856686
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: m_TranslationOffsets.Array.data[0].z
+      value: 0.09893417
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -7751,15 +7757,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7049579879504685386, guid: d77c839416498b648bd8f660f864a81a,
+    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: m_TranslationOffsets.Array.data[0].x
+      value: -0.055877686
       objectReference: {fileID: 0}
-    - target: {fileID: 7999380002860167564, guid: d77c839416498b648bd8f660f864a81a,
+    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_IsActive
-      value: 1
+      propertyPath: m_TranslationOffsets.Array.data[0].y
+      value: 0.08546591
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: m_TranslationOffsets.Array.data[0].z
+      value: 0.17916489
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}

@@ -121,9 +121,10 @@ namespace Urban_KimHyeonWoo
             Callback?.Invoke();
         }
 
+        [SerializeField] UnityEvent startBehavior;
         private void Start()
         {
-            ResetFog();
+            startBehavior?.Invoke();
         }
         [Header("Follow Player Speed")]
         [SerializeField] private float followSpeed = 10f;

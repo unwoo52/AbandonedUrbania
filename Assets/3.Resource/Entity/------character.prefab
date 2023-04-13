@@ -5988,6 +5988,7 @@ GameObject:
   - component: {fileID: 8746677214974817112}
   - component: {fileID: 1722753663787015714}
   - component: {fileID: 1200288020042147945}
+  - component: {fileID: 1740900219}
   m_Layer: 7
   m_Name: UnityChanSSU
   m_TagString: Untagged
@@ -6122,6 +6123,33 @@ MonoBehaviour:
   collisionColor: {r: 1, g: 0, b: 0, a: 1}
   groundCollisionColor: {r: 0, g: 1, b: 0, a: 1}
   angleLimitDrawScale: 0.05
+--- !u!114 &1740900219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5708639413962359115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ae5023c592b2ff45b6d7c3984bef145, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Event:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1005021703}
+        m_TargetAssemblyTypeName: Urban_KimHyeonWoo.Roll, com.lightbug.character-controller-pro
+        m_MethodName: SetRoolEnd
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5715274560841300515
 GameObject:
   m_ObjectHideFlags: 0
@@ -7092,7 +7120,7 @@ ParentConstraint:
   m_TranslationAtRest: {x: 0.0558, y: 1.4818991, z: 0.076199934}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: 0.055725098, y: 0.07585645, z: 0.09893417}
+  - {x: 0.055723667, y: 0.07585716, z: 0.098939896}
   m_RotationOffsets:
   - {x: -6.829918, y: 0, z: 0}
   m_AffectTranslationX: 1
@@ -7974,6 +8002,8 @@ GameObject:
   - component: {fileID: 5962069268660161225}
   - component: {fileID: 5962069268660161224}
   - component: {fileID: 5962069268660161231}
+  - component: {fileID: 1005021694}
+  - component: {fileID: 1005021703}
   m_Layer: 7
   m_Name: States
   m_TagString: Untagged
@@ -8027,6 +8057,7 @@ MonoBehaviour:
   overrideAnimatorController: 1
   runtimeAnimatorController: {fileID: 9100000, guid: e9286b3f0073ebe4dae9e3941444a00d,
     type: 2}
+  cam3d: {fileID: 5962069268888564645}
   planarMovementParameters:
     baseSpeedLimit: 6
     canRun: 1
@@ -8318,6 +8349,104 @@ MonoBehaviour:
   angularAcceleration: 10
   forwardOffset: -0.25
   verticalVelocityParameter: VerticalVelocity
+--- !u!114 &1005021694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962069268660161229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 128f3fa74f9e33a449de4fe3205cf0b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  initialVelocity: 20
+  duration: 1.3
+  endPointAnimation: 0.8
+  slideGrabity: 20
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.99999297
+      inSlope: 0.058203463
+      outSlope: 0.058203463
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.46752784
+    - serializedVersion: 3
+      time: 0.468177
+      value: 1.0171041
+      inSlope: -0.0031290106
+      outSlope: -0.0031290106
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.45940655
+    - serializedVersion: 3
+      time: 1
+      value: 0.99999416
+      inSlope: -0.033002812
+      outSlope: -0.033002812
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3809317
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreSpeedMultipliers: 0
+  cancelOnContact: 1
+  contactVelocityTolerance: 5
+--- !u!114 &1005021703
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5962069268660161229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 355af8ad8bbb8904c8e227dbb662b5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overrideAnimatorController: 0
+  runtimeAnimatorController: {fileID: 0}
+  initialVelocity: 12
+  duration: 100
+  rollGrabity: 1
+  movementCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: -1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ignoreSpeedMultipliers: 0
+  cancelOnContact: 1
+  contactVelocityTolerance: 5
 --- !u!1 &5962069268750157856
 GameObject:
   m_ObjectHideFlags: 0
@@ -8773,7 +8902,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5962069268888564650}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.78, z: -1.23}
+  m_LocalPosition: {x: 0, y: 1.5, z: -1.23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9570,7 +9699,7 @@ ParentConstraint:
   m_TranslationAtRest: {x: -0.0558, y: 1.4818993, z: 0.1569999}
   m_RotationAtRest: {x: 0, y: 0, z: 0}
   m_TranslationOffsets:
-  - {x: -0.055877686, y: 0.08546567, z: 0.17916489}
+  - {x: -0.055876255, y: 0.085466385, z: 0.17916489}
   m_RotationOffsets:
   - {x: -6.829918, y: 0, z: 0}
   m_AffectTranslationX: 1

@@ -188,8 +188,13 @@ namespace Lightbug.CharacterControllerPro.Demo
                 rightDirection.Normalize();
 
                 Vector3 upDirection = CharacterActor.Up;
-                Vector3 targetVelocity = enableClimb ? CharacterActions.movement.value.x * rightDirection * wallClimbHorizontalSpeed +
-                CharacterActions.movement.value.y * upDirection * wallClimbVerticalSpeed : Vector3.zero;
+                Vector3 targetVelocity = enableClimb ? 
+                    CharacterActions.movement.value.x * 
+                    rightDirection 
+                    * wallClimbHorizontalSpeed + CharacterActions.movement.value.y 
+                    * upDirection 
+                    * wallClimbVerticalSpeed
+                : Vector3.zero;
 
                 CharacterActor.Velocity = Vector3.MoveTowards(CharacterActor.Velocity, targetVelocity, wallClimbAcceleration * dt);
             }

@@ -2,13 +2,21 @@ using UnityEngine;
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.Utilities;
 using Lightbug.CharacterControllerPro.Implementation;
+using Urban_KimHyeonWoo;
 
 namespace Lightbug.CharacterControllerPro.Demo
 {
     [AddComponentMenu("Character Controller Pro/Demo/Character/States/Normal Movement")]
     public class NormalMovement : CharacterState
     {
+        //====My Code====//
 
+        [SerializeField] Camera3D cam3d;
+
+
+
+
+        //-----------------------
         [Space(10)]
 
         public PlanarMovementParameters planarMovementParameters = new PlanarMovementParameters();
@@ -148,14 +156,15 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         public override void CheckExitTransition()
         {
-
+            //rolling
             if (CharacterActions.jetPack.value)
             {
                 CharacterStateController.EnqueueTransition<JetPack>();
             }
-            else if (CharacterActions.dash.Started)
+            //slide, wantrun이 트루이고 shift를 눌렀을 때,
+            else if (wantToRun && CharacterActions.dash.Started)
             {
-                CharacterStateController.EnqueueTransition<Dash>();
+                CharacterStateController.EnqueueTransition<Slide>();
             }
             else if (CharacterActor.Triggers.Count != 0)
             {
@@ -272,7 +281,10 @@ namespace Lightbug.CharacterControllerPro.Demo
             materialController.CurrentSurface.speedMultiplier * materialController.CurrentVolume.speedMultiplier : 1f;
 
 
-            bool needToAccelerate = CustomUtilities.Multiply(CharacterStateController.InputMovementReference, currentPlanarSpeedLimit).sqrMagnitude >= CharacterActor.PlanarVelocity.sqrMagnitude;
+            bool needToAccelerate = CustomUtilities.Multiply(
+                CharacterStateController.InputMovementReference, currentPlanarSpeedLimit).sqrMagnitude
+                    >= 
+                CharacterActor.PlanarVelocity.sqrMagnitude;
 
             Vector3 targetPlanarVelocity = default;
             switch (CharacterActor.CurrentState)
@@ -292,6 +304,19 @@ namespace Lightbug.CharacterControllerPro.Demo
 
 
                     // Run ------------------------------------------------------------
+                    if(cam3d != null)
+                    {
+                        if (cam3d.CurrentDistanceToTarget > 1)//카메라 줌이 가까우면
+                        {
+                            wantToRun = true;
+                        }
+                        else
+                        {
+                            wantToRun = false;
+                        }
+                    }
+                    
+                    /*
                     if (planarMovementParameters.runInputMode == InputMode.Toggle)
                     {
                         if (CharacterActions.run.Started)
@@ -306,7 +331,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                             //run == 
                             wantToRun = CharacterActions.run.value;
                     }
-
+                    */
                     if (wantToCrouch || !planarMovementParameters.canRun)
                         wantToRun = false;
 
@@ -333,7 +358,6 @@ namespace Lightbug.CharacterControllerPro.Demo
                     //needToAccelerate = CustomUtilities.Multiply(CharacterStateController.InputMovementReference, currentPlanarSpeedLimit).sqrMagnitude >= CharacterActor.PlanarVelocity.sqrMagnitude;
                     targetPlanarVelocity = CustomUtilities.Multiply(CharacterStateController.InputMovementReference, speedMultiplier, currentPlanarSpeedLimit);
 
-
                     break;
             }
 
@@ -341,9 +365,13 @@ namespace Lightbug.CharacterControllerPro.Demo
 
 
             float acceleration = currentMotion.acceleration;
-            if (needToAccelerate)
+            if (needToAccelerate) //가속할 필요가 있다면
             {
                 acceleration *= currentMotion.angleAccelerationMultiplier;
+                //angleAccelerationMultiplier는
+                //캐릭터의 현재 방향과 목표 방향 사이의 각도를 고려한 가속도 강화 요소입니다.
+                //즉, 캐릭터가 현재 이동 방향과 목표 이동 방향이 같은 방향으로
+                //있을 때 가속도를 더 강하게 해주는 요소입니다.
 
                 // Affect acceleration based on the angle between target velocity and current velocity
                 //float angleCurrentTargetVelocity = Vector3.Angle(CharacterActor.PlanarVelocity, targetPlanarVelocity);
@@ -353,8 +381,12 @@ namespace Lightbug.CharacterControllerPro.Demo
             else
             {
                 acceleration = currentMotion.deceleration;
+                //deceleration는
+                //캐릭터가 이전에 가속해야 했던 상황에서 현재는 감속해야 하는 상황이
+                //되었을 때, 즉 이동 방향이 변경되는 상황에서 사용됩니다.
             }
 
+            //최종 계산된 값을 PlanarVelocity에 대입
             CharacterActor.PlanarVelocity = Vector3.MoveTowards(
                 CharacterActor.PlanarVelocity,
                 targetPlanarVelocity,
@@ -366,15 +398,16 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         protected virtual void ProcessGravity(float dt)
         {
+            //useGravity가 fail이면 리턴
             if (!verticalMovementParameters.useGravity)
                 return;
-
 
             verticalMovementParameters.UpdateParameters();
 
 
             float gravityMultiplier = 1f;
-
+            
+            //질감(얼음 진흙 등 위이면) 값 계산
             if (materialController != null)
                 gravityMultiplier = CharacterActor.LocalVelocity.y >= 0 ?
                     materialController.CurrentVolume.gravityAscendingMultiplier :
@@ -405,9 +438,11 @@ namespace Lightbug.CharacterControllerPro.Demo
         {
             JumpResult jumpResult = JumpResult.Invalid;
 
+            //canJump가 활성화 되어있으면              점프 X
             if (!verticalMovementParameters.canJump)
                 return jumpResult;
 
+            //웅크리고 있으면                          점프 X
             if (isCrouched)
                 return jumpResult;
 
@@ -415,7 +450,8 @@ namespace Lightbug.CharacterControllerPro.Demo
             switch (CharacterActor.CurrentState)
             {
                 case CharacterActorState.StableGrounded:
-
+                    //캐릭터가 지면에 닿은 뒤 바로 점프할 수는 없고 preGroundedJumpTime가 지나야 점프할 수 있음
+                    //preGroundedJumpTime가 지났는지를 체크해서, 지났으면 JumpResult          점프 O
                     if (CharacterActions.jump.StartedElapsedTime <= verticalMovementParameters.preGroundedJumpTime && groundedJumpAvailable)
                         jumpResult = JumpResult.Grounded;
 
@@ -579,16 +615,14 @@ namespace Lightbug.CharacterControllerPro.Demo
                 if (OnJumpPerformed != null)
                     OnJumpPerformed();
 
-                // Define the jump direction ---------------------------------------------------
-                jumpDirection = SetJumpDirection();
 
                 // Force "not grounded" state.     
                 if (CharacterActor.IsGrounded)
                     CharacterActor.ForceNotGrounded();
 
                 // First remove any velocity associated with the jump direction.
-                CharacterActor.Velocity -= Vector3.Project(CharacterActor.Velocity, jumpDirection);
-                CharacterActor.Velocity += CustomUtilities.Multiply(jumpDirection, verticalMovementParameters.jumpSpeed);
+                CharacterActor.Velocity -= Vector3.Project(CharacterActor.Velocity, CharacterActor.Up);
+                CharacterActor.Velocity += CustomUtilities.Multiply(CharacterActor.Up, verticalMovementParameters.jumpSpeed);
 
                 if (verticalMovementParameters.cancelJumpOnRelease)
                     isAllowedToCancelJump = true;
@@ -596,14 +630,6 @@ namespace Lightbug.CharacterControllerPro.Demo
             }
 
 
-        }
-
-        /// <summary>
-        /// Returns the jump direction vector whenever the jump action is started.
-        /// </summary>
-        protected virtual Vector3 SetJumpDirection()
-        {
-            return CharacterActor.Up;
         }
 
         #endregion
