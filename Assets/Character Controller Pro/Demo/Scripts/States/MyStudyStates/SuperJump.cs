@@ -60,9 +60,14 @@ namespace Urban_KimHyeonWoo
         [Header("이전 롤 state에서 넘어온 힘을 관리하는 field")]
         [Tooltip("이전 롤 state에서 넘어온 Velocity가 남아있는 양. 높으면 롤 속도만큼 멀리 밀려나고, 적으면 WASD키방향의 힘만 온전히 적용.")]
         [SerializeField] float BehindExitRoll_MultipleRollVelocity = 1;
+
         // 롤 이후 점프할 때, 앞 방향으로 가해지는 힘
-        [Tooltip("롤 이후 점프할 때, WASD키 방향으로 가해지는 힘.")]
+        [Tooltip("롤 이후 점프하는 순간에, WASD키 방향으로 가해지는 힘.")]
         [SerializeField] float BehindExitRoll_JumpDirForce = 1;
+
+
+        [Tooltip("점프 중, WASD키 방향으로 가해지는 힘.")]
+        [SerializeField] float InJump_WASD_InputDirForce = 1;
 
         //[SerializeField]
         //[Tooltip("true면 플레이어의 alwaysNotGrounded을 true로 설정해서 State도중 플레이어 상태를 항상 공중으로 처리")]
@@ -180,9 +185,6 @@ namespace Urban_KimHyeonWoo
             if (CharacterActor.IsGrounded)
                 CharacterActor.ForceNotGrounded();
 
-            Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
-            Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
-
             //==== Legacy Demo Code ====
             //항상 땅에 안닿은 처리
             //슬라이드는 대시와 다르게 땅에 닿은 처리를 해야 함
@@ -226,8 +228,6 @@ namespace Urban_KimHyeonWoo
             Vector3 newJumpDir = 
                 CharacterActor.Right * Input.GetAxisRaw("Movement X") + 
                 CharacterActor.Forward * Input.GetAxisRaw("Movement Y");
-            Debug.Log(newJumpDir);
-
             CharacterActor.Velocity = CharacterActor.Velocity * BehindExitRoll_MultipleRollVelocity + newJumpDir * BehindExitRoll_JumpDirForce;
             isDone = false;
             SuperJumpCursor = 0;
@@ -263,7 +263,7 @@ namespace Urban_KimHyeonWoo
             //Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
             //===개선한 점프 방향 코드
             Vector3 JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
-            
+
 
             //기존의 Velocity 고정 코드
             //CharacterActor.Velocity = dashVelocity;
@@ -271,7 +271,15 @@ namespace Urban_KimHyeonWoo
             //===개선한 중력 적용 코드===
             //CharacterActor.PlanarVelocity = initialForwardVelocity * currentSpeedMultiplier * JumpDirection; // + 마우스 방향 정면 * VelocityForceToMouseDirection
             //CharacterActor.RotateYaw(); //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
-            if(JumpUp_currFrameCount <= JumpUp_FrameCount)
+
+            if (JumpUp_currFrameCount == 0)
+            {
+
+                Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
+                Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
+
+            }
+            if (JumpUp_currFrameCount <= JumpUp_FrameCount)
             {
                 float temf = JumpUp_UpperPowerCurv.Evaluate(JumpUp_currFrameCount / JumpUp_FrameCount);
                 //Debug.Log(temf);
@@ -282,8 +290,17 @@ namespace Urban_KimHyeonWoo
             }
             CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabity;
 
-
+            //PlanarVelocity code====
+            // 입력값 보간
+            /*
+            Vector3 newJumpDir =
+                CharacterActor.Right * Input.GetAxis("Movement X") +
+                CharacterActor.Forward * Input.GetAxis("Movement Y");
             
+            CharacterActor.PlanarVelocity += newJumpDir  * InJump_WASD_InputDirForce;
+            */
+            //====
+
 
 
 

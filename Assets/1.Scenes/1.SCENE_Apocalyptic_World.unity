@@ -18916,6 +18916,94 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpPower
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: InJump_WASD_InputDirForce
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: BehindExitRoll_JumpDirForce
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].time
+      value: 0.3042396
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].time
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].value
+      value: 0.16958287
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].value
+      value: 0.0099983215
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].inSlope
+      value: -0.040521123
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].inSlope
+      value: -0.5787684
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].inSlope
+      value: -0.092266105
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].outSlope
+      value: -0.040521123
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].outSlope
+      value: -0.5787684
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].inWeight
+      value: 0.12282902
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].outSlope
+      value: -0.092266105
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].outWeight
+      value: 0.43211153
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].outWeight
+      value: 0.06785336
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].tangentMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_Name

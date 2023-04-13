@@ -302,7 +302,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                     break;
                 case CharacterActorState.StableGrounded:
 
-
+                    
                     // Run ------------------------------------------------------------
                     if(cam3d != null)
                     {
