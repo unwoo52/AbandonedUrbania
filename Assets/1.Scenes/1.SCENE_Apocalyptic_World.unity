@@ -6035,6 +6035,59 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 562648173}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &563383505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 563383506}
+  - component: {fileID: 563383507}
+  m_Layer: 3
+  m_Name: Weapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &563383506
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563383505}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1763540026}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &563383507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 563383505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8424eda4f270c94db6ef90d9325983f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FireSound: {fileID: 8300000, guid: b33b58d851fd75a4ea886457d5aa281a, type: 3}
+  audioSource: {fileID: 1596227922}
+  m_CameraFocus: {fileID: 1989315820}
+  Bullet: {fileID: 6838843427780193994, guid: 23124d33d6e104347af2b86f1bf345b2, type: 3}
+  muzzleTransform: {fileID: 1673001693}
+  MaxShotDistance: 1000
+  hitableMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &586660113
 GameObject:
   m_ObjectHideFlags: 0
@@ -17879,6 +17932,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1594764361}
   m_PrefabAsset: {fileID: 0}
+--- !u!82 &1596227922 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 8892254005114830405, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1623900616
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18529,6 +18588,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1668840253}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1673001693 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5962069268794644826, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1673290844
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -18916,94 +18981,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpPower
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: InJump_WASD_InputDirForce
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: BehindExitRoll_JumpDirForce
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].time
-      value: 0.3042396
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].time
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].value
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].value
-      value: 0.16958287
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].value
-      value: 0.0099983215
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].inSlope
-      value: -0.040521123
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].inSlope
-      value: -0.5787684
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].inSlope
-      value: -0.092266105
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].outSlope
-      value: -0.040521123
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].inWeight
-      value: 0.33333334
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].outSlope
-      value: -0.5787684
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].inWeight
-      value: 0.12282902
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].outSlope
-      value: -0.092266105
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].outWeight
-      value: 0.43211153
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].outWeight
-      value: 0.06785336
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[0].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[1].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: JumpUp_UpperPowerCurv.m_Curve.Array.data[2].tangentMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_Name
@@ -20179,6 +20156,12 @@ GameObject:
 --- !u!1 &1763540022 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5962069268750157856, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1763540026 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5962069268750157859, guid: d77c839416498b648bd8f660f864a81a,
     type: 3}
   m_PrefabInstance: {fileID: 1714592103}
   m_PrefabAsset: {fileID: 0}
@@ -22113,6 +22096,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959366467}
   m_Mesh: {fileID: -7425271489800135146, guid: 7364a697c50f8254a86ecbf09a33dff3, type: 3}
+--- !u!20 &1989315820 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5962069268888564647, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1993846475
 PrefabInstance:
   m_ObjectHideFlags: 0

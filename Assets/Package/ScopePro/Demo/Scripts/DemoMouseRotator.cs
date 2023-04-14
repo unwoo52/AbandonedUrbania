@@ -6,30 +6,20 @@ using UnityEngine;
 using Urban_KimHyeonWoo;
 using static UnityEditor.Rendering.CameraUI;
 
-namespace Lovatto.Demo.ScopePro
+namespace Urban_KimHyeonWoo
 {
     public class DemoMouseRotator : MonoBehaviour
-    {
-        //Key InPut Field
-        float MousX;
-        float MousY;
-        float MouseWheel;
-        bool Fire1;
-        /// <summary>
-        /// scope focus : 스코프의 로테이션을 입체적으로 만들기 위한 부모오브젝트 원점.
-        /// 스코프와 가까울수록 스코프는 제자리에서 회전하고,
-        /// 스코프와 멀수록 스코프가 화면안에서 많이 움직입니다.
-        /// </summary>
+    {        
+        //스코프 필드
         [Tooltip("스코프 회전 원점. 이 오브젝트를 기준으로 스코프가 회전")]
         public GameObject ScopeFocus;
         [Tooltip("스코프를 바라볼 카메라")]
-        public Camera m_Camera;
-        public Camera m_CameraFocus;
+        Camera cam;
+
+        public Camera RensCam;
         [Tooltip("스코프 렌즈 메테리얼")]
         public Material ZoomMaterial;
 
-        public AudioClip FireSound;
-        public AudioSource audioSource;
 
         //default size
         Vector3 defaultRot;
@@ -38,19 +28,6 @@ namespace Lovatto.Demo.ScopePro
 
 
         
-        private void Awake()
-        {
-            defaultRot = transform.localEulerAngles;
-            defaultcamRot = m_Camera.transform.localEulerAngles;
-            defaultCenterPos = ScopeFocus.transform.localPosition;
-        }
-        
-        private void OnEnable()
-        {
-            HorizonMouseInput = 0;
-            VerticalMouseInput = 0;
-            zoomValue = 0.5f;
-        }
         
         [Header("스코프 움직임 조절")]
         [Tooltip("값이 클수록 마우스를 움직일 때 카메라가 크게 회전합니다.")]
@@ -95,53 +72,53 @@ namespace Lovatto.Demo.ScopePro
         //default mouse input field
         public float HorizonMouseInput = 0;
         public float VerticalMouseInput = 0;
+
+
+
+        //======================================
+        //======================================
+
+
+        #region Unity Callbacks and OnEnable Method
+        private void Awake()
+        {
+            cam = transform.parent.GetComponent<Camera>();
+            defaultRot = transform.localEulerAngles;
+            defaultcamRot = cam.transform.localEulerAngles;
+            defaultCenterPos = ScopeFocus.transform.localPosition;
+        }
+
         private void Update()
         {
             GetInput();
             Scope(MousX, MousY, MouseWheel);
-            if (Fire1) Fire();
         }
-        [Header("bullet")]
-        [SerializeField] GameObject Bullet;
-        [SerializeField] Transform muzzleTransform;
-        [SerializeField] float MaxShotDistance = 1000f;
-        [SerializeField] LayerMask hitableMask;
-        void Fire()
+
+        private void OnEnable()
         {
-
-            audioSource.PlayOneShot(FireSound);
-
-            Ray ray = m_CameraFocus.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
-            Vector3 direction;
-
-            if (Physics.Raycast(ray, out RaycastHit hit, MaxShotDistance, hitableMask))
-            {
-                Debug.Log($"hitObject ::: {hit.transform.name}");
-
-                Debug.DrawRay(m_CameraFocus.transform.position, hit.point - m_CameraFocus.transform.position, Color.red, 3f);
-
-                direction = (hit.point - muzzleTransform.transform.position).normalized;
-            }
-            else
-            {
-                direction = (ray.GetPoint(MaxShotDistance) - muzzleTransform.transform.position).normalized;
-            }
-
-            
-            GameObject bullet = Instantiate(Bullet);
-            bullet.transform.position = muzzleTransform.position;
-            bullet.transform.rotation = Quaternion.LookRotation(direction);
+            HorizonMouseInput = 0;
+            VerticalMouseInput = 0;
+            zoomValue = 0.5f;
         }
+        #endregion
 
+
+        #region Input Process
+
+        //Key InPut Field
+        float MousX;
+        float MousY;
+        float MouseWheel;
 
         void GetInput()
         {
             MouseWheel = Input.GetAxis("Camera Zoom");
             MousX = Input.GetAxis("Camera X");
             MousY = Input.GetAxis("Camera Y");
-            Fire1 = Input.GetButtonDown("Fire1");
         }
+        #endregion
 
+        #region Scope Movement
         void Scope(float mousex, float mousey, float mouseWheel)
         {
             //get wheelup value
@@ -155,10 +132,10 @@ namespace Lovatto.Demo.ScopePro
             //add Dot Sight
             ZoomMaterial.SetFloat("Vector1_0bb2c494708d4e73aed6ec3922b741ac", k);
             //add Scope Zoom size
-            m_CameraFocus.fieldOfView = m;
+            RensCam.fieldOfView = m;
 
             //add Camera Field of View
-            m_Camera.fieldOfView = Mathf.Lerp(CamFieldofView.x, CamFieldofView.y, zoomValue);
+            cam.fieldOfView = Mathf.Lerp(CamFieldofView.x, CamFieldofView.y, zoomValue);
 
             //modify aim speed
             SensitivityMouseAim = aimCurve.Evaluate(zoomValue);
@@ -177,11 +154,12 @@ namespace Lovatto.Demo.ScopePro
             //add Scope Angle
             ScopeFocus.transform.localEulerAngles = defaultRot + euler * CenterAngle;
             //add Cam Angle
-            m_Camera.transform.localEulerAngles = (defaultcamRot + euler) * CameraAngle;
+            cam.transform.localEulerAngles = (defaultcamRot + euler) * CameraAngle;
 
             //add Cam Transform
             Vector3 newver = new Vector3(euler.y, -euler.x, 0);
             ScopeFocus.transform.localPosition = (defaultCenterPos + newver * CenterPos);
         }
+        #endregion
     }
 }

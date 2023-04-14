@@ -17,6 +17,8 @@ namespace Urban_KimHyeonWoo
     }
     public class ControllCamera3D : MonoBehaviour, IBindPlayerCam, IGetRayAtCamera
     {
+        [Tooltip("true로 설정되어 있을 때에는 ChangeFSM이 동작하지 않습니다.")]
+        public bool IsLockChangeState = false;
 
         Vector2 OriginZoomMinMax;
         [SerializeField] Vector2 CloseZoomMinMax;
@@ -29,6 +31,15 @@ namespace Urban_KimHyeonWoo
         [SerializeField] GameObject HudeHip;
         [SerializeField] GameObject Sniper;
         [SerializeField] GameObject Player;
+
+
+
+        //======================================
+        //======================================
+
+
+        #region FSM
+
         enum CameraViewState
         {
             ThirdPersonView_Far, ThirdPersonView_Close, AmingView, OtherObjectView
@@ -37,6 +48,7 @@ namespace Urban_KimHyeonWoo
         CameraViewState beforeState = default;
         void ChangeViewState(CameraViewState viewState)
         {
+            if (IsLockChangeState) return;
             if(currentViewState == viewState) return;
             CameraViewState tempBeforeState = currentViewState;
 
@@ -82,7 +94,9 @@ namespace Urban_KimHyeonWoo
                     break;
             }
         }
+        #endregion
 
+        #region Unity Callbacks
         private void Start()
         {
             if (cam == null)
@@ -105,10 +119,12 @@ namespace Urban_KimHyeonWoo
             InputProcsee();
         }
 
+        #endregion
+
+        #region Input Process
         //Input Fields
         bool AmingKey = false;
         float SwapViewKey;
-
         void GetInput()
         {
             AmingKey = Input.GetButtonDown("Fire2");            
@@ -128,6 +144,7 @@ namespace Urban_KimHyeonWoo
             }
         }
 
+        #endregion
 
         void Swap_FirstOrThirdView(bool isClose)
         {            
@@ -157,6 +174,20 @@ namespace Urban_KimHyeonWoo
             cam.minZoom = ZoomMinMax.x;
             cam.maxZoom = ZoomMinMax.y;
         }
+
+        #region Unity Event Method
+        //슈퍼점프의 유니티이벤트에 넣을 함수
+        public void EnterBindCam()
+        {
+            ChangeViewState(CameraViewState.ThirdPersonView_Close);
+            IsLockChangeState = true;
+        }
+        public void ExitBindCam()
+        {
+            IsLockChangeState = false;
+            ChangeViewState(CameraViewState.ThirdPersonView_Far);
+        }
+        #endregion
 
         #region interfaces
         public void BindPlayerCam_To_Object(bool isBind, GameObject targetObject, Vector2 zoomMinMax)

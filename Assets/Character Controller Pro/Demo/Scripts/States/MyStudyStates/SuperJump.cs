@@ -4,6 +4,7 @@ using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.Utilities;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Urban_KimHyeonWoo
 {
@@ -164,8 +165,7 @@ namespace Urban_KimHyeonWoo
             {
                 //roll
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);
-                CharacterStateController.Animator.SetBool("IsRoll", true);
-                CharacterStateController.EnqueueTransition<Roll>();
+                CharacterStateController.EnqueueTransition<NormalMovement>();
             }
             else if (CharacterActor.IsGrounded && !CharacterActor.IsStable && isDone)
             {
@@ -180,10 +180,14 @@ namespace Urban_KimHyeonWoo
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
             //==== My code ====
-
+            BindEnterEvent?.Invoke();
             JumpUp_currFrameCount = 0;
+
             if (CharacterActor.IsGrounded)
                 CharacterActor.ForceNotGrounded();
+
+            Instantiate(EffectPrefab, FootPositionL.position, CharacterActor.Rotation * Quaternion.Euler(0f, 180f, 0f));
+            Instantiate(EffectPrefab, FootPositionL.position, CharacterActor.Rotation * Quaternion.Euler(0f, 180f, 0f));
 
             //==== Legacy Demo Code ====
             //항상 땅에 안닿은 처리
@@ -240,6 +244,7 @@ namespace Urban_KimHyeonWoo
 
         public override void ExitBehaviour(float dt, CharacterState toState)
         {
+            BindExitEvent?.Invoke();
             if (OnSuperJumpStart != null)
                 OnSuperJumpStart(JumpProgressDirection);
             //forceNotGrounded(항상 땅에 안닿게 처리하는 필드) 가 true이면
@@ -257,28 +262,14 @@ namespace Urban_KimHyeonWoo
             //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
         // Write your update code here
+        [Tooltip("ControllCamera3D의 시선 고정 함수를 넣어야 함")]
+        [SerializeField] UnityEvent BindEnterEvent;
+        [SerializeField] UnityEvent BindExitEvent;
         public override void UpdateBehaviour(float dt)
         {
-            //기존의 dashVelocity  코드
-            //Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
-            //===개선한 점프 방향 코드
             Vector3 JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
 
 
-            //기존의 Velocity 고정 코드
-            //CharacterActor.Velocity = dashVelocity;
-
-            //===개선한 중력 적용 코드===
-            //CharacterActor.PlanarVelocity = initialForwardVelocity * currentSpeedMultiplier * JumpDirection; // + 마우스 방향 정면 * VelocityForceToMouseDirection
-            //CharacterActor.RotateYaw(); //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
-
-            if (JumpUp_currFrameCount == 0)
-            {
-
-                Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
-                Instantiate(EffectPrefab, FootPositionL.position, Quaternion.identity);
-
-            }
             if (JumpUp_currFrameCount <= JumpUp_FrameCount)
             {
                 float temf = JumpUp_UpperPowerCurv.Evaluate(JumpUp_currFrameCount / JumpUp_FrameCount);
@@ -290,16 +281,9 @@ namespace Urban_KimHyeonWoo
             }
             CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabity;
 
-            //PlanarVelocity code====
-            // 입력값 보간
-            /*
-            Vector3 newJumpDir =
-                CharacterActor.Right * Input.GetAxis("Movement X") +
-                CharacterActor.Forward * Input.GetAxis("Movement Y");
-            
-            CharacterActor.PlanarVelocity += newJumpDir  * InJump_WASD_InputDirForce;
-            */
-            //====
+            //캐릭터 시선 고정
+            Vector3 mouseDir = new Vector3(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z);
+            CharacterActor.SetRotation(mouseDir, CharacterActor.Up);
 
 
 

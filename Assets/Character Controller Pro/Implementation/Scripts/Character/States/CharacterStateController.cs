@@ -2,6 +2,7 @@
 using UnityEngine;
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.Utilities;
+using Lightbug.CharacterControllerPro.Demo;
 
 namespace Lightbug.CharacterControllerPro.Implementation
 {

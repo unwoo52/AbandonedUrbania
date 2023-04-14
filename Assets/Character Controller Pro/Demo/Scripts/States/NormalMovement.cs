@@ -3,6 +3,7 @@ using Lightbug.CharacterControllerPro.Core;
 using Lightbug.Utilities;
 using Lightbug.CharacterControllerPro.Implementation;
 using Urban_KimHyeonWoo;
+using UnityEngine.UIElements;
 
 namespace Lightbug.CharacterControllerPro.Demo
 {
@@ -313,6 +314,9 @@ namespace Lightbug.CharacterControllerPro.Demo
                         else
                         {
                             wantToRun = false;
+                            //캐릭터 방향 고정 코드
+                            Vector3 mouseDir = new Vector3(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z);
+                            CharacterActor.SetRotation(mouseDir, CharacterActor.Up);
                         }
                     }
                     
@@ -363,6 +367,7 @@ namespace Lightbug.CharacterControllerPro.Demo
 
             SetMotionValues(targetPlanarVelocity);
 
+            
 
             float acceleration = currentMotion.acceleration;
             if (needToAccelerate) //가속할 필요가 있다면
@@ -393,8 +398,17 @@ namespace Lightbug.CharacterControllerPro.Demo
                 acceleration * dt
             );
         }
+        [Header("IK")]
+        [SerializeField]Transform LeftHand;
+        public override void UpdateIK(int layerIndex)
+        {
 
+            // Set the weight
+            CharacterActor.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 
+            // Set the position
+            CharacterActor.Animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHand.position);
+        }
 
         protected virtual void ProcessGravity(float dt)
         {

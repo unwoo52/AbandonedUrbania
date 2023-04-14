@@ -5,9 +5,6 @@ using Lightbug.Utilities;
 
 namespace Lightbug.CharacterControllerPro.Implementation
 {
-
-
-
     /// <summary>
     /// 이 클래스는 
     /// 캐릭터 상태 컨트롤러(유한 상태 머신)에서 

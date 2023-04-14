@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0c3dc836e9c4baf43b2a1ecec558cfd2
+guid: cfb3b91c66540be47b3cb7a714f3db03
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -33,7 +33,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Jump
+      name: RilfeSprint3
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
@@ -47,7 +47,7 @@ ModelImporter:
       loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
-      loopBlendPositionY: 0
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 0

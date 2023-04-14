@@ -225,7 +225,6 @@ namespace Lightbug.CharacterControllerPro.Demo
                 this.enabled = false;
                 return;
             }
-                        
             Vector2 cameraAxes = inputHandlerSettings.InputHandler.GetVector2(axes); //getVector2("camera")
 
 

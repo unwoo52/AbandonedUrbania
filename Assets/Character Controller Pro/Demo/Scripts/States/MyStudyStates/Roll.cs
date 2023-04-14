@@ -122,9 +122,14 @@ namespace Urban_KimHyeonWoo
         {
             if (fromState == CharacterStateController.GetState<SuperJump>())
             {
+                rollDirection = fromState.CharacterActor.Velocity.normalized;
                 IsFromSuperJump = true;
             }
-            else IsFromSuperJump = false;
+            else
+            {
+                rollDirection = CharacterActor.Forward;
+                IsFromSuperJump = false;
+            }
 
             TriggerOnSuperJump = false;
 
@@ -165,16 +170,10 @@ namespace Urban_KimHyeonWoo
         }
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
-            isRollEnd = false;
             //==== My code ====
-            //duration을 애니메이터 클립의 길이로 정의
-
-
+            isRollEnd = false;
 
             //==== Legacy Demo Code ====
-            //항상 땅에 안닿은 처리
-            //슬라이드는 대시와 다르게 땅에 닿은 처리를 해야 함
-            //if (forceNotGrounded) CharacterActor.alwaysNotGrounded = true;
 
             //루트모션 안쓸거니까
             CharacterActor.UseRootMotion = false;
@@ -204,7 +203,6 @@ namespace Urban_KimHyeonWoo
             }
 
             //Set the dash direction
-            rollDirection = CharacterActor.Forward;
 
 
             //ResetDash();
@@ -252,8 +250,7 @@ namespace Urban_KimHyeonWoo
             //마우스 방향으로 회전, rotateForceTomouseDirection = if(캐릭터 정면 기준으로 마우스 방향에 따라 + or - )
             //다음과 같은 코드를 완성해줘. actorDir는 내 캐릭터의 정면 방향이고, mouseDir은 내 마우스가 바라보고 있는 방향이야.
             //이 코드는 UpdateBehaviour에 작성되고 있어. CharacterActor.RotateYaw(); 를 이용해서 myRotateSpeed속도로 캐릭터가 마우스 방향으로 회전하기를 원해
-            Vector3 actorDir = CharacterActor.Forward;
-            Vector3 mouseDir = CharacterActor.CurCam.gameObject.transform.forward;
+            Vector3 mouseDir = CharacterActor.CurCam.transform.forward;
             Quaternion targetRotation = Quaternion.LookRotation(new Vector3(mouseDir.x, 0f, mouseDir.z));
             Quaternion newRotation = Quaternion.RotateTowards(CharacterActor.transform.rotation, targetRotation, TESTRotateSpeed * Time.deltaTime);
             CharacterActor.RotateYaw(newRotation.eulerAngles.y - CharacterActor.transform.rotation.eulerAngles.y);
