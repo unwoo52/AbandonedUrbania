@@ -18,7 +18,7 @@ namespace Urban_KimHyeonWoo
     public class ControllCamera3D : MonoBehaviour, IBindPlayerCam, IGetRayAtCamera
     {
         [Tooltip("true로 설정되어 있을 때에는 ChangeFSM이 동작하지 않습니다.")]
-        public bool IsLockChangeState = false;
+        [HideInInspector] public bool IsLockChangeState = false;
 
         Vector2 OriginZoomMinMax;
         [SerializeField] Vector2 CloseZoomMinMax;
@@ -29,7 +29,6 @@ namespace Urban_KimHyeonWoo
         [SerializeField] GameObject Weapon;
         [SerializeField] GameObject HandHip;
         [SerializeField] GameObject HudeHip;
-        [SerializeField] GameObject Sniper;
         [SerializeField] GameObject Player;
 
 
@@ -61,7 +60,10 @@ namespace Urban_KimHyeonWoo
                     break;
                 case CameraViewState.AmingView:
                     cam.cameraMode = Camera3D.CameraMode.ThirdPerson;
-                    Sniper.SetActive(false);
+                    if (TryGetComponent(out ControllCameraFirstView controllCameraFirstView))
+                    {
+                        controllCameraFirstView.ExitAim();
+                    }
                     break;
                 case CameraViewState.OtherObjectView:
                     break;
@@ -85,7 +87,10 @@ namespace Urban_KimHyeonWoo
                     break;
                 case CameraViewState.AmingView:
                     cam.cameraMode = Camera3D.CameraMode.FirstPerson;
-                    Sniper.SetActive(true);
+                    if(TryGetComponent(out ControllCameraFirstView controllCameraFirstView))
+                    {
+                        controllCameraFirstView.EnterAim();
+                    }
                     break;
                 case CameraViewState.OtherObjectView:
                     beforeState = tempBeforeState;
@@ -134,14 +139,17 @@ namespace Urban_KimHyeonWoo
         {
             if (AmingKey) Enter_AmingView();
 
-            if (SwapViewKey == 1)
+            if(currentViewState != CameraViewState.AmingView)
             {
-                Swap_FirstOrThirdView(true);
-            }
-            else if (SwapViewKey == -1)
-            {
-                Swap_FirstOrThirdView(false);
-            }
+                if (SwapViewKey == 1)
+                {
+                    Swap_FirstOrThirdView(true);
+                }
+                else if (SwapViewKey == -1)
+                {
+                    Swap_FirstOrThirdView(false);
+                }
+            }            
         }
 
         #endregion

@@ -2929,6 +2929,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 277248628}
   m_PrefabAsset: {fileID: 0}
+--- !u!20 &282797154 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 5962069269069850290, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &296522648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6132,6 +6138,12 @@ Transform:
   m_Father: {fileID: 383396606}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &594231928 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5962069267979689932, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &599012710
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7304,6 +7316,12 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3667691662902867859, guid: 5f86aa84ddf55884882a4ff3e0474d36,
     type: 3}
   m_PrefabInstance: {fileID: 732573936}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &767655191 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5962069267448382059, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &784310318
 PrefabInstance:
@@ -18981,6 +18999,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
+    - target: {fileID: 5962069267979689933, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: RensCam
+      value: 
+      objectReference: {fileID: 282797154}
+    - target: {fileID: 5962069267979689933, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_Name
@@ -19041,7 +19069,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2688100073504971005, guid: d77c839416498b648bd8f660f864a81a, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}
 --- !u!1001 &1717276523
 PrefabInstance:
@@ -22096,12 +22125,107 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1959366467}
   m_Mesh: {fileID: -7425271489800135146, guid: 7364a697c50f8254a86ecbf09a33dff3, type: 3}
+--- !u!1 &1989315814 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5962069268888564650, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &1989315820 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 5962069268888564647, guid: d77c839416498b648bd8f660f864a81a,
     type: 3}
   m_PrefabInstance: {fileID: 1714592103}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1989315821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1989315814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: acd063954252b6f48a9b78be1f380d4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ScopeObject: {fileID: 594231928}
+  ScopeFocus: {fileID: 767655191}
+  RensCam: {fileID: 282797154}
+  ZoomMaterial: {fileID: 2100000, guid: a7e4fcdf1e6108247a0b8b65490a78d4, type: 2}
+  CameraAngle: 0.2
+  CenterAngle: 0.5
+  CenterPos: 0.001
+  MinMax: 50
+  DotsiteMinMax: {x: 0.5, y: 1.5}
+  ZoomAreaMinMax: {x: 1, y: 10}
+  CamFieldofView: {x: 31, y: 40}
+  aimCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.34999084
+      inSlope: 0.6200104
+      outSlope: 0.6200104
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.9700012
+      inSlope: 0.6200104
+      outSlope: 0.6200104
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ZoomWheelSpeed: 0.827
+  zoomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00030136108
+      value: 0.07456303
+      inSlope: 0.047430024
+      outSlope: 0.047430024
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.40531793
+    - serializedVersion: 3
+      time: 0.6952745
+      value: 0.19094713
+      inSlope: 0.41999334
+      outSlope: 0.41999334
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.26541457
+      outWeight: 0.49392796
+    - serializedVersion: 3
+      time: 1
+      value: 1.0032177
+      inSlope: 4.939679
+      outSlope: 4.939679
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.068387814
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  CurvedzoomSpeed: 0
+  SensitivityMouseAim: 0
+  zoomForce: 0.5
+  HorizonMouseInput: 0
+  VerticalMouseInput: 0
+  MousX: 0
+  MousY: 0
+  MouseWheel: 0
 --- !u!1001 &1993846475
 PrefabInstance:
   m_ObjectHideFlags: 0

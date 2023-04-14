@@ -1,23 +1,21 @@
-ï»¿using Lightbug.CharacterControllerPro.Implementation;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+using Lightbug.CharacterControllerPro.Demo;
+using System.Security.Cryptography;
+using Unity.Mathematics;
 using UnityEngine;
-using Urban_KimHyeonWoo;
-using static UnityEditor.Rendering.CameraUI;
 
 namespace Urban_KimHyeonWoo
 {
-    public class DemoMouseRotator : MonoBehaviour
-    {        
-        //ìŠ¤ì½”í”„ í•„ë“œ
-        [Tooltip("ìŠ¤ì½”í”„ íšŒì „ ì›ì . ì´ ì˜¤ë¸Œì íŠ¸ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìŠ¤ì½”í”„ê°€ íšŒì „")]
+    public class ControllCameraFirstView : MonoBehaviour
+    {
+        //½ºÄÚÇÁ ÇÊµå
+        [SerializeField] GameObject ScopeObject;
+        [Tooltip("½ºÄÚÇÁ È¸Àü ¿øÁ¡. ÀÌ ¿ÀºêÁ§Æ®¸¦ ±âÁØÀ¸·Î ½ºÄÚÇÁ°¡ È¸Àü")]
         public GameObject ScopeFocus;
-        [Tooltip("ìŠ¤ì½”í”„ë¥¼ ë°”ë¼ë³¼ ì¹´ë©”ë¼")]
+        [Tooltip("½ºÄÚÇÁ¸¦ ¹Ù¶óº¼ Ä«¸Ş¶ó")]
         Camera cam;
 
         public Camera RensCam;
-        [Tooltip("ìŠ¤ì½”í”„ ë Œì¦ˆ ë©”í…Œë¦¬ì–¼")]
+        [Tooltip("½ºÄÚÇÁ ·»Áî ¸ŞÅ×¸®¾ó")]
         public Material ZoomMaterial;
 
 
@@ -27,45 +25,45 @@ namespace Urban_KimHyeonWoo
         Vector3 defaultCenterPos;
 
 
-        
-        
-        [Header("ìŠ¤ì½”í”„ ì›€ì§ì„ ì¡°ì ˆ")]
-        [Tooltip("ê°’ì´ í´ìˆ˜ë¡ ë§ˆìš°ìŠ¤ë¥¼ ì›€ì§ì¼ ë•Œ ì¹´ë©”ë¼ê°€ í¬ê²Œ íšŒì „í•©ë‹ˆë‹¤.")]
+
+
+        [Header("½ºÄÚÇÁ ¿òÁ÷ÀÓ Á¶Àı")]
+        [Tooltip("°ªÀÌ Å¬¼ö·Ï ¸¶¿ì½º¸¦ ¿òÁ÷ÀÏ ¶§ Ä«¸Ş¶ó°¡ Å©°Ô È¸ÀüÇÕ´Ï´Ù.")]
         public float CameraAngle;
-        [Tooltip("ê°’ì´ í´ìˆ˜ë¡ ë§ˆìš°ìŠ¤ë¥¼ ì›€ì§ì¼ ë•Œ ìŠ¤ì½”í”„ê°€ í¬ê²Œ íšŒì „í•©ë‹ˆë‹¤.")]
+        [Tooltip("°ªÀÌ Å¬¼ö·Ï ¸¶¿ì½º¸¦ ¿òÁ÷ÀÏ ¶§ ½ºÄÚÇÁ°¡ Å©°Ô È¸ÀüÇÕ´Ï´Ù.")]
         public float CenterAngle;
-        [Tooltip("ê°’ì´ í´ìˆ˜ë¡ í™”ë©´ ì¤‘ì•™ìœ¼ë¡œë¶€í„° ìŠ¤ì½”í”„ê°€ ë©€ì–´ì§‘ë‹ˆë‹¤")]
+        [Tooltip("°ªÀÌ Å¬¼ö·Ï È­¸é Áß¾ÓÀ¸·ÎºÎÅÍ ½ºÄÚÇÁ°¡ ¸Ö¾îÁı´Ï´Ù")]
         public float CenterPos;
-        [Tooltip("ì—ì„ì˜ ìƒí•˜ì¢Œìš° í•œê³„ì¹˜ì…ë‹ˆë‹¤.")]
+        [Tooltip("¿¡ÀÓÀÇ »óÇÏÁÂ¿ì ÇÑ°èÄ¡ÀÔ´Ï´Ù.")]
         public float MinMax;
 
 
-        [Header("ìŠ¤ì½”í”„ ë Œì¦ˆ ì¤Œê°’ ì¡°ì ˆ")]
-        [Tooltip("ë„íŠ¸ì‚¬ì´íŠ¸ í¬ê¸° ìµœì†Œ ìµœëŒ€ ê°’")]
+        [Header("½ºÄÚÇÁ ·»Áî ÁÜ°ª Á¶Àı")]
+        [Tooltip("µµÆ®»çÀÌÆ® Å©±â ÃÖ¼Ò ÃÖ´ë °ª")]
         public Vector2 DotsiteMinMax = new Vector2(0.5f, 1.5f);
-        [Tooltip("ìŠ¤í¬í¬ ë Œì¦ˆ í™•ëŒ€ ìµœì†Œ ìµœëŒ€ ê°’")]
+        [Tooltip("½ºÆ÷Å© ·»Áî È®´ë ÃÖ¼Ò ÃÖ´ë °ª")]
         public Vector2 ZoomAreaMinMax = new Vector2(3f, 15f);
-        [Tooltip("ì¹´ë©”ë¼ í™•ëŒ€ ìµœì†Œ ìµœëŒ€ ê°’")]
+        [Tooltip("Ä«¸Ş¶ó È®´ë ÃÖ¼Ò ÃÖ´ë °ª")]
         public Vector2 CamFieldofView = new Vector2(21f, 29f);
 
         [Header("Zoom Value")]
         public AnimationCurve aimCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
-        [Tooltip("ë§ˆìš°ìŠ¤íœ ë¡œ ì¤Œ í•˜ëŠ” ì†ë„ë¥¼ ì¡°ì ˆí•©ë‹ˆë‹¤..")]
-        [Range(0,1)]
+        [Tooltip("¸¶¿ì½ºÈÙ·Î ÁÜ ÇÏ´Â ¼Óµµ¸¦ Á¶ÀıÇÕ´Ï´Ù..")]
+        [Range(0, 1)]
         public float ZoomWheelSpeed = 0.5f;
-        [Tooltip("ì¤Œ ê±°ë¦¬ì— ë”°ë¥¸ ì¤Œ ìŠ¤í”¼ë“œë¥¼ ì¡°ì ˆí•˜ëŠ” ê³¡ì„ ì…ë‹ˆë‹¤.")]
+        [Tooltip("ÁÜ °Å¸®¿¡ µû¸¥ ÁÜ ½ºÇÇµå¸¦ Á¶ÀıÇÏ´Â °î¼±ÀÔ´Ï´Ù.")]
         public AnimationCurve zoomCurve = AnimationCurve.Linear(0f, 0f, 1f, 1f);
 
 
-        [Header("ëª¨ë‹ˆí„°ë§")]
-        [Tooltip("ëª¨ë‹ˆí„°ë§ :: ì¤Œ ì†ë„ì˜ ì»¤ë¸Œ ìƒíƒœì…ë‹ˆë‹¤.")]
+        [Header("¸ğ´ÏÅÍ¸µ")]
+        [Tooltip("¸ğ´ÏÅÍ¸µ :: ÁÜ ¼ÓµµÀÇ Ä¿ºê »óÅÂÀÔ´Ï´Ù.")]
         public float CurvedzoomSpeed;
 
-        [Tooltip("ëª¨ë‹ˆí„°ë§ :: ì—ì„ì˜ ê°ë„ì…ë‹ˆë‹¤.")]
+        [Tooltip("¸ğ´ÏÅÍ¸µ :: ¿¡ÀÓÀÇ °¨µµÀÔ´Ï´Ù.")]
         public float SensitivityMouseAim;
 
-        [Tooltip("ëª¨ë‹ˆí„°ë§ :: ì¤Œ ìˆ˜ì¹˜ì…ë‹ˆë‹¤.")]
+        [Tooltip("¸ğ´ÏÅÍ¸µ :: ÁÜ ¼öÄ¡ÀÔ´Ï´Ù.")]
         [SerializeField] float zoomForce = 0.5f; // 0 ~ 1
         Vector2 ZoomMinMax = new Vector2(0, 1);
 
@@ -73,7 +71,7 @@ namespace Urban_KimHyeonWoo
         public float HorizonMouseInput = 0;
         public float VerticalMouseInput = 0;
 
-
+        bool isAimState = false;
 
         //======================================
         //======================================
@@ -82,7 +80,7 @@ namespace Urban_KimHyeonWoo
         #region Unity Callbacks and OnEnable Method
         private void Awake()
         {
-            cam = transform.parent.GetComponent<Camera>();
+            cam = GetComponent<Camera>();
             defaultRot = transform.localEulerAngles;
             defaultcamRot = cam.transform.localEulerAngles;
             defaultCenterPos = ScopeFocus.transform.localPosition;
@@ -91,34 +89,57 @@ namespace Urban_KimHyeonWoo
         private void Update()
         {
             GetInput();
-            Scope(MousX, MousY, MouseWheel);
+            if(isAimState)
+                Scope(MousX, MousY, MouseWheel);
         }
 
-        private void OnEnable()
-        {
-            HorizonMouseInput = 0;
-            VerticalMouseInput = 0;
-            zoomForce = 0.5f;
-        }
         #endregion
 
 
         #region Input Process
 
         //Key InPut Field
-        float MousX;
-        float MousY;
-        float MouseWheel;
-
+        [SerializeField] float MousX;
+        [SerializeField] float MousY;
+        [SerializeField] float MouseWheel;
         void GetInput()
         {
             MouseWheel = Input.GetAxis("Camera Zoom");
             MousX = Input.GetAxis("Camera X");
             MousY = Input.GetAxis("Camera Y");
+            Debug.Log($"{MousX} ::: {MousY}");
+        }
+        #endregion
+
+        #region public
+        float originFieldOfView;
+        Quaternion originRot;
+        [SerializeField] Vector2 CamRotateMinMax = new Vector2(-30f, 30f); // Ä«¸Ş¶ó È¸Àü ÃÖ¼Ò, ÃÖ´ë°ª (x: min, y: max)
+        [SerializeField] Vector2 curCamMinMax = new Vector2(0, 0);
+        public void EnterAim()
+        {
+            if (TryGetComponent(out Camera3D camera3D))
+            {
+                originRot = transform.rotation;
+            }
+            HorizonMouseInput = 0;
+            VerticalMouseInput = 0;
+            zoomForce = 0.5f;
+            originFieldOfView = cam.fieldOfView;
+            isAimState = true;
+            ScopeObject.SetActive(true);
+        }
+
+        public void ExitAim()
+        {
+            cam.fieldOfView = originFieldOfView;
+            isAimState = false;
+            ScopeObject.SetActive(false);
         }
         #endregion
 
         #region Scope Movement
+        public float testff = 0.001f;
         void Scope(float mousex, float mousey, float mouseWheel)
         {
             //calculate Zoom Force  -------
@@ -143,20 +164,21 @@ namespace Urban_KimHyeonWoo
 
 
             //add camPos camAngle scopeAngle
-            Vector2 output = new Vector2(mousex, mousey) * SensitivityMouseAim;
-            Vector3 euler = transform.eulerAngles;
+            HorizonMouseInput = Mathf.Clamp(HorizonMouseInput + mousey * SensitivityMouseAim, -MinMax, MinMax);
+            VerticalMouseInput = Mathf.Clamp(VerticalMouseInput + mousex * SensitivityMouseAim, -MinMax, MinMax);
 
-            HorizonMouseInput = Mathf.Clamp(HorizonMouseInput + output.y, -MinMax, MinMax);
-            VerticalMouseInput = Mathf.Clamp(VerticalMouseInput + output.x, -MinMax, MinMax);
-
-            euler.x = -HorizonMouseInput;
-            euler.y = VerticalMouseInput;
+            Vector3 euler = new Vector3(-HorizonMouseInput, VerticalMouseInput, 0);
 
             //add Scope Angle
             ScopeFocus.transform.localEulerAngles = defaultRot + euler * CenterAngle;
-            //add Cam Angle
-            cam.transform.localEulerAngles = (defaultcamRot + euler) * CameraAngle;
 
+            //add Cam Angle
+            if (TryGetComponent(out Camera3D camera3D))
+            {
+                camera3D.deltaPitch += -mousey * testff * SensitivityMouseAim;
+                camera3D.deltaYaw += mousex * testff * SensitivityMouseAim;
+            }
+            
             //add Cam Transform
             Vector3 newver = new Vector3(euler.y, -euler.x, 0);
             ScopeFocus.transform.localPosition = (defaultCenterPos + newver * CenterPos);

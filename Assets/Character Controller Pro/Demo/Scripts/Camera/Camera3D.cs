@@ -118,8 +118,8 @@ namespace Lightbug.CharacterControllerPro.Demo
         public float CurrentDistanceToTarget => currentDistanceToTarget;
         float smoothedDistanceToTarget;
 
-        float deltaYaw = 0f;
-        float deltaPitch = 0f;
+        public float deltaYaw = 0f;
+        public float deltaPitch = 0f;
         float deltaZoom = 0f;
 
         Vector3 lerpedCharacterUp = Vector3.up;       
@@ -243,8 +243,8 @@ namespace Lightbug.CharacterControllerPro.Demo
             }
             else
             {
-                deltaPitch = 0;
-                deltaYaw = 0;
+                //deltaPitch = 0;
+                //deltaYaw = 0;
             }
             
 
