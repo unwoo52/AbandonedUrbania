@@ -1,0 +1,97 @@
+using Lightbug.CharacterControllerPro.Core;
+using Lightbug.CharacterControllerPro.Implementation;
+using Lightbug.Utilities;
+using UnityEngine;
+
+namespace Urban_KimHyeonWoo
+{
+    public class WeaponState : MonoBehaviour
+    {
+        public WeaponStateController WeaponStateController { get; private set; }
+
+
+
+        /// <summary>
+        /// Gets the CharacterBrain component of the gameObject.
+        /// </summary>
+        // public CharacterBrain CharacterBrain{ get; private set; }
+        CharacterBrain CharacterBrain = null;
+        /// <summary>
+        /// Gets the current brain actions CharacterBrain component of the gameObject.
+        /// </summary>
+        public CharacterActions CharacterActions
+        {
+            get
+            {
+                return CharacterBrain == null ? new CharacterActions() : CharacterBrain.CharacterActions;
+            }
+        }
+
+
+
+        #region unity CallBacks
+        private void Awake()
+        {
+            CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
+            WeaponStateController = this.GetComponentInBranch<CharacterActor, WeaponStateController>();
+        }
+        #endregion
+
+        #region Check Transition
+        /// <summary>
+        /// Checks if the required conditions to exit this state are true. If so it returns the desired state (null otherwise). After this the state machine will
+        /// proceed to evaluate the "enter transition" condition on the target state.
+        /// </summary>
+        public virtual void CheckExitTransition()
+        {
+        }
+
+        /// <summary>
+        /// Checks if the required conditions to enter this state are true. If so the state machine will automatically change the current state to the desired one.
+        /// </summary>  
+        public virtual bool CheckEnterTransition(WeaponState fromState)
+        {
+            return true;
+        }
+        #endregion
+
+        #region Behaviors
+        /// <summary>
+        /// This method runs once when the state has entered the state machine.
+        /// </summary>
+        public virtual void EnterBehaviour(float dt, WeaponState fromState)
+        {
+        }
+        /// <summary>
+        /// This method runs once when the state has exited the state machine.
+        /// </summary>
+        public virtual void ExitBehaviour(float dt, WeaponState toState)
+        {
+        }
+
+
+        /// <summary>
+        /// This methods runs before the main Update method.
+        /// </summary>
+        public virtual void PreUpdateBehaviour(float dt)
+        {
+        }
+
+        /// <summary>
+        /// This method runs frame by frame, and should be implemented by the derived state class.
+        /// </summary>
+        public virtual void UpdateBehaviour(float dt)
+        {
+        }
+
+        /// <summary>
+        /// This methods runs after the main Update method.
+        /// </summary>
+        public virtual void PostUpdateBehaviour(float dt)
+        {
+        }
+        #endregion
+
+    }
+
+}

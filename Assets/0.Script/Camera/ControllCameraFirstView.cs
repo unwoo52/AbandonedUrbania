@@ -1,6 +1,5 @@
 using Lightbug.CharacterControllerPro.Demo;
-using System.Security.Cryptography;
-using Unity.Mathematics;
+using System.Collections;
 using UnityEngine;
 
 namespace Urban_KimHyeonWoo
@@ -128,6 +127,9 @@ namespace Urban_KimHyeonWoo
             originFieldOfView = cam.fieldOfView;
             isAimState = true;
             ScopeObject.SetActive(true);
+
+            if(ShakingHand != null ) { StopCoroutine(ShakingHand); }
+            ShakingHand = StartCoroutine(cor());
         }
 
         public void ExitAim()
@@ -135,6 +137,8 @@ namespace Urban_KimHyeonWoo
             cam.fieldOfView = originFieldOfView;
             isAimState = false;
             ScopeObject.SetActive(false);
+
+            StopCoroutine(ShakingHand);
         }
         #endregion
 
@@ -181,8 +185,37 @@ namespace Urban_KimHyeonWoo
             
             //add Cam Transform
             Vector3 newver = new Vector3(euler.y, -euler.x, 0);
-            ScopeFocus.transform.localPosition = (defaultCenterPos + newver * CenterPos);
+            ScopeFocus.transform.localPosition = (defaultCenterPos + newver * CenterPos) + shakingHands;
+
+            
         }
         #endregion
+
+        [Header("¼Õ¶³¸² ÇÊµå")]
+        private Vector3 shakingHands;
+        [Tooltip("¼Õ¶³¸² °­µµ")]
+        [SerializeField] float shakingValue = 0.001f;
+        [Tooltip("¼Õ¶³¸®´Â ¼Óµµ")]
+        [SerializeField] float shakingSpeed = 0.05f;
+        Coroutine ShakingHand;
+        IEnumerator cor()
+        {
+            while (true)
+            {
+                Vector3 target = new Vector3(Random.Range(-shakingValue, shakingValue), Random.Range(-shakingValue, shakingValue), shakingHands.z);
+                float distance = Vector3.Distance(shakingHands, target);
+                float duration = distance / shakingSpeed;
+
+                float t = 0;
+                while (t < duration)
+                {
+                    shakingHands = Vector3.Lerp(shakingHands, target, t / duration);
+                    t += Time.deltaTime;
+                    yield return null;
+                }
+
+                shakingHands = target;
+            }
+        }
     }
 }

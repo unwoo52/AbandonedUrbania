@@ -2,14 +2,16 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!21 &2100000
 Material:
-  serializedVersion: 6
+  serializedVersion: 8
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Reflex Sight 2
   m_Shader: {fileID: 4800000, guid: 79973772ad1e6034cb0b2c8f6b25bdd2, type: 3}
-  m_ShaderKeywords: FIXED_SIZE
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - FIXED_SIZE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -59,6 +61,7 @@ Material:
         m_Texture: {fileID: 2800000, guid: bf22c5fbf403ba042b347cdce2e9c665, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    m_Ints: []
     m_Floats:
     - _BumpScale: 1
     - _Cutoff: 0.5
@@ -82,6 +85,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 0.34609511, g: 0, b: 0.77205884, a: 0.09803922}
+    - _Color: {r: 0.77254903, g: 0, b: 0.04677727, a: 0.09803922}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _RedDotColor: {r: 1, g: 1, b: 1, a: 1}
+    - _RedDotColor: {r: 0.13642168, g: 0.7924528, b: 0.10840159, a: 1}
+  m_BuildTextureStacks: []
