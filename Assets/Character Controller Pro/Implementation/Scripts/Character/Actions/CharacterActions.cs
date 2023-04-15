@@ -15,11 +15,16 @@ namespace Lightbug.CharacterControllerPro.Implementation
         public BoolAction @jetPack;
         public BoolAction @dash;
         public BoolAction @crouch;
+        //add
+        public BoolAction Fire1;
+        public BoolAction Fire2;
 
 
         // Float actions
         public FloatAction @pitch;
         public FloatAction @roll;
+        //add
+        public FloatAction Wheelupdown;
 
 
         // Vector2 actions
@@ -38,9 +43,14 @@ namespace Lightbug.CharacterControllerPro.Implementation
             @jetPack.Reset();
             @dash.Reset();
             @crouch.Reset();
+            //add
+            Fire1.Reset();
+            Fire2.Reset();
 
             @pitch.Reset();
             @roll.Reset();
+            //add
+            Wheelupdown.Reset();
 
             @movement.Reset();
 
@@ -69,9 +79,18 @@ namespace Lightbug.CharacterControllerPro.Implementation
             @crouch = new BoolAction();
             @crouch.Initialize();
 
+            //add
+            Fire1 = new BoolAction();
+            Fire1.Initialize();
+
+            Fire2 = new BoolAction();
+            Fire2.Initialize();
+
 
             @pitch = new FloatAction();
             @roll = new FloatAction();
+            //add
+            Wheelupdown = new FloatAction();
 
             @movement = new Vector2Action();
 
@@ -88,12 +107,18 @@ namespace Lightbug.CharacterControllerPro.Implementation
             @jump.value = inputHandler.GetBool("Jump");
             @run.value = inputHandler.GetBool("Run");
             @interact.value = inputHandler.GetBool("Interact");
-            //@jetPack.value = inputHandler.GetBool("Jet Pack");
+            @jetPack.value = inputHandler.GetBool("Jet Pack");
             @dash.value = inputHandler.GetBool("Dash");
             @crouch.value = inputHandler.GetBool("Crouch");
+            //add
+            Fire1.value = inputHandler.GetBool("Fire1");
+            Fire2.value = inputHandler.GetBool("Fire2");
+
 
             @pitch.value = inputHandler.GetFloat("Pitch");
             @roll.value = inputHandler.GetFloat("Roll");
+            //add
+            Wheelupdown.value = inputHandler.GetFloat("Mouse ScrollWheel");
 
             @movement.value = inputHandler.GetVector2("Movement");
 
@@ -110,9 +135,14 @@ namespace Lightbug.CharacterControllerPro.Implementation
             @jetPack.value = characterActions.jetPack.value;
             @dash.value = characterActions.dash.value;
             @crouch.value = characterActions.crouch.value;
+            //add
+            Fire1.value = characterActions.Fire1.value;
+            Fire2.value = characterActions.Fire2.value;
 
             @pitch.value = characterActions.pitch.value;
             @roll.value = characterActions.roll.value;
+            //add
+            Wheelupdown.value = characterActions.Wheelupdown.value;
 
             @pitch.value = characterActions.pitch.value;
             @roll.value = characterActions.roll.value;
@@ -131,7 +161,9 @@ namespace Lightbug.CharacterControllerPro.Implementation
             @jetPack.Update(dt);
             @dash.Update(dt);
             @crouch.Update(dt);
-
+            //add
+            Fire1.Update(dt);
+            Fire2.Update(dt);
         }
 
 

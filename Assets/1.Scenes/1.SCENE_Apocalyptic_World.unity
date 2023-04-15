@@ -4921,12 +4921,6 @@ Transform:
   m_Father: {fileID: 1872275537}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!20 &282797154 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 5962069269069850290, guid: d77c839416498b648bd8f660f864a81a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1714592103}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &283055121
 GameObject:
   m_ObjectHideFlags: 0
@@ -30313,50 +30307,15 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
-    - target: {fileID: 1989315821, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: shakingSpeed
-      value: 0.004
-      objectReference: {fileID: 0}
-    - target: {fileID: 1989315821, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: shakingValue
-      value: 0.0002
-      objectReference: {fileID: 0}
-    - target: {fileID: 1989315821, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: CamFieldofView.x
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 1989315821, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: ZoomAreaMinMax.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1989315821, guid: d77c839416498b648bd8f660f864a81a, type: 3}
-      propertyPath: ZoomAreaMinMax.y
-      value: 22
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
+    - target: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].x
-      value: 0.055723667
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].y
-      value: 0.07585716
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].z
-      value: 0.098939896
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069267979689933, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: RensCam
+      propertyPath: FireSound
       value: 
-      objectReference: {fileID: 282797154}
-    - target: {fileID: 5962069267979689933, guid: d77c839416498b648bd8f660f864a81a,
+      objectReference: {fileID: 8300000, guid: b33b58d851fd75a4ea886457d5aa281a, type: 3}
+    - target: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: hitableMask.m_Bits
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -30418,23 +30377,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].x
-      value: -0.055876255
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].y
-      value: 0.085466385
-      objectReference: {fileID: 0}
-    - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
-        type: 3}
-      propertyPath: m_TranslationOffsets.Array.data[0].z
-      value: 0.17916489
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 0}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}
 --- !u!1 &1716824921
 GameObject:

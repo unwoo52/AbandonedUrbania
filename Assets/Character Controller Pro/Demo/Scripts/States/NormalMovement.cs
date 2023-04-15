@@ -402,7 +402,6 @@ namespace Lightbug.CharacterControllerPro.Demo
         [SerializeField]Transform LeftHand;
         public override void UpdateIK(int layerIndex)
         {
-
             // Set the weight
             CharacterActor.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 

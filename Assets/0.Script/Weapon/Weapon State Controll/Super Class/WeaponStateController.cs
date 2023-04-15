@@ -8,14 +8,32 @@ namespace Urban_KimHyeonWoo
 {
     public class WeaponStateController : MonoBehaviour
     {
+        [Header("States")]
         public WeaponState initialState = null;
         public WeaponState CurrentState { get; protected set; }
         public WeaponState PreviousState { get; protected set; }
 
 
+        [Header("Bullet Field")]
+        //bullet fire system field
+        [SerializeField][Tooltip("발사 쿨타임")] float bulletCooldown = 0.5f;
+        private float currentBulletCooldown = 0f; // 현재 쿨타임
+        [SerializeField] [Tooltip("총알 사거리")]float maxDistance = 1000f;
+
+        [SerializeField] GameObject BulletPrefab; // 총알 프리팹
+        AudioSource audioSource;
+        [SerializeField] AudioClip FireSound;
+
+
+        [Header("weapon and hand position")]
+        //weapon and hand position
         [SerializeField] GameObject weaponObject;
+        [SerializeField] GameObject handPosition;
+        [SerializeField] GameObject backPosition;
         public GameObject WeaponObject => weaponObject;
 
+
+        [Header("Cam")]
         [SerializeField] Camera3D camera3D;
         public Camera3D Camera3D => camera3D;
         public Camera Cam;
@@ -23,24 +41,75 @@ namespace Urban_KimHyeonWoo
         [SerializeField] ControllCamera3D controllCamera3D;
         public ControllCamera3D ControllCamera3D => controllCamera3D;
 
+        bool machineStarted = false;
+
+        public void ChangeWeaponPos_Hand()
+        {
+            WeaponObject.transform.SetParent(handPosition.transform, false);
+        }
+
+        public void ChangeWeaponPos_Back()
+        {
+            WeaponObject.transform.SetParent(backPosition.transform, false);
+        }
 
         Queue<WeaponState> transitionsQueue = new Queue<WeaponState>();
+
+        #region unity Callbacks
         private void Awake()
         {
             camera3D = transform.parent.parent.GetChild(0).GetComponent<Camera3D>();
             controllCamera3D = transform.parent.parent.GetChild(0).GetComponent<ControllCamera3D>();
             Cam = camera3D.gameObject.GetComponent<Camera>();
+            audioSource = this.GetComponentInBranch<CharacterActor,AudioSource>();
 
             //기본 상태가 없으면,
-            CurrentState = initialState;
 
             if (weaponObject == null)
             {
                 weaponObject = transform.GetChild(0).gameObject;
             }
+
         }
         private void FixedUpdate()
         {
+            if (!machineStarted)
+            {
+                if (initialState == null)
+                {
+                    enabled = false;
+                    return;
+                }
+
+                CurrentState = initialState;
+
+
+                if (CurrentState == null)
+                    return;
+
+                if (!CurrentState.isActiveAndEnabled)
+                    return;
+
+                machineStarted = true;
+                CurrentState.EnterBehaviour(0f, CurrentState);
+            }
+
+
+
+            if (CurrentState == null)
+                return;
+
+            if (!CurrentState.isActiveAndEnabled)
+                return;
+
+
+            if (!machineStarted)
+            {
+                CurrentState.EnterBehaviour(0f, CurrentState);
+                machineStarted = true;
+            }
+
+
             float dt = Time.deltaTime;
 
             bool validTransition = CheckForTransitions();
@@ -56,6 +125,51 @@ namespace Urban_KimHyeonWoo
             CurrentState.PostUpdateBehaviour(dt);
         }
 
+        private void Update()
+        {
+            // 총알 쿨타임 감소
+            if (currentBulletCooldown > 0f)
+            {
+                currentBulletCooldown -= Time.deltaTime;
+            }
+        }
+        #endregion
+
+        #region Fire Weapon System
+        [SerializeField] Transform muzzleTransform;
+        [SerializeField] LayerMask hitableMask;
+        public void DoFire()
+        {
+            Ray ray = Cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit hitInfo;
+            Vector3 hitPoint;
+            if (Physics.Raycast(ray, out hitInfo, maxDistance, hitableMask))
+            {
+                hitPoint = hitInfo.point;
+                // 충돌한 지점의 위치를 사용하는 코드
+            }
+            else
+            {
+                hitPoint = ray.origin + ray.direction * maxDistance;
+                // 레이의 사거리 끝 지점을 사용하는 코드
+            }
+            // 쿨타임이 아직 남았으면 발사하지 않음
+            if (currentBulletCooldown > 0f) return;
+
+            // 발사 쿨타임 초기화
+            currentBulletCooldown = bulletCooldown;
+
+            audioSource.PlayOneShot(FireSound);
+
+            // BulletPrefab을 instantiate하여 생성된 총알의 로테이션을 입력받은 ray를 바라보게 회전시킴
+            GameObject bullet = Instantiate(BulletPrefab);
+            bullet.transform.position = muzzleTransform.position;
+            Vector3 direction = (hitPoint - muzzleTransform.position).normalized;
+            bullet.transform.rotation = Quaternion.LookRotation(direction);
+        }
+        #endregion
+        public GameObject t1;
+        public GameObject t2;
         #region Events                  -----------------
 
         /// <summary>

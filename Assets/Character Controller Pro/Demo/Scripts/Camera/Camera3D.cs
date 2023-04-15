@@ -216,6 +216,10 @@ namespace Lightbug.CharacterControllerPro.Demo
             viewReference.Rotate(Vector3.right, initialPitch);
 
             lerpedHeight = characterActor.BodySize.y;
+
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
 
         void Update()

@@ -12,6 +12,10 @@ namespace Urban_KimHyeonWoo
 
 
         /// <summary>
+        /// Gets the CharacterActor component of the gameObject.
+        /// </summary>
+        public CharacterActor CharacterActor { get; private set; }
+        /// <summary>
         /// Gets the CharacterBrain component of the gameObject.
         /// </summary>
         // public CharacterBrain CharacterBrain{ get; private set; }
@@ -32,6 +36,7 @@ namespace Urban_KimHyeonWoo
         #region unity CallBacks
         private void Awake()
         {
+            CharacterActor = this.GetComponentInBranch<CharacterActor>();
             CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
             WeaponStateController = this.GetComponentInBranch<CharacterActor, WeaponStateController>();
         }

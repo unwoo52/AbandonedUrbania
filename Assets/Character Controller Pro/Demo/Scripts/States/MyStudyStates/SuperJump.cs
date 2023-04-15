@@ -180,7 +180,6 @@ namespace Urban_KimHyeonWoo
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
             //==== My code ====
-            BindEnterEvent?.Invoke();
             JumpUp_currFrameCount = 0;
 
             if (CharacterActor.IsGrounded)
@@ -244,7 +243,6 @@ namespace Urban_KimHyeonWoo
 
         public override void ExitBehaviour(float dt, CharacterState toState)
         {
-            BindExitEvent?.Invoke();
             if (OnSuperJumpStart != null)
                 OnSuperJumpStart(JumpProgressDirection);
             //forceNotGrounded(항상 땅에 안닿게 처리하는 필드) 가 true이면
@@ -261,10 +259,6 @@ namespace Urban_KimHyeonWoo
             //alwaysNotGrounde를 false로 설정함으로써, 플레이어가 다시 땅에 닿으면, 땅에 닿은것으로 처리될 수 있도록 함
             //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
-        // Write your update code here
-        [Tooltip("ControllCamera3D의 시선 고정 함수를 넣어야 함")]
-        [SerializeField] UnityEvent BindEnterEvent;
-        [SerializeField] UnityEvent BindExitEvent;
         public override void UpdateBehaviour(float dt)
         {
             Vector3 JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
