@@ -133,17 +133,17 @@ PrefabInstance:
     - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].x
-      value: 0.055723708
+      value: 0.05572367
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].y
-      value: 0.075856686
+      value: 0.07585657
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].z
-      value: 0.098937646
+      value: 0.09894398
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -208,7 +208,7 @@ PrefabInstance:
     - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].x
-      value: -0.05587629
+      value: -0.05587625
       objectReference: {fileID: 0}
     - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -218,7 +218,7 @@ PrefabInstance:
     - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].z
-      value: 0.1791642
+      value: 0.17916389
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}

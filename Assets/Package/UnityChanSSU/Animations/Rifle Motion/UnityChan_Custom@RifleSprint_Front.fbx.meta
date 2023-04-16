@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 29903e63ab4138646b59f116dba59d56
+guid: e871787f651cb504dab68fc386f4bf12
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
@@ -33,13 +33,13 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Rifle Idle
+      name: RifleSprint_Front
       takeName: mixamo.com
       internalID: -203655887218126122
       firstFrame: 0
-      lastFrame: 257
+      lastFrame: 13
       wrapMode: 0
-      orientationOffsetY: -30
+      orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0

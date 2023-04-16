@@ -4,6 +4,7 @@ using Lightbug.Utilities;
 using Lightbug.CharacterControllerPro.Implementation;
 using Urban_KimHyeonWoo;
 using UnityEngine.UIElements;
+using UnityEngine.TextCore.Text;
 
 namespace Lightbug.CharacterControllerPro.Demo
 {
@@ -269,7 +270,6 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         }
 
-
         /// <summary>
         /// Processes the lateral movement of the character (stable and unstable state), that is, walk, run, crouch, etc. 
         /// This movement is tied directly to the "movement" character action.
@@ -307,9 +307,9 @@ namespace Lightbug.CharacterControllerPro.Demo
                     // Run ------------------------------------------------------------
                     if(cam3d != null)
                     {
-                        if (cam3d.CurrentDistanceToTarget > 1)//카메라 줌이 가까우면
+                        if (cam3d.CurrentDistanceToTarget > 1)//카메라 줌이 멀면
                         {
-                            wantToRun = true;
+                            wantToRun = true;                            
                         }
                         else
                         {

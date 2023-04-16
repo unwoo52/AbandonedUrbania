@@ -10,7 +10,7 @@ namespace Urban_KimHyeonWoo
         public WeaponStateController WeaponStateController { get; private set; }
 
 
-
+        public CharacterStateController CharacterStateController;
         /// <summary>
         /// Gets the CharacterActor component of the gameObject.
         /// </summary>
@@ -39,6 +39,7 @@ namespace Urban_KimHyeonWoo
             CharacterActor = this.GetComponentInBranch<CharacterActor>();
             CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
             WeaponStateController = this.GetComponentInBranch<CharacterActor, WeaponStateController>();
+            CharacterStateController = this.GetComponentInBranch<CharacterActor, CharacterStateController>();
         }
         #endregion
 

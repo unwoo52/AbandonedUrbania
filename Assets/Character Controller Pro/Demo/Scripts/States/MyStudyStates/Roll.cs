@@ -236,7 +236,8 @@ namespace Urban_KimHyeonWoo
         }
 
         // Write your update code here
-        [SerializeField] float TESTRotateSpeed = 1;
+        [Tooltip("높을수록 마우스 방향으로 캐릭터가 빨리 바라봅니다.")]
+        [SerializeField] float RotatePower = 200;
         public override void UpdateBehaviour(float dt)
         {
             Vector3 dashVelocity = initialVelocity * currentSpeedMultiplier * movementCurve.Evaluate(rollCursor) * rollDirection;
@@ -252,7 +253,7 @@ namespace Urban_KimHyeonWoo
             //이 코드는 UpdateBehaviour에 작성되고 있어. CharacterActor.RotateYaw(); 를 이용해서 myRotateSpeed속도로 캐릭터가 마우스 방향으로 회전하기를 원해
             Vector3 mouseDir = CharacterActor.CurCam.transform.forward;
             Quaternion targetRotation = Quaternion.LookRotation(new Vector3(mouseDir.x, 0f, mouseDir.z));
-            Quaternion newRotation = Quaternion.RotateTowards(CharacterActor.transform.rotation, targetRotation, TESTRotateSpeed * Time.deltaTime);
+            Quaternion newRotation = Quaternion.RotateTowards(CharacterActor.transform.rotation, targetRotation, RotatePower * Time.deltaTime);
             CharacterActor.RotateYaw(newRotation.eulerAngles.y - CharacterActor.transform.rotation.eulerAngles.y);
 
 

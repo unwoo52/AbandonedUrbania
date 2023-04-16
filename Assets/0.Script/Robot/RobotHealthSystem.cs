@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using Urban_KimHyeonWoo;
 
@@ -7,10 +8,12 @@ public class RobotHealthSystem : MonoBehaviour, ITestDamageSystem
 {
     [SerializeField] float hp = 1000f;
     [SerializeField] GameObject Explosion;
+    bool isDie= false;
     public void OnDam(float dmg)
     {
-        if(dmg > hp)
+        if(dmg > hp && isDie == false)
         {
+            isDie = true;
             SetGroggyState();
             Instantiate(Explosion);
         }

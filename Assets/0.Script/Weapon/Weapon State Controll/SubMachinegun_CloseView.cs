@@ -12,6 +12,14 @@ public class SubMachinegun_CloseView : WeaponState
     [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
     Vector3 CloseViewOffsetValue = new Vector3(0.3f, -0.22f, 0.27f);
 
+    #region EventTrigger
+    bool setFarStateTrigger = false;
+    public void SetFatState()
+    {
+        setFarStateTrigger = true;
+    }
+    #endregion
+
     public override void CheckExitTransition()
     {
         /*
@@ -21,6 +29,11 @@ public class SubMachinegun_CloseView : WeaponState
             }*/
         if (CharacterActions.Wheelupdown.value < 0f)
         {
+            WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
+        }
+        if(setFarStateTrigger == true)
+        {
+            setFarStateTrigger= false;
             WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
         }
     }

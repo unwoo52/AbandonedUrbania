@@ -30307,11 +30307,83 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].time
+      value: 0.5445175
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].time
+      value: 0.84154415
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[3].time
+      value: 1.0026855
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].value
+      value: 0.0018506646
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].value
+      value: -0.26501912
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[3].value
+      value: -0.85491943
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].inSlope
+      value: -1.1974959
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].inSlope
+      value: -0.820986
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[3].inSlope
+      value: -4.954162
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].outSlope
+      value: -1.1974959
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].inWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].outSlope
+      value: -0.820986
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[3].inWeight
+      value: 0.15719415
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[3].outSlope
+      value: -4.954162
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[1].outWeight
+      value: 0.10311699
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: upforceCurve.m_Curve.Array.data[2].outWeight
+      value: 0.33333334
+      objectReference: {fileID: 0}
     - target: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: FireSound
       value: 
-      objectReference: {fileID: 8300000, guid: b33b58d851fd75a4ea886457d5aa281a, type: 3}
+      objectReference: {fileID: 8300000, guid: af296108b55ef4245b70c5bfc2220725, type: 3}
     - target: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: hitableMask.m_Bits

@@ -48,10 +48,7 @@ namespace Urban_KimHyeonWoo
             shakeCoroutine = StartCoroutine(ShakeRobotBody());
             if (robotComponenetManager == null) robotComponenetManager = GetComponent<RobotComponenetManager>();
         }
-        public Vector3 GetRobotLookDir()
-        {
-            return robotComponenetManager.RobotBody.transform.rotation.eulerAngles;
-        }
+
         public void LookTarget_ControllWithInputManager(float horizonInput, float verticalInput, float controllSpeed)
         {
             Vector3 currentAngle = robotComponenetManager.RobotBody.transform.rotation.eulerAngles;
@@ -97,16 +94,15 @@ namespace Urban_KimHyeonWoo
 
             robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);            
         }
-        [ContextMenu("LookRandom")]
-        public void RandomLook()
-        {
-            // 로봇을 기준으로 랜덤한 방향으로 10만큼 떨어진 거리의 포지션(lookposition)을 얻어옵니다.
-            Vector3 lookposition = robotComponenetManager.RobotBody.position + Random.insideUnitSphere * 1000f;
-            Debug.DrawRay(robotComponenetManager.RobotBody.position, robotComponenetManager.RobotBody.position - lookposition, Color.red, 5f);
-            // 얻은 포지션을 RobotLook 함수로 전달합니다.
 
-            StartCoroutine(RobotLook(lookposition));
-        }
+
+
+
+
+
+
+
+
         [SerializeField] bool shakebody = true;
         IEnumerator ShakeRobotBody()
         {
@@ -159,6 +155,7 @@ namespace Urban_KimHyeonWoo
 
 
         }
+        //반동
         private IEnumerator RecoilCoroutine()
         {
             float elapsedTime = 0f;

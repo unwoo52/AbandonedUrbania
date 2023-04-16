@@ -1,6 +1,7 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.Utilities;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,8 @@ namespace Urban_KimHyeonWoo
         [SerializeField] GameObject BulletPrefab; // 총알 프리팹
         AudioSource audioSource;
         [SerializeField] AudioClip FireSound;
+
+        [SerializeField] GameObject SkillEffectObject;
 
 
         [Header("weapon and hand position")]
@@ -138,8 +141,40 @@ namespace Urban_KimHyeonWoo
         #region Fire Weapon System
         [SerializeField] Transform muzzleTransform;
         [SerializeField] LayerMask hitableMask;
+
+        [SerializeField] float skilltime = 1.2f;
+        [SerializeField] int bulletcount = 30;
+
+
+        //test skill field
+        bool isSkillOn = false;
+        public void SkillOn()
+        {
+            isSkillOn = true;
+        }
+        [SerializeField] float skillCooltime = 2f;
         public void DoFire()
         {
+
+            //Bullet();
+            if (isSkillOn)
+            {
+                StartCoroutine(ShootSkill(skilltime, bulletcount));
+                currentBulletCooldown = skillCooltime;
+                isSkillOn = false;
+                return;
+            }
+
+            // 쿨타임이 아직 남았으면 발사하지 않음
+            if (currentBulletCooldown > 0f) return;
+
+            // 발사 쿨타임 초기화
+            currentBulletCooldown = bulletCooldown;
+            Bullet();
+        }
+        void Bullet()
+        {
+                        //get ray
             Ray ray = Cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit hitInfo;
             Vector3 hitPoint;
@@ -153,23 +188,40 @@ namespace Urban_KimHyeonWoo
                 hitPoint = ray.origin + ray.direction * maxDistance;
                 // 레이의 사거리 끝 지점을 사용하는 코드
             }
-            // 쿨타임이 아직 남았으면 발사하지 않음
-            if (currentBulletCooldown > 0f) return;
 
-            // 발사 쿨타임 초기화
-            currentBulletCooldown = bulletCooldown;
 
+
+                        //audioSource.clip = FireSound;
+            audioSource.Stop();
             audioSource.PlayOneShot(FireSound);
 
-            // BulletPrefab을 instantiate하여 생성된 총알의 로테이션을 입력받은 ray를 바라보게 회전시킴
+                        // BulletPrefab을 instantiate하여 생성된 총알의 로테이션을 입력받은 ray를 바라보게 회전시킴
             GameObject bullet = Instantiate(BulletPrefab);
             bullet.transform.position = muzzleTransform.position;
             Vector3 direction = (hitPoint - muzzleTransform.position).normalized;
             bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+
+            //skill Effect
+            GameObject effect = Instantiate(SkillEffectObject);
+            effect.transform.position = hitPoint;
+            effect.transform.rotation = Quaternion.LookRotation(direction) * new Quaternion(0,270,0,0);
+        }
+        
+        IEnumerator ShootSkill(float shootTime, int bulletCount)
+        {
+            // 발사 시간을 총알 개수로 나누어 코루틴 동안 발사 주기를 계산한다
+            float interval = shootTime / bulletCount;
+
+            // 총알 발사를 위해 bulletCount만큼 Bullet() 코루틴 함수를 실행한다
+            for (int i = 0; i < bulletCount; i++)
+            {                
+                Bullet(); // 총알 발사
+                yield return new WaitForSeconds(interval); // 발사 주기만큼 대기
+            }
         }
         #endregion
-        public GameObject t1;
-        public GameObject t2;
+
         #region Events                  -----------------
 
         /// <summary>

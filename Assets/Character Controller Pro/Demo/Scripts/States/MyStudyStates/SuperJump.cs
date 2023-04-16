@@ -5,30 +5,26 @@ using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.Utilities;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System.Collections;
 
 namespace Urban_KimHyeonWoo
 {
     public class SuperJump : CharacterState
     {
-        [Min(0f)]
-        [SerializeField]
-        [Tooltip("시작될 때 점프 파워 속도")]
-        protected float initialUpVelocity = 12f;
         protected float initialForwardVelocity = 12f;
 
-
         [Min(0f)]
         [SerializeField]
-        [Tooltip("공중 채류시간")]
+        [Tooltip("onground 이벤트를 안받는 시간, 이 시간이 지나면 isdone 활성화")]
         protected float duration = 1;
 
         [SerializeField]
         [Tooltip("점프 중 중력")]
-        protected float inJumpGrabity = 1;
+        protected float inJumpGrabityMultiple = 40;
 
 
         [SerializeField]
-        [Tooltip("캐릭터의 위로 작용하는 힘 커브 그래프")] // 처음에 파격적으로 높았다가 점점 줄어듬
+        [Tooltip("중력:: +면 캐릭터가 상승, -면 캐릭터가 하강. ")]
         protected AnimationCurve upforceCurve = AnimationCurve.Linear(0, 1, 1, 0);
 
 
@@ -42,7 +38,10 @@ namespace Urban_KimHyeonWoo
         [SerializeField] Transform FootPositionR;
         [SerializeField] Transform FootPositionL;
         [SerializeField] GameObject EffectPrefab;
+        [Tooltip("이펙트 사운드")]
+        [SerializeField] AudioClip JumpSound;
 
+        AudioSource audioSource;
 
 
         //-----------
@@ -50,25 +49,24 @@ namespace Urban_KimHyeonWoo
         [Tooltip("슈퍼 점프 시작 시 폭팔적으로 위로 가려는 힘")]
         [SerializeField] float JumpUp_UpPower;
 
-        [Tooltip("슈퍼 점프시 폭팔적으로 위로 가는 힘이 가해질 프레임들. 만약 20이면 20프레임동안 폭팔적인 상승을 \'CharacterActor.Position = \'으로 JumpUp_UpperPowerCurv만큼 실행")]
-        [SerializeField] int JumpUp_FrameCount;
-
         [Tooltip("슈퍼 점프시 폭팔적으로 위로 가는 힘의 곡선")]
         [SerializeField] AnimationCurve JumpUp_UpperPowerCurv;
-        int JumpUp_currFrameCount;
+
+        [Tooltip("강력한 점프 시간")]
+        [SerializeField] float JumpUp_Time = 0.4f;
 
         //-----------
         [Header("이전 롤 state에서 넘어온 힘을 관리하는 field")]
         [Tooltip("이전 롤 state에서 넘어온 Velocity가 남아있는 양. 높으면 롤 속도만큼 멀리 밀려나고, 적으면 WASD키방향의 힘만 온전히 적용.")]
-        [SerializeField] float BehindExitRoll_MultipleRollVelocity = 1;
+        [SerializeField] float BehindExitRoll_MultipleRollVelocity = 0.5f;
 
         // 롤 이후 점프할 때, 앞 방향으로 가해지는 힘
         [Tooltip("롤 이후 점프하는 순간에, WASD키 방향으로 가해지는 힘.")]
-        [SerializeField] float BehindExitRoll_JumpDirForce = 1;
+        [SerializeField] float BehindExitRoll_JumpDirForce = 5;
 
 
         [Tooltip("점프 중, WASD키 방향으로 가해지는 힘.")]
-        [SerializeField] float InJump_WASD_InputDirForce = 1;
+        [SerializeField] float InJump_WASD_InputDirForce = 0.1f;
 
         //[SerializeField]
         //[Tooltip("true면 플레이어의 alwaysNotGrounded을 true로 설정해서 State도중 플레이어 상태를 항상 공중으로 처리")]
@@ -121,6 +119,10 @@ namespace Urban_KimHyeonWoo
         /// </summary>
         public event System.Action<Vector3> OnSuperJumpEnd;
 
+        [Header("이벤트")]
+        public UnityEvent enterEvent;
+        public UnityEvent exitEvent;
+
         #endregion
 
         #region OnGroundedStateEnter에 람다식 추가
@@ -145,7 +147,7 @@ namespace Urban_KimHyeonWoo
             base.Awake();
 
             materialController = this.GetComponentInBranch<CharacterActor, MaterialController>();
-
+            audioSource = this.GetComponentInBranch<CharacterActor, AudioSource>();
 
             //공중에서 대시 가능 횟수를 availableNotGroundedDashes(1)로 초기화
             //airDashesLeft = availableNotGroundedDashes;
@@ -157,6 +159,7 @@ namespace Urban_KimHyeonWoo
         // Write your transitions here
         public override bool CheckEnterTransition(CharacterState fromState)
         {
+            enterEvent?.Invoke();
             return true;
         }
         public override void CheckExitTransition()
@@ -166,32 +169,31 @@ namespace Urban_KimHyeonWoo
                 //roll
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);
                 CharacterStateController.EnqueueTransition<NormalMovement>();
+                exitEvent?.Invoke();
             }
             else if (CharacterActor.IsGrounded && !CharacterActor.IsStable && isDone)
             {
                 //normal
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);
                 CharacterStateController.EnqueueTransition<NormalMovement>();
+                exitEvent?.Invoke();
             }
         }
         #endregion
-
         #region STATE METHOD - Behavior
         public override void EnterBehaviour(float dt, CharacterState fromState)
         {
             //==== My code ====
-            JumpUp_currFrameCount = 0;
-
             if (CharacterActor.IsGrounded)
                 CharacterActor.ForceNotGrounded();
 
+            audioSource.PlayOneShot(JumpSound);
             Instantiate(EffectPrefab, FootPositionL.position, CharacterActor.Rotation * Quaternion.Euler(0f, 180f, 0f));
             Instantiate(EffectPrefab, FootPositionL.position, CharacterActor.Rotation * Quaternion.Euler(0f, 180f, 0f));
 
+            StartCoroutine(SuperJumpCor(JumpUp_Time, JumpUp_UpPower));
             //==== Legacy Demo Code ====
             //항상 땅에 안닿은 처리
-            //슬라이드는 대시와 다르게 땅에 닿은 처리를 해야 함
-            //if (forceNotGrounded) CharacterActor.alwaysNotGrounded = true;
 
             //루트모션 안쓸거니까
             CharacterActor.UseRootMotion = false;
@@ -224,10 +226,7 @@ namespace Urban_KimHyeonWoo
             JumpProgressDirection = CharacterActor.Up;
             JumpDirection = CharacterActor.Forward;
 
-            //ResetDash(); <<===================================================수정해야 할지도, 점프 이전의 가속도 영향을 받을지 말지 결정
-            Debug.Log($"{CharacterActor.Velocity.x} , {CharacterActor.Velocity.y}, {CharacterActor.Velocity.z}");
 
-            //wasd 입력으로 벡터 생성. w만 누르면 x1, s누르면 x-1, a,d도 y값을 동일하게 조정
             Vector3 newJumpDir = 
                 CharacterActor.Right * Input.GetAxisRaw("Movement X") + 
                 CharacterActor.Forward * Input.GetAxisRaw("Movement Y");
@@ -245,42 +244,20 @@ namespace Urban_KimHyeonWoo
         {
             if (OnSuperJumpStart != null)
                 OnSuperJumpStart(JumpProgressDirection);
-            //forceNotGrounded(항상 땅에 안닿게 처리하는 필드) 가 true이면
-
-            /*
-            if (forceNotGrounded)
-                CharacterActor.alwaysNotGrounded = false;
-            */
-
-            //퇴장 Behaviour에서 다시 원래대로 alwaysNotGrounded = false.
-            //(Dash에서는 시작할 때 true로 설정했었음. slide는 ExitBehaviour 코드와 EnterBehaviour 코드를 주석처리.)
-
-            //===CharacterActor.alwaysNotGrounded 설명===
-            //alwaysNotGrounde를 false로 설정함으로써, 플레이어가 다시 땅에 닿으면, 땅에 닿은것으로 처리될 수 있도록 함
-            //반대로 alwaysNotGrounded가 만약 true라면 땅에 닿아도 땅에 닿은것으로 처리를 안했다.
         }
+
+
         public override void UpdateBehaviour(float dt)
         {
-            Vector3 JumpVelocity = initialUpVelocity * currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
+            //중력
+            Vector3 JumpVelocity = currentSpeedMultiplier * upforceCurve.Evaluate(SuperJumpCursor) * JumpProgressDirection;
+            CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabityMultiple * dt;
 
 
-            if (JumpUp_currFrameCount <= JumpUp_FrameCount)
-            {
-                float temf = JumpUp_UpperPowerCurv.Evaluate(JumpUp_currFrameCount / JumpUp_FrameCount);
-                //Debug.Log(temf);
-
-                
-                CharacterActor.Position = CharacterActor.Position + new Vector3(0, JumpUp_UpPower * temf, 0);
-                JumpUp_currFrameCount++;
-            }
-            CharacterActor.VerticalVelocity += JumpVelocity * inJumpGrabity;
-
-            //캐릭터 시선 고정
-            Vector3 mouseDir = new Vector3(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z);
-            CharacterActor.SetRotation(mouseDir, CharacterActor.Up);
-
-
-
+            Vector3 newJumpDir =
+                CharacterActor.Right * Input.GetAxisRaw("Movement X") +
+                CharacterActor.Forward * Input.GetAxisRaw("Movement Y");
+            CharacterActor.PlanarVelocity += newJumpDir * InJump_WASD_InputDirForce;
 
             //===========================
 
@@ -298,6 +275,23 @@ namespace Urban_KimHyeonWoo
         }
 
 
+        IEnumerator SuperJumpCor(float duration, float height)
+        {
+            float dt = Time.deltaTime;
+            float elapsed = 0.0f;
+
+            while (elapsed < duration)
+            {
+                dt = Time.deltaTime;
+                float t = elapsed / duration;
+
+                float curv = JumpUp_UpperPowerCurv.Evaluate(t);
+                CharacterActor.Position = CharacterActor.Position + new Vector3(0, height * curv * dt, 0);
+
+                elapsed += dt;
+                yield return null;
+            }
+        }
 
         #endregion
 
