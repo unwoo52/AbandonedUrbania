@@ -91,38 +91,6 @@ namespace Urban_KimHyeonWoo
         {
             robotActions.LookTarget_ControllWithInputManager(LookHorizonKey, LookVerticalKey, RobotRotateSpeed);
             robotBehavior.MoveToDir(MoveVerticalKey, -MoveHorizonKey);
-            /*
-            Vector3 dir = robotActions.GetRobotLookDir() + testvec;
-            Vector3 direction = Quaternion.Euler(0f, dir.y, 0f) * new Vector3(MoveHorizonKey, 0f, MoveVerticalKey);
-            Debug.Log($"{dir} :::: {direction}");
-            switch (test)
-            {
-                case 1:
-                    robotBehavior.MoveToDir(direction.z, direction.x);
-                    break;
-                case 2:
-                    robotBehavior.MoveToDir(-direction.z, direction.x);
-                    break;
-                case 3:
-                    robotBehavior.MoveToDir(direction.z, -direction.x);
-                    break;
-                case 4:
-                    robotBehavior.MoveToDir(-direction.z, -direction.x);
-                    break;
-                case 5:
-                    robotBehavior.MoveToDir(direction.x, direction.z);
-                    break;
-                case 6:
-                    robotBehavior.MoveToDir(-direction.x, direction.z);
-                    break;
-                case 7:
-                    robotBehavior.MoveToDir(direction.x, -direction.z);
-                    break;
-                case 8:
-                    robotBehavior.MoveToDir(-direction.x, -direction.z);
-                    break;
-            }
-            */
 
 
             robotBehavior.WeaponInputKey = ShotKey ? 1 : 0;

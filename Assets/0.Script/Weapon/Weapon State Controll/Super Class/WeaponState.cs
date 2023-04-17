@@ -7,7 +7,7 @@ namespace Urban_KimHyeonWoo
 {
     public class WeaponState : MonoBehaviour
     {
-        public WeaponStateController WeaponStateController { get; private set; }
+        [HideInInspector] public WeaponStateController WeaponStateController { get; private set; }
 
 
         public CharacterStateController CharacterStateController;

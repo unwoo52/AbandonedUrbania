@@ -99,6 +99,7 @@ namespace Lightbug.CharacterControllerPro.Demo
         float reducedAirControlInitialTime = 0f;
         float reductionDuration = 0.5f;
 
+
         protected override void Awake()
         {
             base.Awake();
@@ -270,13 +271,28 @@ namespace Lightbug.CharacterControllerPro.Demo
 
         }
 
+        private void FixedUpdate()
+        {
+            //mycode
+            if (CharacterStateController.IsFixedLookdir)
+            {
+                Vector3 mouseDir = new Vector3(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z);
+                //CharacterActor.SetRotation(mouseDir, CharacterActor.Up);
+                CharacterActor.SetYaw(mouseDir);
+
+                //Quaternion mouseRot = new Quaternion(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z,0);
+                //CharacterActor.Rotation = mouseRot;
+            }
+            //====
+        }
+
         /// <summary>
         /// Processes the lateral movement of the character (stable and unstable state), that is, walk, run, crouch, etc. 
         /// This movement is tied directly to the "movement" character action.
         /// </summary>
         protected virtual void ProcessPlanarMovement(float dt)
         {
-            //SetMotionValues();
+            
 
             float speedMultiplier = materialController != null ?
             materialController.CurrentSurface.speedMultiplier * materialController.CurrentVolume.speedMultiplier : 1f;
@@ -314,9 +330,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                         else
                         {
                             wantToRun = false;
-                            //캐릭터 방향 고정 코드
-                            Vector3 mouseDir = new Vector3(CharacterActor.CurCam.transform.forward.x, 0, CharacterActor.CurCam.transform.forward.z);
-                            CharacterActor.SetRotation(mouseDir, CharacterActor.Up);
+                            //캐릭터 방향 고정 코드                                                   
                         }
                     }
                     
@@ -402,11 +416,15 @@ namespace Lightbug.CharacterControllerPro.Demo
         [SerializeField]Transform LeftHand;
         public override void UpdateIK(int layerIndex)
         {
-            // Set the weight
-            CharacterActor.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
+            if (CharacterActor.IsGrounded)
+            {
+                // Set the weight
+                CharacterActor.Animator.SetIKPositionWeight(AvatarIKGoal.LeftHand, 1);
 
-            // Set the position
-            CharacterActor.Animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHand.position);
+                // Set the position
+                CharacterActor.Animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHand.position);
+            }
+            
         }
 
         protected virtual void ProcessGravity(float dt)

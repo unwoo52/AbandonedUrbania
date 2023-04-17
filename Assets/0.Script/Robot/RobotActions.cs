@@ -65,10 +65,10 @@ namespace Urban_KimHyeonWoo
             //lookAngle(newRotation);
         }
 
+
         public void lookAngle(Quaternion rot)
         {
             Vector3 direction = rot * Vector3.forward;
-            Vector3 GunVec = robotComponenetManager.RobotBody.position;
 
             float distance = new Vector3(direction.x, 0f, direction.z).magnitude;
             distance = rot.eulerAngles.y < 180f ? distance : -distance;
@@ -79,6 +79,8 @@ namespace Urban_KimHyeonWoo
 
             robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);
         }
+
+        //특정 포지션을 바라보는 함수
         public void looktarget(Vector3 pos)
         {
             Vector3 GunVec = robotComponenetManager.RobotBody.position;

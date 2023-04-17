@@ -22,11 +22,11 @@ public class SubMachinegun_CloseView : WeaponState
 
     public override void CheckExitTransition()
     {
-        /*
-            if (CharacterActions.Fire2.value == true)
-            {
-                WeaponStateController.EnqueueTransition<Sniper_AimState>();
-            }*/
+        
+        if (Input.GetButtonDown("Fire2"))
+        {
+            WeaponStateController.EnqueueTransition<SubMachinegun_AimView>();
+        }
         if (CharacterActions.Wheelupdown.value < 0f)
         {
             WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
@@ -39,6 +39,7 @@ public class SubMachinegun_CloseView : WeaponState
     }
     public override void EnterBehaviour(float dt, WeaponState fromState)
     {
+        CharacterStateController.IsFixedLookdir = true;
         CharacterActor.Animator.SetLayerWeight(1, 1);
 
         WeaponStateController.ChangeWeaponPos_Hand();
@@ -50,7 +51,7 @@ public class SubMachinegun_CloseView : WeaponState
     }
     public override void ExitBehaviour(float dt, WeaponState toState)
     {
-        base.ExitBehaviour(dt, toState);
+        CharacterStateController.IsFixedLookdir = false;
     }
     public override void UpdateBehaviour(float dt)
     {

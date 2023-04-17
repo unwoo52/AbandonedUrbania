@@ -26,11 +26,12 @@ namespace Urban_KimHyeonWoo
         #endregion
         public override void CheckExitTransition()
         {
-            /*
-            if (CharacterActions.Fire2.value == true)
+            
+            //if (CharacterActions.Fire2.value == true)
+            if(Input.GetButtonDown("Fire2"))
             {
-                WeaponStateController.EnqueueTransition<Sniper_AimState>();
-            }*/
+                WeaponStateController.EnqueueTransition<SubMachinegun_AimView>();
+            }
             if (CharacterActions.Wheelupdown.value > 0f)
             {
                 WeaponStateController.EnqueueTransition<SubMachinegun_CloseView>();
@@ -54,57 +55,113 @@ namespace Urban_KimHyeonWoo
         }
         public override void ExitBehaviour(float dt, WeaponState toState)
         {
-            base.ExitBehaviour(dt, toState);
+            CharacterActor.Animator.SetLayerWeight(SideAimRunLayerNum, 0);
+            CharacterActor.Animator.SetLayerWeight(FrontAimRunLayerNum, 0);
         }
 
 
         [Header("측방사격에 관련된 field")]
         [SerializeField] int FrontAimRunLayerNum = 2;
         [SerializeField] int SideAimRunLayerNum = 3;
+        [SerializeField] int UpperAimRunLayerNum = 1;
+        float curSideLayerValue = 0;
+        float curFrontLayerValue = 0;
+        float curUpperLayerValue = 0;
+
+        [SerializeField] float battletime = 0.2f;
+        [SerializeField] float animChangeSpeed = 0.1f;
+        float currBattleTime;
+
         public override void UpdateBehaviour(float dt)
         {
-            float speed = CharacterActor.Animator.GetFloat("PlanarSpeed");
-            
-            if (speed > 4 && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>())
+            //cooltime
+            if (currBattleTime >= 0)
             {
-                //get camdir
-                Vector3 cameraForward = WeaponStateController.Cam.transform.forward;
-                Vector3 characterForward = CharacterActor.Forward;
+                currBattleTime -= dt;
+            }
 
 
-                float angle = Vector3.SignedAngle(cameraForward, characterForward, Vector3.up);
-                           
+            if (CharacterActions.Fire1.value == true)
+            {
+                currBattleTime = battletime;
+            }
 
-                bool isCanLateralFiring = Mathf.Abs(angle) < 110f;
-                if (!isCanLateralFiring)
-                {
-                    CharacterActor.Animator.SetLayerWeight(SideAimRunLayerNum, 0);
-                    CharacterActor.Animator.SetLayerWeight(FrontAimRunLayerNum, 1);
+
+            //run fire animControll
+            float speed = CharacterActor.Animator.GetFloat("PlanarSpeed");
+
+            if(currBattleTime > 0 && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>())//사격중일 때
+            {
+                if (speed > 4 )
+                {//달릴 때
+                    SetAnimatorLayer_LateralFiring(dt);
                 }
-                else
+                else//달리지 않을 때
                 {
                     if (CharacterActions.Fire1.value == true)
                     {
                         WeaponStateController.DoFire();
                     }
+                    Vector3 mouseDir = WeaponStateController.Cam.transform.forward;
+                    CharacterActor.SetYaw(mouseDir);
 
-                    CharacterActor.Animator.SetLayerWeight(SideAimRunLayerNum, Mathf.Abs(angle) / 110);
-                    CharacterActor.Animator.SetLayerWeight(FrontAimRunLayerNum, Mathf.Abs(Mathf.Abs(angle) / 110 - 1));
-                    if (angle > 0f)//right
-                    {
-                        CharacterActor.Animator.SetBool("IsAimRunRight", true);
-                    }
-                    else if (angle <= 0f) // left
-                    {
-                        CharacterActor.Animator.SetBool("IsAimRunRight", false);
-                    }
-                }                
+                    SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
+                    SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
+                    SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
+                }
             }
-            else
+            else // 사격중이 아닐 때
             {
-                CharacterActor.Animator.SetLayerWeight(SideAimRunLayerNum, 0);
-                CharacterActor.Animator.SetLayerWeight(FrontAimRunLayerNum, 0);
+                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum , 0, dt);
+                SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
+                SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
+        }
+        void SetAnimatorLayer_LateralFiring(float dt)
+        {
+            Vector3 cameraForward = WeaponStateController.Cam.transform.forward;
+            Vector3 characterForward = CharacterActor.Forward;
+
+            //캐릭터의 진행방향과 카메라의 각도를 계산
+            float angle = Vector3.SignedAngle(cameraForward, characterForward, Vector3.up);
+
+            //제한 각도가 110도인 이유는 측방사격 애니메이션이 있는 레이어의 weight가 1일 때, 캐릭터가 110도 측면을 사격하기 때문
+            //수정하고 싶다면 캐릭터의 측방사격 애니메이션의 yaw rotate offset값을 수정할 것
+            bool isCanLateralFiring = Mathf.Abs(angle) < 110f;
+
+            //뒤를 바라보는 방향이라 사격을 못할 때,
+            if (!isCanLateralFiring)
+            {
+                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
+                SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
+                SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
+            }
+            else//사격 가능 각도일 때,
+            {
+                if (CharacterActions.Fire1.value == true)
+                {
+                    WeaponStateController.DoFire();
+                }
+
+                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
+                SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, Mathf.Abs(angle) / 110, dt);
+                SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, Mathf.Abs(Mathf.Abs(angle) / 110 - 1), dt);
+                if (angle > 0f)//right
+                {
+                    CharacterActor.Animator.SetBool("IsAimRunRight", true);
+                }
+                else if (angle <= 0f) // left
+                {
+                    CharacterActor.Animator.SetBool("IsAimRunRight", false);
+                }
+            }
+        }
+
+
+        void SetAnimControllerSetLayerWeight(ref float curLayerValue, int LayerNum,float destValue, float dt)
+        {
+            curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
+            CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
         }
     }
 }

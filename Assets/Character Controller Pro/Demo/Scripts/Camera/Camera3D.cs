@@ -220,7 +220,11 @@ namespace Lightbug.CharacterControllerPro.Demo
 
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
+
+            IsFixedMouseMove = false;
         }
+
+        [HideInInspector] public bool IsFixedMouseMove = false;
 
         void Update()
         {
@@ -231,7 +235,15 @@ namespace Lightbug.CharacterControllerPro.Demo
             }
             Vector2 cameraAxes = inputHandlerSettings.InputHandler.GetVector2(axes); //getVector2("camera")
 
-
+            if (!IsFixedMouseMove)
+            {
+                if (updatePitch)
+                    deltaPitch = -cameraAxes.y;
+                if (updateYaw)
+                    deltaYaw = cameraAxes.x;
+            }
+            
+            /*
             if (cameraMode != CameraMode.FirstPerson)
             {
                 if (updatePitch)
@@ -240,16 +252,17 @@ namespace Lightbug.CharacterControllerPro.Demo
                     deltaYaw = cameraAxes.x;
 
                 //휠업으로 줌 하는 코드. 휠업을 close view <=> far view로 바꾸면서 주석처리함 2023-04-12
-                /*
+                
+            -----------------
                 if (updateZoom)
                     deltaZoom = -inputHandlerSettings.InputHandler.GetFloat(zoomAxis);
-                */
+            -----------------
             }
             else
             {
                 //deltaPitch = 0;
                 //deltaYaw = 0;
-            }
+            }*/
             
 
             // An input axis value (e.g. mouse x) usually gets accumulated over time. So, the higher the frame rate the smaller the value returned.
@@ -290,10 +303,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                             if (skinnedMeshRenderer != null)
                                 skinnedMeshRenderer.forceRenderingOff = hideBody;
                         }
-                        else
-                        {
-                            bodyRenderers[i].enabled = !hideBody;
-                        }
+                        else { bodyRenderers[i].enabled = !hideBody; }
                     }
 
             }

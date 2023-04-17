@@ -61,8 +61,8 @@ namespace Urban_KimHyeonWoo
         #region unity Callbacks
         private void Awake()
         {
-            camera3D = transform.parent.parent.GetChild(0).GetComponent<Camera3D>();
-            controllCamera3D = transform.parent.parent.GetChild(0).GetComponent<ControllCamera3D>();
+            camera3D = transform.parent.parent.parent.GetChild(0).GetComponent<Camera3D>();
+            controllCamera3D = transform.parent.parent.parent.GetChild(0).GetComponent<ControllCamera3D>();
             Cam = camera3D.gameObject.GetComponent<Camera>();
             audioSource = this.GetComponentInBranch<CharacterActor,AudioSource>();
 
@@ -240,7 +240,10 @@ namespace Urban_KimHyeonWoo
             WeaponState state = GetComponent<T>();
 
             if (state == null)
+            {
+                Debug.LogError("state를 찾지 못했습니다!");
                 return;
+            }
 
             transitionsQueue.Enqueue(state);
         }

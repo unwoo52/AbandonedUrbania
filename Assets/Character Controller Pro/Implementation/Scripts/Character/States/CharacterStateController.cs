@@ -24,6 +24,12 @@ namespace Lightbug.CharacterControllerPro.Implementation
     [AddComponentMenu("Character Controller Pro/Implementation/Character/Character State Controller")]
     public class CharacterStateController : MonoBehaviour
     {
+
+        //mycode
+        [HideInInspector] public bool IsFixedLookdir = false;
+
+
+
         [Tooltip("The state used to start the state machine. It is necessary for the state to be not-null, active and enabled. Otherwise, " + 
             "the state machine will not run.")]
         [UnityEngine.Serialization.FormerlySerializedAs("currentState")]
@@ -298,7 +304,8 @@ namespace Lightbug.CharacterControllerPro.Implementation
         #region Messages
 
         void Awake()
-        {            
+        {
+            IsFixedLookdir = false;
             CharacterActor = this.GetComponentInBranch<CharacterActor>();
             Animator = CharacterActor.GetComponentInChildren<Animator>();
             CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
