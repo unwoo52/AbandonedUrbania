@@ -56,36 +56,24 @@ namespace Urban_KimHyeonWoo
 
         [Header("측방사격에 관련된 field")]
         [SerializeField] int FrontAimRunLayerNum = 2;
-        [SerializeField] int SideAimRunLayerNum = 3;
-        [SerializeField] int UpperAimRunLayerNum = 1;
-        float curSideLayerValue = 0;
         float curFrontLayerValue = 0;
-        float curUpperLayerValue = 0;
+        [SerializeField] int SideAimRunLayerNum = 3;
+        float curSideLayerValue = 0;
 
-        [SerializeField] float battletime = 0.2f;
         [SerializeField] float animChangeSpeed = 0.1f;
-        float currBattleTime;
 
         public override void UpdateBehaviour(float dt)
         {
             //cooltime
-            if (currBattleTime >= 0)
-            {
-                currBattleTime -= dt;
-            }
-
-
-            if (CharacterActions.Fire1.value == true)
-            {
-                currBattleTime = battletime;
-            }
 
 
             //run fire animControll
             float speed = CharacterActor.Animator.GetFloat("PlanarSpeed");
 
-            
-            if(currBattleTime > 0 && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>() && !WeaponStateController.IsReload)
+            //총을 발사했다면 사격 애니메이션으로 전환, 아니라면 일반 애니메이션으로 전환
+            bool isFiredRecontly = weaponController.IsFiredRecontly();
+
+            if (isFiredRecontly && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>())
             {//사격중이고, 액션중이 아니고, 장전중이 아닐 때
                 if (speed > 4 )
                 {//달릴 때
@@ -93,27 +81,18 @@ namespace Urban_KimHyeonWoo
                 }
                 else//달리지 않을 때
                 {
-                    if (CharacterActions.Fire1.value == true)
-                    {
-                        WeaponStateController.DoFire();
-                    }
+                    weaponController.FireLock = false;
+
                     Vector3 mouseDir = WeaponStateController.Cam.transform.forward;
                     CharacterActor.SetYaw(mouseDir);
 
-                    SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
+                    //SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
                     SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                     SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
                 }
             }
-            else if(currBattleTime <= 0 && !WeaponStateController.IsReload)
+            else if(!isFiredRecontly)
             {
-                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum , 0, dt);
-                SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
-                SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
-            }  
-            else if (WeaponStateController.IsReload)
-            {
-                Debug.Log("SET");
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
@@ -134,15 +113,13 @@ namespace Urban_KimHyeonWoo
             //뒤를 바라보는 방향이라 사격을 못할 때,
             if (!isCanLateralFiring)
             {
+                weaponController.FireLock = true;
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
             else//사격 가능 각도일 때,
             {
-                if (CharacterActions.Fire1.value == true)
-                {
-                    WeaponStateController.DoFire();
-                }
+                weaponController.FireLock = false;
 
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, Mathf.Abs(angle) / 110, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, Mathf.Abs(Mathf.Abs(angle) / 110 - 1), dt);

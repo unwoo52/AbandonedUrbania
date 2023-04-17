@@ -164,6 +164,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b815bdd59adcaa408ef78b8b4432874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletCooldown: 0.5
+  maxDistance: 1000
+  BulletPrefab: {fileID: 6838843427780193994, guid: 23124d33d6e104347af2b86f1bf345b2,
+    type: 3}
+  FireSound: {fileID: 8300000, guid: af296108b55ef4245b70c5bfc2220725, type: 3}
+  SkillEffectObject: {fileID: 7261340612303336624, guid: 1d410296cf484d84daac7fcf07bf6dd4,
+    type: 3}
+  muzzleTransform: {fileID: 0}
+  hitableMask:
+    serializedVersion: 2
+    m_Bits: 8
+  skilltime: 0.4
+  bulletcount: 30
+  ReloadTime: 3
+  battletime: 0.2
+  currBattleTime: 0
+  FireLock: 0
+  skillCooltime: 2
 --- !u!114 &3592929557201624332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,21 +201,6 @@ MonoBehaviour:
   camera3D: {fileID: 0}
   Cam: {fileID: 0}
   controllCamera3D: {fileID: 0}
-  bulletCooldown: 0.065
-  maxDistance: 1000
-  BulletPrefab: {fileID: 6838843427780193994, guid: 23124d33d6e104347af2b86f1bf345b2,
-    type: 3}
-  FireSound: {fileID: 8300000, guid: af296108b55ef4245b70c5bfc2220725, type: 3}
-  SkillEffectObject: {fileID: 7261340612303336624, guid: 333bc525772babd40bcac0d25426176a,
-    type: 3}
-  muzzleTransform: {fileID: 8889430098642461939}
-  hitableMask:
-    serializedVersion: 2
-    m_Bits: 8
-  skilltime: 0.45
-  bulletcount: 22
-  ReloadTime: 0
-  skillCooltime: 2
 --- !u!114 &4059708737806788656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +219,6 @@ MonoBehaviour:
   FrontAimRunLayerNum: 2
   SideAimRunLayerNum: 3
   UpperAimRunLayerNum: 1
-  battletime: 0.2
   animChangeSpeed: 0.1
 --- !u!114 &5434302119256071932
 MonoBehaviour:

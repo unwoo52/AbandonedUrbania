@@ -52,7 +52,7 @@ public class SubMachinegun_CloseView : WeaponState
     {
         if (CharacterActions.Fire1.value == true)
         {
-            WeaponStateController.DoFire();
+            weaponController.OrderFire();
         }
     }
 }
