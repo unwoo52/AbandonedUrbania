@@ -26,12 +26,6 @@ namespace Urban_KimHyeonWoo
         #endregion
         public override void CheckExitTransition()
         {
-            
-            //if (CharacterActions.Fire2.value == true)
-            if(Input.GetButtonDown("Fire2"))
-            {
-                WeaponStateController.EnqueueTransition<SubMachinegun_AimView>();
-            }
             if (CharacterActions.Wheelupdown.value > 0f)
             {
                 WeaponStateController.EnqueueTransition<SubMachinegun_CloseView>();
@@ -90,8 +84,9 @@ namespace Urban_KimHyeonWoo
             //run fire animControll
             float speed = CharacterActor.Animator.GetFloat("PlanarSpeed");
 
-            if(currBattleTime > 0 && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>())//사격중일 때
-            {
+            
+            if(currBattleTime > 0 && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>() && !WeaponStateController.IsReload)
+            {//사격중이고, 액션중이 아니고, 장전중이 아닐 때
                 if (speed > 4 )
                 {//달릴 때
                     SetAnimatorLayer_LateralFiring(dt);
@@ -110,13 +105,20 @@ namespace Urban_KimHyeonWoo
                     SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
                 }
             }
-            else // 사격중이 아닐 때
+            else if(currBattleTime <= 0 && !WeaponStateController.IsReload)
             {
                 SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum , 0, dt);
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
+            }  
+            else if (WeaponStateController.IsReload)
+            {
+                Debug.Log("SET");
+                SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
+                SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
         }
+
         void SetAnimatorLayer_LateralFiring(float dt)
         {
             Vector3 cameraForward = WeaponStateController.Cam.transform.forward;
@@ -132,7 +134,6 @@ namespace Urban_KimHyeonWoo
             //뒤를 바라보는 방향이라 사격을 못할 때,
             if (!isCanLateralFiring)
             {
-                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
@@ -143,9 +144,9 @@ namespace Urban_KimHyeonWoo
                     WeaponStateController.DoFire();
                 }
 
-                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, Mathf.Abs(angle) / 110, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, Mathf.Abs(Mathf.Abs(angle) / 110 - 1), dt);
+
                 if (angle > 0f)//right
                 {
                     CharacterActor.Animator.SetBool("IsAimRunRight", true);

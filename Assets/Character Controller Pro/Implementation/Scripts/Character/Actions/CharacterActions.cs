@@ -18,6 +18,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
         //add
         public BoolAction Fire1;
         public BoolAction Fire2;
+        public BoolAction Reload;
 
 
         // Float actions
@@ -46,6 +47,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
             //add
             Fire1.Reset();
             Fire2.Reset();
+            Reload.Reset();
 
             @pitch.Reset();
             @roll.Reset();
@@ -86,6 +88,9 @@ namespace Lightbug.CharacterControllerPro.Implementation
             Fire2 = new BoolAction();
             Fire2.Initialize();
 
+            Reload = new BoolAction();
+            Reload.Initialize();
+
 
             @pitch = new FloatAction();
             @roll = new FloatAction();
@@ -113,6 +118,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
             //add
             Fire1.value = inputHandler.GetBool("Fire1");
             Fire2.value = inputHandler.GetBool("Fire2");
+            Reload.value = inputHandler.GetBool("Reload");
 
 
             @pitch.value = inputHandler.GetFloat("Pitch");
@@ -138,6 +144,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
             //add
             Fire1.value = characterActions.Fire1.value;
             Fire2.value = characterActions.Fire2.value;
+            Reload.value = characterActions.Reload.value;
 
             @pitch.value = characterActions.pitch.value;
             @roll.value = characterActions.roll.value;
@@ -164,6 +171,7 @@ namespace Lightbug.CharacterControllerPro.Implementation
             //add
             Fire1.Update(dt);
             Fire2.Update(dt);
+            Reload.Update(dt);
         }
 
 

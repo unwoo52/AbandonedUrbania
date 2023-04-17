@@ -22,11 +22,6 @@ public class SubMachinegun_CloseView : WeaponState
 
     public override void CheckExitTransition()
     {
-        
-        if (Input.GetButtonDown("Fire2"))
-        {
-            WeaponStateController.EnqueueTransition<SubMachinegun_AimView>();
-        }
         if (CharacterActions.Wheelupdown.value < 0f)
         {
             WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();

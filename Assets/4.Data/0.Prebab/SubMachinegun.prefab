@@ -125,6 +125,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8889430099253275930}
+  - component: {fileID: 1699177544381008688}
   - component: {fileID: 3592929557201624332}
   - component: {fileID: 4059708737806788656}
   - component: {fileID: 5434302119256071932}
@@ -151,6 +152,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1699177544381008688
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8889430099253275929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b815bdd59adcaa408ef78b8b4432874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3592929557201624332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,6 +177,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   initialState: {fileID: 4059708737806788656}
+  weaponObject: {fileID: 942706225845075366}
+  handPosition: {fileID: 0}
+  backPosition: {fileID: 0}
+  camera3D: {fileID: 0}
+  Cam: {fileID: 0}
+  controllCamera3D: {fileID: 0}
   bulletCooldown: 0.065
   maxDistance: 1000
   BulletPrefab: {fileID: 6838843427780193994, guid: 23124d33d6e104347af2b86f1bf345b2,
@@ -171,18 +190,13 @@ MonoBehaviour:
   FireSound: {fileID: 8300000, guid: af296108b55ef4245b70c5bfc2220725, type: 3}
   SkillEffectObject: {fileID: 7261340612303336624, guid: 333bc525772babd40bcac0d25426176a,
     type: 3}
-  weaponObject: {fileID: 942706225845075366}
-  handPosition: {fileID: 0}
-  backPosition: {fileID: 0}
-  camera3D: {fileID: 0}
-  Cam: {fileID: 0}
-  controllCamera3D: {fileID: 0}
   muzzleTransform: {fileID: 8889430098642461939}
   hitableMask:
     serializedVersion: 2
     m_Bits: 8
   skilltime: 0.45
   bulletcount: 22
+  ReloadTime: 0
   skillCooltime: 2
 --- !u!114 &4059708737806788656
 MonoBehaviour:
@@ -201,6 +215,9 @@ MonoBehaviour:
   ViewOffsetValue: {x: 0.4, y: -0.1, z: 0}
   FrontAimRunLayerNum: 2
   SideAimRunLayerNum: 3
+  UpperAimRunLayerNum: 1
+  battletime: 0.2
+  animChangeSpeed: 0.1
 --- !u!114 &5434302119256071932
 MonoBehaviour:
   m_ObjectHideFlags: 0

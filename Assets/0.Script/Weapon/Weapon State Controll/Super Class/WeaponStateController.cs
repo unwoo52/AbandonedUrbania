@@ -1,5 +1,6 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
+using Lightbug.CharacterControllerPro.Implementation;
 using Lightbug.Utilities;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,20 +14,6 @@ namespace Urban_KimHyeonWoo
         public WeaponState initialState = null;
         public WeaponState CurrentState { get; protected set; }
         public WeaponState PreviousState { get; protected set; }
-
-
-        [Header("Bullet Field")]
-        //bullet fire system field
-        [SerializeField][Tooltip("발사 쿨타임")] float bulletCooldown = 0.5f;
-        private float currentBulletCooldown = 0f; // 현재 쿨타임
-        [SerializeField] [Tooltip("총알 사거리")]float maxDistance = 1000f;
-
-        [SerializeField] GameObject BulletPrefab; // 총알 프리팹
-        AudioSource audioSource;
-        [SerializeField] AudioClip FireSound;
-
-        [SerializeField] GameObject SkillEffectObject;
-
 
         [Header("weapon and hand position")]
         //weapon and hand position
@@ -135,18 +122,71 @@ namespace Urban_KimHyeonWoo
             {
                 currentBulletCooldown -= Time.deltaTime;
             }
+            if(CurrentState.CharacterActions.Reload.value == true)
+            {
+                CorReload = StartCoroutine(corReload(ReloadTime));
+            }
         }
         #endregion
 
         #region Fire Weapon System
+        [Header("Bullet Field")]
+        //bullet fire system field
+        [SerializeField][Tooltip("발사 쿨타임")] float bulletCooldown = 0.5f;
+        private float currentBulletCooldown = 0f; // 현재 쿨타임
+        [SerializeField][Tooltip("총알 사거리")] float maxDistance = 1000f;
+
+        [SerializeField] GameObject BulletPrefab; // 총알 프리팹
+        AudioSource audioSource;
+        [SerializeField] AudioClip FireSound;
+
+        [SerializeField] GameObject SkillEffectObject;
+
+        [Header("무기 관련 field")]
         [SerializeField] Transform muzzleTransform;
         [SerializeField] LayerMask hitableMask;
 
         [SerializeField] float skilltime = 1.2f;
         [SerializeField] int bulletcount = 30;
 
+        [SerializeField] 
+        [Tooltip("재장전 시간")] float ReloadTime;
 
-        //test skill field
+        //reload
+        bool isReload = false;
+        public bool IsReload => isReload;
+        Coroutine CorReload;
+        IEnumerator corReload(float duration)
+        {
+            isReload = true;
+            float curdurationTime = duration;
+
+            //check layer
+            if(CurrentState.CharacterActor.Animator.GetLayerName(1) != "Upper Layer")
+            {
+                Debug.LogError("SetLayerWeight하려는 레이어가 재장전애니메이션이 있는 상반신 레이어가 아닙니다.");
+                StopCoroutine(CorReload);
+            }
+            CurrentState.CharacterActor.Animator.SetTrigger("Trigger_Reload");
+
+
+            while (curdurationTime > 0)
+            {
+                CurrentState.CharacterActor.Animator.SetLayerWeight(1, 1);
+                float dt = Time.deltaTime;
+                if (curdurationTime <= dt)
+                {
+                    dt = curdurationTime;
+                }
+                curdurationTime -= dt;
+                yield return null;
+            }
+
+            CurrentState.CharacterActor.Animator.SetLayerWeight(1, 0);
+
+            isReload = false;
+        }
+
         bool isSkillOn = false;
         public void SkillOn()
         {
