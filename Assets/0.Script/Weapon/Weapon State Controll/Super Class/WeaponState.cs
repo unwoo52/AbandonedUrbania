@@ -32,15 +32,12 @@ namespace Urban_KimHyeonWoo
             }
         }
 
-        #region Public Methods
-        public WeaponViews SetDisable()
+        #region self enqeue Methods
+        public virtual void EnqueueSelfState()
         {
-            WeaponStateController.EnqueueTransition<SubMachinegun_Disable>();
-
-            return WeaponStateController.currWeaponView;
+            Debug.LogError("\'EnqueueThisState\'를 구현하지 않았습니다.");
         }
         #endregion
-
 
         #region unity CallBacks
         private void Awake()

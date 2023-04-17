@@ -1,6 +1,7 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Implementation;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static UnityEditor.VersionControl.Asset;
@@ -22,20 +23,15 @@ namespace Urban_KimHyeonWoo
         public void SetWeaponsAble(WeaponViews weaponViews)
         {
             //currWeaponView = weaponViews;
-            foreach (var weaponObject in GameObject.FindObjectsOfType<WeaponState>())
+            foreach (WeaponState weaponObject in FindObjectsOfType<WeaponState>())
             {
                 //weaponStates.Add(weaponObject);
                 if(weaponObject.weaponViews == weaponViews)
                 {
-                    string tesmp = weaponObject.name;
-                    EnqueueTransition<>();
+                    weaponObject.EnqueueSelfState();
                     break;
                 }
             }
-
-
-
-            
         }
         #endregion
 
@@ -80,7 +76,7 @@ namespace Urban_KimHyeonWoo
         #region unity Callbacks         -----------------
         private void Awake()
         {
-            AddStates
+            AddStates();
             camera3D = transform.parent.parent.parent.GetChild(0).GetComponent<Camera3D>();
             controllCamera3D = transform.parent.parent.parent.GetChild(0).GetComponent<ControllCamera3D>();
             Cam = camera3D.gameObject.GetComponent<Camera>();
@@ -225,6 +221,21 @@ namespace Urban_KimHyeonWoo
 
             transitionsQueue.Enqueue(state);
         }
+        
+        public void EnqueueTransition(string name)
+        {
+            WeaponState[] states = GetComponents<WeaponState>();
+
+            foreach(var v in states)
+            {
+                if(v.GetType().Name == name)
+                {
+                    transitionsQueue.Enqueue(v);
+                    break;
+                }
+            }
+        }
+
         bool CheckForTransitions()
         {
             CurrentState.CheckExitTransition();
@@ -255,10 +266,24 @@ namespace Urban_KimHyeonWoo
             }
 
             return false;
-
         }
 
-        
+
+        /// <summary>
+        /// Forces the state machine to transition from the current state to a new one.
+        /// </summary>
+        public void ForceState(WeaponState state)
+        {
+            if (state == null)
+                return;
+
+            PreviousState = CurrentState;
+            CurrentState = state;
+
+            PreviousState.ExitBehaviour(Time.deltaTime, CurrentState);
+
+            CurrentState.EnterBehaviour(Time.deltaTime, PreviousState);
+        }
         #endregion
     }
 }

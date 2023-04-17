@@ -109,6 +109,11 @@ namespace Urban_KimHyeonWoo
 
         }
 
+        public override void EnqueueSelfState()
+        {
+            WeaponStateController.ForceState(this);
+        }
+
         void SetAnimatorLayer_LateralFiring(float dt, bool isCanLateralFiring, float angle)
         {
             //뒤를 바라보는 방향이라 사격을 못할 때,
