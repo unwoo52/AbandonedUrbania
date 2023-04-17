@@ -64,7 +64,19 @@ namespace Urban_KimHyeonWoo
 
         public override void UpdateBehaviour(float dt)
         {
-            //cooltime
+            //get angle
+            Vector3 cameraForward = WeaponStateController.Cam.transform.forward;
+            Vector3 characterForward = CharacterActor.Forward;
+
+            //캐릭터의 진행방향과 카메라의 각도를 계산
+            float angle = Vector3.SignedAngle(cameraForward, characterForward, Vector3.up);
+
+            //제한 각도가 110도인 이유는 측방사격 애니메이션이 있는 레이어의 weight가 1일 때, 캐릭터가 110도 측면을 사격하기 때문
+            //수정하고 싶다면 캐릭터의 측방사격 애니메이션의 yaw rotate offset값을 수정할 것
+            bool isCanLateralFiring = Mathf.Abs(angle) < 110f;
+
+            if(isCanLateralFiring) { weaponController.FireLock = false; }
+            else if(!isCanLateralFiring) { weaponController.FireLock = true;}
 
 
             //run fire animControll
@@ -77,12 +89,10 @@ namespace Urban_KimHyeonWoo
             {//사격중이고, 액션중이 아니고, 장전중이 아닐 때
                 if (speed > 4 )
                 {//달릴 때
-                    SetAnimatorLayer_LateralFiring(dt);
+                    SetAnimatorLayer_LateralFiring(dt, isFiredRecontly, angle);
                 }
                 else//달리지 않을 때
                 {
-                    weaponController.FireLock = false;
-
                     Vector3 mouseDir = WeaponStateController.Cam.transform.forward;
                     CharacterActor.SetYaw(mouseDir);
 
@@ -96,30 +106,19 @@ namespace Urban_KimHyeonWoo
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
+
         }
 
-        void SetAnimatorLayer_LateralFiring(float dt)
+        void SetAnimatorLayer_LateralFiring(float dt, bool isCanLateralFiring, float angle)
         {
-            Vector3 cameraForward = WeaponStateController.Cam.transform.forward;
-            Vector3 characterForward = CharacterActor.Forward;
-
-            //캐릭터의 진행방향과 카메라의 각도를 계산
-            float angle = Vector3.SignedAngle(cameraForward, characterForward, Vector3.up);
-
-            //제한 각도가 110도인 이유는 측방사격 애니메이션이 있는 레이어의 weight가 1일 때, 캐릭터가 110도 측면을 사격하기 때문
-            //수정하고 싶다면 캐릭터의 측방사격 애니메이션의 yaw rotate offset값을 수정할 것
-            bool isCanLateralFiring = Mathf.Abs(angle) < 110f;
-
             //뒤를 바라보는 방향이라 사격을 못할 때,
             if (!isCanLateralFiring)
             {
-                weaponController.FireLock = true;
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, 0, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, 0, dt);
             }
             else//사격 가능 각도일 때,
             {
-                weaponController.FireLock = false;
 
                 SetAnimControllerSetLayerWeight(ref curSideLayerValue, SideAimRunLayerNum, Mathf.Abs(angle) / 110, dt);
                 SetAnimControllerSetLayerWeight(ref curFrontLayerValue, FrontAimRunLayerNum, Mathf.Abs(Mathf.Abs(angle) / 110 - 1), dt);

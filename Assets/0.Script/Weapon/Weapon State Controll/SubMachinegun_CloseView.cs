@@ -20,6 +20,13 @@ public class SubMachinegun_CloseView : WeaponState
     }
     #endregion
 
+    #region unity Callbacks
+    private void Start()
+    {
+        weaponViews = WeaponViews.Close;
+    }
+    #endregion
+
     public override void CheckExitTransition()
     {
         if (CharacterActions.Wheelupdown.value < 0f)
@@ -50,9 +57,10 @@ public class SubMachinegun_CloseView : WeaponState
     }
     public override void UpdateBehaviour(float dt)
     {
-        if (CharacterActions.Fire1.value == true)
+
+        if (CharacterStateController.CurrentState == CharacterStateController.GetState<SuperJump>())
         {
-            weaponController.OrderFire();
+            weaponController.currBattleTime = 0.2f;
         }
     }
 }

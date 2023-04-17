@@ -7,6 +7,7 @@ namespace Urban_KimHyeonWoo
 {
     public class WeaponState : MonoBehaviour
     {
+        [HideInInspector] public WeaponViews weaponViews;
         [HideInInspector] public WeaponStateController WeaponStateController { get; private set; }
 
         protected WeaponController weaponController;
@@ -31,6 +32,14 @@ namespace Urban_KimHyeonWoo
             }
         }
 
+        #region Public Methods
+        public WeaponViews SetDisable()
+        {
+            WeaponStateController.EnqueueTransition<SubMachinegun_Disable>();
+
+            return WeaponStateController.currWeaponView;
+        }
+        #endregion
 
 
         #region unity CallBacks

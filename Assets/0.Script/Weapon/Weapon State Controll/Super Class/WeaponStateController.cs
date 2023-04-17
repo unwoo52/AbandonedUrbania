@@ -1,16 +1,48 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Implementation;
-using Lightbug.Utilities;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.VersionControl.Asset;
 
 namespace Urban_KimHyeonWoo
 {
-    public class WeaponStateController : MonoBehaviour
+    public enum WeaponViews
     {
+        Far, Close, Aim, None
+    }
+    public class WeaponStateController : MonoBehaviour, ISetWeaponDisable, ISetWeaponsAble
+    {
+        #region interface---------------
+        public WeaponViews SetWeaponDisable()
+        {
+            EnqueueTransition<SubMachinegun_Disable>();
+            return CurrentState.weaponViews;
+        }
+        public void SetWeaponsAble(WeaponViews weaponViews)
+        {
+            //currWeaponView = weaponViews;
+            foreach (var weaponObject in GameObject.FindObjectsOfType<WeaponState>())
+            {
+                //weaponStates.Add(weaponObject);
+                if(weaponObject.weaponViews == weaponViews)
+                {
+                    string tesmp = weaponObject.name;
+                    EnqueueTransition<>();
+                    break;
+                }
+            }
+
+
+
+            
+        }
+        #endregion
+
+        Dictionary<string, WeaponState> states = new Dictionary<string, WeaponState>();
+
         [Header("States")]
+
         public WeaponState initialState = null;
         public WeaponState CurrentState { get; protected set; }
         public WeaponState PreviousState { get; protected set; }
@@ -45,9 +77,10 @@ namespace Urban_KimHyeonWoo
 
         Queue<WeaponState> transitionsQueue = new Queue<WeaponState>();
 
-        #region unity Callbacks
+        #region unity Callbacks         -----------------
         private void Awake()
         {
+            AddStates
             camera3D = transform.parent.parent.parent.GetChild(0).GetComponent<Camera3D>();
             controllCamera3D = transform.parent.parent.parent.GetChild(0).GetComponent<ControllCamera3D>();
             Cam = camera3D.gameObject.GetComponent<Camera>();
@@ -122,6 +155,50 @@ namespace Urban_KimHyeonWoo
 
         #endregion
 
+        #region Init                    ----------------- 
+        void AddStates()
+        {
+            WeaponState[] statesArray = FindObjectsOfType<WeaponState>();
+            for (int i = 0; i < statesArray.Length; i++)
+            {
+                WeaponState state = statesArray[i];
+                string stateName = state.GetType().Name;
+
+                // The state is already included, ignore it!
+                if (GetState(stateName) != null)
+                {
+                    Debug.Log("Warning: GameObject " + state.gameObject.name + " has the state " + stateName + " repeated in the hierarchy.");
+                    continue;
+                }
+
+                states.Add(stateName, state);
+            }
+
+        }
+        #endregion
+
+        #region GetStateMethod
+
+        /// <summary>
+        /// Searches for a particular state.
+        /// </summary>
+        public WeaponState GetState(string stateName)
+        {
+            states.TryGetValue(stateName, out WeaponState state);
+
+            return state;
+        }
+
+        /// <summary>
+        /// Searches for a particular state.
+        /// </summary>
+        public WeaponState GetState<T>() where T : WeaponState
+        {
+            string stateName = typeof(T).Name;
+            return GetState(stateName);
+        }
+
+        #endregion
 
         #region Events                  -----------------
 
@@ -180,6 +257,8 @@ namespace Urban_KimHyeonWoo
             return false;
 
         }
-        #endregion 
+
+        
+        #endregion
     }
 }

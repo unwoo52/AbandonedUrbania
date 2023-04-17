@@ -12,6 +12,7 @@ namespace Urban_KimHyeonWoo
     public class SuperJump : CharacterState
     {
         protected float initialForwardVelocity = 12f;
+               
 
         [Min(0f)]
         [SerializeField]
@@ -159,12 +160,14 @@ namespace Urban_KimHyeonWoo
         // Write your transitions here
         public override bool CheckEnterTransition(CharacterState fromState)
         {
+            Debug.Log("enter");
             enterEvent?.Invoke();
             return true;
         }
         public override void CheckExitTransition()
         {
-            if(CharacterActor.IsGrounded && CharacterActor.IsStable && isDone)
+            Debug.Log("exit");
+            if (CharacterActor.IsGrounded && CharacterActor.IsStable && isDone)
             {
                 //roll
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);
