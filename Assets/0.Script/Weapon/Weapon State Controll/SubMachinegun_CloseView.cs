@@ -6,6 +6,10 @@ using Urban_KimHyeonWoo;
 
 public class SubMachinegun_CloseView : WeaponState
 {
+    [Header("애니메이션 레이어에 관련된 field")]
+    [SerializeField] int UpperAimRunLayerNum = 1;
+    float curUpperLayerValue = 0;
+
     [SerializeField]
     [Tooltip("캐릭터로부터 카메라의 거리")]
     Vector2 CloseZoomMinMax = new Vector2(0.7f, 0.8f);//<<줌minmax는 의미 없어졌으므로, 고정값으로 수정해야 함
@@ -45,6 +49,7 @@ public class SubMachinegun_CloseView : WeaponState
     }
     public override void EnterBehaviour(float dt, WeaponState fromState)
     {
+        CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", 0);
         CharacterStateController.IsFixedLookdir = true;
         CharacterActor.Animator.SetLayerWeight(1, 1);
 
@@ -59,9 +64,11 @@ public class SubMachinegun_CloseView : WeaponState
     {
         CharacterStateController.IsFixedLookdir = false;
     }
+
+    
     public override void UpdateBehaviour(float dt)
     {
-
+        SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
         if (CharacterStateController.CurrentState == CharacterStateController.GetState<SuperJump>())
         {
             weaponController.currBattleTime = 0.2f;

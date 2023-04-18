@@ -19376,12 +19376,6 @@ PrefabInstance:
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}
---- !u!4 &1714592104 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6404057276343335442, guid: d77c839416498b648bd8f660f864a81a,
-    type: 3}
-  m_PrefabInstance: {fileID: 1714592103}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1714592105 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 124931451132776877, guid: d77c839416498b648bd8f660f864a81a,
@@ -19407,8 +19401,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Slot:
-  - {fileID: 1714592106}
   - {fileID: 700025956089040485}
+  - {fileID: 1714592106}
   InitSlot: 0
 --- !u!114 &1714592108
 MonoBehaviour:
@@ -24640,85 +24634,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 674f492a5dd16894e8604facf1b40506, type: 3}
---- !u!1001 &700025956089040484
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1714592104}
-    m_Modifications:
-    - target: {fileID: 4738832704986623414, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_Name
-      value: Rocket Launcher
-      objectReference: {fileID: 0}
-    - target: {fileID: 4738832704986623414, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 280914c751dd47340a1d4366cb13d746, type: 3}
 --- !u!1 &700025956089040485 stripped
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 4738832704986623414, guid: 280914c751dd47340a1d4366cb13d746,
+  m_CorrespondingSourceObject: {fileID: 6255584363212813268, guid: d77c839416498b648bd8f660f864a81a,
     type: 3}
-  m_PrefabInstance: {fileID: 700025956089040484}
+  m_PrefabInstance: {fileID: 1714592103}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &716321463429823004 stripped
 Transform:

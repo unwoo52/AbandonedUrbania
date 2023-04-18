@@ -7,6 +7,7 @@ namespace Urban_KimHyeonWoo
 {
     public class WeaponState : MonoBehaviour
     {
+
         [HideInInspector] public WeaponViews weaponViews;
         [HideInInspector] public WeaponStateController WeaponStateController { get; private set; }
 
@@ -44,14 +45,24 @@ namespace Urban_KimHyeonWoo
         {
             CharacterActor = this.GetComponentInBranch<CharacterActor>();
             CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
-            WeaponStateController = this.GetComponentInBranch<CharacterActor, WeaponStateController>();
+            WeaponStateController = GetComponent<WeaponStateController>();
             CharacterStateController = this.GetComponentInBranch<CharacterActor, CharacterStateController>();
             weaponController = GetComponent<WeaponController>();
         }
         #endregion
 
+        #region Anim Controll Method
+        //애니메이터의 LayerMask의 SetLayerWeight속도를 조절하는 필드
+        [SerializeField] [Tooltip("캐릭터의 모션이 전환되는 속도를 조절")] float animChangeSpeed = 0.1f;
+        public void SetAnimControllerSetLayerWeight(ref float curLayerValue, int LayerNum, float destValue, float dt)
+        {
+            curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
+            CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
+        }
+        #endregion
+
         #region Check Transition
-        
+
         /// <summary>
         /// Checks if the required conditions to exit this state are true. If so it returns the desired state (null otherwise). After this the state machine will
         /// proceed to evaluate the "enter transition" condition on the target state.

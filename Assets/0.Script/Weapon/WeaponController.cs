@@ -13,7 +13,7 @@ namespace Urban_KimHyeonWoo
         //bullet fire system field
         [SerializeField][Tooltip("발사 쿨타임")] float bulletCooldown = 0.5f;
         private float currentBulletCooldown = 0f; // 현재 쿨타임
-        [SerializeField][Tooltip("총알 사거리")] float maxDistance = 1000f;
+        [SerializeField][Tooltip("레이 조준 사거리")] float maxDistance = 1000f;
 
         [SerializeField] GameObject BulletPrefab; // 총알 프리팹
         AudioSource audioSource;
@@ -148,22 +148,12 @@ namespace Urban_KimHyeonWoo
             switch (currentState)
             {
                 case WeaponFireState.CanFire:
-                    //layer weight 설정
-                    if (IsFiredRecontly())
-                    {
-                        SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
-                    }
-                    else
-                    {
-                        SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
-                    }
                     //fire
                     if (CharacterActions.Fire1.value == true)
                         OrderFire();
                     break;
                 case WeaponFireState.Reload:
                     SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
-
                     break;
                 case WeaponFireState.OnSkill:
                     break;

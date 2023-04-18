@@ -17,6 +17,16 @@ namespace Urban_KimHyeonWoo
         [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
         Vector3 ViewOffsetValue = new Vector3(0.4f, -0.1f, 0);
 
+
+        [Header("애니메이션 레이어에 관련된 field")]
+        [SerializeField] int UpperAimRunLayerNum = 1;
+        float curUpperLayerValue = 0;
+        [SerializeField] int FrontAimRunLayerNum = 2;
+        float curFrontLayerValue = 0;
+        [SerializeField] int SideAimRunLayerNum = 3;
+        float curSideLayerValue = 0;
+
+
         public override void CheckExitTransition()
         {            
             if (CharacterActions.Wheelupdown.value > 0f)
@@ -26,6 +36,9 @@ namespace Urban_KimHyeonWoo
         }
         public override void EnterBehaviour(float dt, WeaponState fromState)
         {
+            CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", 0);
+
+
             CharacterActor.Animator.SetLayerWeight(1, 0);
 
             WeaponStateController.ChangeWeaponPos_Hand();
@@ -42,13 +55,8 @@ namespace Urban_KimHyeonWoo
         }
 
 
-        [Header("측방사격에 관련된 field")]
-        [SerializeField] int FrontAimRunLayerNum = 2;
-        float curFrontLayerValue = 0;
-        [SerializeField] int SideAimRunLayerNum = 3;
-        float curSideLayerValue = 0;
 
-        [SerializeField] float animChangeSpeed = 0.1f;
+        
 
         public override void UpdateBehaviour(float dt)
         {
@@ -72,6 +80,17 @@ namespace Urban_KimHyeonWoo
 
             //총을 발사했다면 사격 애니메이션으로 전환, 아니라면 일반 애니메이션으로 전환
             bool isFiredRecontly = weaponController.IsFiredRecontly();
+
+            //layer weight 설정
+            if (weaponController.IsFiredRecontly())
+            {
+                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
+            }
+            else
+            {
+                SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
+            }
+
 
             if (isFiredRecontly && CharacterStateController.CurrentState == CharacterStateController.GetState<NormalMovement>())
             {//사격중이고, 액션중이 아니고, 장전중이 아닐 때
@@ -126,13 +145,5 @@ namespace Urban_KimHyeonWoo
                 }
             }
         }
-
-
-        void SetAnimControllerSetLayerWeight(ref float curLayerValue, int LayerNum,float destValue, float dt)
-        {
-            curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
-            CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
-        }
-
     }
 }
