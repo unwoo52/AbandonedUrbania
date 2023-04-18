@@ -1,15 +1,24 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Implementation;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using Urban_KimHyeonWoo;
+using static AnimationLayerMaskIndex;
 
 namespace Urban_KimHyeonWoo
 {
     public class SubMachinegun_FarView : WeaponState
     {
+        //animation field
+        [Header("애니메이션 레이어에 관련된 field")]
+        int UpperAimRunLayerNum;
+        float curUpperLayerValue = 0;
+        int FrontAimRunLayerNum = 2;
+        float curFrontLayerValue = 0;
+        int SideAimRunLayerNum = 3;
+        float curSideLayerValue = 0;
+        float weaponBlendTree;
+
+        //cam field
         [SerializeField]
         [Tooltip("캐릭터로부터 카메라의 거리")]
         Vector2 ZoomMinMax = new Vector2(5, 12);//<<줌minmax는 의미 없어졌으므로, 고정값으로 수정해야 함
@@ -17,15 +26,13 @@ namespace Urban_KimHyeonWoo
         [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
         Vector3 ViewOffsetValue = new Vector3(0.4f, -0.1f, 0);
 
-
-        [Header("애니메이션 레이어에 관련된 field")]
-        [SerializeField] int UpperAimRunLayerNum = 1;
-        float curUpperLayerValue = 0;
-        [SerializeField] int FrontAimRunLayerNum = 2;
-        float curFrontLayerValue = 0;
-        [SerializeField] int SideAimRunLayerNum = 3;
-        float curSideLayerValue = 0;
-
+        private void Start()
+        {
+            UpperAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Upper_Layer;
+            FrontAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Front_Aim_Run;
+            SideAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Side_Aim_Run;
+            weaponBlendTree = (float)AnimationLayerMaskIndex.WeaponBlendTree.Rifle / 10;
+        }
 
         public override void CheckExitTransition()
         {            
@@ -36,7 +43,7 @@ namespace Urban_KimHyeonWoo
         }
         public override void EnterBehaviour(float dt, WeaponState fromState)
         {
-            CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", 0);
+            CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", weaponBlendTree);
 
 
             CharacterActor.Animator.SetLayerWeight(1, 0);

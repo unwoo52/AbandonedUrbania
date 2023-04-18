@@ -49,12 +49,11 @@ namespace Urban_KimHyeonWoo
 
 
         [Header("Cam")]
-        [SerializeField] Camera3D camera3D;
-        public Camera3D Camera3D => camera3D;
-        public Camera Cam;
+        Camera3D camera3D;
+        [HideInInspector] public Camera Cam;
+        [HideInInspector] public Camera3D Camera3D => camera3D;
 
-        [SerializeField] ControllCamera3D controllCamera3D;
-        public ControllCamera3D ControllCamera3D => controllCamera3D;
+        ControllCamera3D controllCamera3D;
 
         bool machineStarted = false;
 

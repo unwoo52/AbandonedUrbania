@@ -6,10 +6,13 @@ using Urban_KimHyeonWoo;
 
 public class SubMachinegun_CloseView : WeaponState
 {
+    //animation field
     [Header("애니메이션 레이어에 관련된 field")]
-    [SerializeField] int UpperAimRunLayerNum = 1;
+    int UpperAimRunLayerNum;
     float curUpperLayerValue = 0;
+    float weaponBlendTree;
 
+    //cam field
     [SerializeField]
     [Tooltip("캐릭터로부터 카메라의 거리")]
     Vector2 CloseZoomMinMax = new Vector2(0.7f, 0.8f);//<<줌minmax는 의미 없어졌으므로, 고정값으로 수정해야 함
@@ -17,17 +20,11 @@ public class SubMachinegun_CloseView : WeaponState
     [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
     Vector3 CloseViewOffsetValue = new Vector3(0.3f, -0.22f, 0.27f);
 
-    #region EventTrigger
-    bool setFarStateTrigger = false;
-    public void SetFatState()
-    {
-        setFarStateTrigger = true;
-    }
-    #endregion
-
     #region unity Callbacks
     private void Start()
     {
+        UpperAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Upper_Layer;
+        weaponBlendTree = (float)AnimationLayerMaskIndex.WeaponBlendTree.Rifle / 10;
         weaponViews = WeaponViews.Close;
     }
     #endregion
@@ -41,17 +38,12 @@ public class SubMachinegun_CloseView : WeaponState
         {
             WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
         }
-        if(setFarStateTrigger == true)
-        {
-            setFarStateTrigger= false;
-            WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
-        }
     }
     public override void EnterBehaviour(float dt, WeaponState fromState)
     {
-        CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", 0);
+        CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", weaponBlendTree);
+
         CharacterStateController.IsFixedLookdir = true;
-        CharacterActor.Animator.SetLayerWeight(1, 1);
 
         WeaponStateController.ChangeWeaponPos_Hand();
 
@@ -69,6 +61,8 @@ public class SubMachinegun_CloseView : WeaponState
     public override void UpdateBehaviour(float dt)
     {
         SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
+
+        //슈퍼점프동안은 항상 배틀타임상태로
         if (CharacterStateController.CurrentState == CharacterStateController.GetState<SuperJump>())
         {
             weaponController.currBattleTime = 0.2f;

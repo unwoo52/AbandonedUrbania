@@ -1,3 +1,4 @@
+using Lightbug.CharacterControllerPro.Implementation;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,6 +26,10 @@ namespace Urban_KimHyeonWoo
         public override void UpdateBehaviour(float dt)
         {
             base.UpdateBehaviour(dt);
+        }
+        public override void ActionStateChangeListener(CharacterState state)
+        {
+            base.ActionStateChangeListener(state);
         }
     }
 }

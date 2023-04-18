@@ -54,10 +54,24 @@ namespace Urban_KimHyeonWoo
         #region Anim Controll Method
         //애니메이터의 LayerMask의 SetLayerWeight속도를 조절하는 필드
         [SerializeField] [Tooltip("캐릭터의 모션이 전환되는 속도를 조절")] float animChangeSpeed = 0.1f;
-        public void SetAnimControllerSetLayerWeight(ref float curLayerValue, int LayerNum, float destValue, float dt)
+        public void SetAnimControllerSetLayerWeight(ref float curLayerValue, string layerName, float destValue, float dt)
         {
+            //calculate lerp value
             curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
-            CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
+            //get layer name
+            int layerNum = CharacterActor.Animator.GetLayerIndex(layerName);
+
+            //SetLayerWeight
+            CharacterActor.Animator.SetLayerWeight(layerNum, curLayerValue);
+        }
+
+        public void SetAnimControllerSetLayerWeight(ref float curLayerValue, int layerNum, float destValue, float dt)
+        {
+            //calculate lerp value
+            curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
+
+            //SetLayerWeight
+            CharacterActor.Animator.SetLayerWeight(layerNum, curLayerValue);
         }
         #endregion
 

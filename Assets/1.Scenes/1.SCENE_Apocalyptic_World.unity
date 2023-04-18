@@ -695,6 +695,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 39569181}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &48184313 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6408595010913337099, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &52138581
 GameObject:
   m_ObjectHideFlags: 0
@@ -19113,6 +19119,11 @@ PrefabInstance:
       propertyPath: WeaponAimTranformParent
       value: 
       objectReference: {fileID: 1151709785}
+    - target: {fileID: 3210197907001805905, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: handPosition
+      value: 
+      objectReference: {fileID: 48184313}
     - target: {fileID: 4831062802669586936, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: battletime
@@ -19141,42 +19152,42 @@ PrefabInstance:
     - target: {fileID: 5962069267353740351, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: 29.689474
+      value: 29.689583
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267353740351, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: 114.08438
+      value: 114.08428
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267353740351, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.z
-      value: -85.670845
+      value: -85.671
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267774174916, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: -29.689476
+      value: -29.689556
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267774174916, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: 65.915565
+      value: 65.91567
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267774174916, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.z
-      value: 94.329185
+      value: 94.32901
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267835518466, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: -46.360184
+      value: -46.36028
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267835518466, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: 0.42013097
+      value: 0.4201217
       objectReference: {fileID: 0}
     - target: {fileID: 5962069267835518466, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -19211,7 +19222,7 @@ PrefabInstance:
     - target: {fileID: 5962069267862701629, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_TranslationOffsets.Array.data[0].z
-      value: 0.09894562
+      value: 0.09895325
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -19301,17 +19312,17 @@ PrefabInstance:
     - target: {fileID: 5962069268832843445, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: 42.036903
+      value: 42.036514
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268832843445, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: -118.80226
+      value: -118.802155
       objectReference: {fileID: 0}
     - target: {fileID: 5962069268832843445, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.z
-      value: -101.56341
+      value: -101.56316
       objectReference: {fileID: 0}
     - target: {fileID: 5962069269193907140, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -19346,18 +19357,24 @@ PrefabInstance:
     - target: {fileID: 5962069269217102316, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
-      value: -42.036804
+      value: -42.036396
       objectReference: {fileID: 0}
     - target: {fileID: 5962069269217102316, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.y
-      value: -61.197765
+      value: -61.197895
       objectReference: {fileID: 0}
     - target: {fileID: 5962069269217102316, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.z
-      value: 78.436554
+      value: 78.43674
       objectReference: {fileID: 0}
+    - target: {fileID: 6167724693610699388, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: SkillEffectObject
+      value: 
+      objectReference: {fileID: 6497072022067581020, guid: 36b227cb49ef0954a908c8dd592f0a80,
+        type: 3}
     - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: bulletCooldown
@@ -19418,6 +19435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponViews: 0
   CharacterStateController: {fileID: 0}
+  animChangeSpeed: 0.1
 --- !u!114 &1714592113 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
