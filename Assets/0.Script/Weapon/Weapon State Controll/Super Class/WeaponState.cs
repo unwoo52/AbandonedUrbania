@@ -51,6 +51,7 @@ namespace Urban_KimHyeonWoo
         #endregion
 
         #region Check Transition
+        
         /// <summary>
         /// Checks if the required conditions to exit this state are true. If so it returns the desired state (null otherwise). After this the state machine will
         /// proceed to evaluate the "enter transition" condition on the target state.
@@ -105,6 +106,13 @@ namespace Urban_KimHyeonWoo
         }
         #endregion
 
+        #region Adapter
+        //characterState Adapter
+        public virtual void ActionStateChangeListener(CharacterState state)
+        {
+        }
+
+        #endregion
     }
 
 }

@@ -160,21 +160,19 @@ namespace Urban_KimHyeonWoo
         // Write your transitions here
         public override bool CheckEnterTransition(CharacterState fromState)
         {
-            Debug.Log("enter");
             enterEvent?.Invoke();
             return true;
         }
         public override void CheckExitTransition()
         {
-            Debug.Log("exit");
-            if (CharacterActor.IsGrounded && CharacterActor.IsStable && isDone)
+            if (isDone && CharacterActor.IsGrounded && CharacterActor.IsStable)
             {
                 //roll
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);
                 CharacterStateController.EnqueueTransition<NormalMovement>();
                 exitEvent?.Invoke();
             }
-            else if (CharacterActor.IsGrounded && !CharacterActor.IsStable && isDone)
+            else if (isDone && CharacterActor.IsGrounded && !CharacterActor.IsStable)
             {
                 //normal
                 CharacterStateController.Animator.SetBool("IsSuperJump", false);

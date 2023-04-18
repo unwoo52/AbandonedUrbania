@@ -1,5 +1,6 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
+using Lightbug.CharacterControllerPro.Implementation;
 using UnityEngine;
 using Urban_KimHyeonWoo;
 
@@ -29,6 +30,9 @@ public class SubMachinegun_CloseView : WeaponState
 
     public override void CheckExitTransition()
     {
+        //adapter code
+        if (isViewChangeLock()) return;
+
         if (CharacterActions.Wheelupdown.value < 0f)
         {
             WeaponStateController.EnqueueTransition<SubMachinegun_FarView>();
@@ -63,4 +67,29 @@ public class SubMachinegun_CloseView : WeaponState
             weaponController.currBattleTime = 0.2f;
         }
     }
+
+
+    #region Adapter
+    //CharacterState Adapter
+    bool SuperJumpLock = false;
+    bool isViewChangeLock()
+    {
+        return SuperJumpLock;
+    }
+    public override void ActionStateChangeListener(CharacterState state)
+    {
+        if (state == CharacterStateController.GetState<SuperJump>())
+        {
+            SuperJumpLock = true;
+
+            WeaponStateController.ForceState(this);
+        }
+        else if (state != CharacterStateController.GetState<SuperJump>() && SuperJumpLock == true)
+        {//슈퍼점프에서 빠져나갔다면,
+            SuperJumpLock = false;
+
+            WeaponStateController.ForceState(WeaponStateController.PreviousState);
+        }
+    }
+    #endregion
 }

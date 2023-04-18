@@ -1,13 +1,10 @@
-using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Implementation;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.VersionControl.Asset;
 
 namespace Urban_KimHyeonWoo
-{
+{    
     public enum WeaponViews
     {
         Far, Close, Aim, None
@@ -73,6 +70,9 @@ namespace Urban_KimHyeonWoo
 
         Queue<WeaponState> transitionsQueue = new Queue<WeaponState>();
 
+        
+
+
         #region unity Callbacks         -----------------
         private void Awake()
         {
@@ -119,21 +119,6 @@ namespace Urban_KimHyeonWoo
             }
 
 
-
-            if (CurrentState == null)
-                return;
-
-            if (!CurrentState.isActiveAndEnabled)
-                return;
-
-
-            if (!machineStarted)
-            {
-                CurrentState.EnterBehaviour(0f, CurrentState);
-                machineStarted = true;
-            }
-
-
             float dt = Time.deltaTime;
 
             bool validTransition = CheckForTransitions();
@@ -169,7 +154,6 @@ namespace Urban_KimHyeonWoo
 
                 states.Add(stateName, state);
             }
-
         }
         #endregion
 
@@ -284,6 +268,19 @@ namespace Urban_KimHyeonWoo
 
             CurrentState.EnterBehaviour(Time.deltaTime, PreviousState);
         }
+        #endregion
+
+        #region Adapter
+        //characterState Adapter
+        public void Notify_CharacterActionHasChanged(CharacterState characterState)
+        {
+            //states의 모든 state에게 ActionStateChangeListener를 실행
+            foreach (KeyValuePair<string, WeaponState> weaponState in states)
+            {
+                weaponState.Value.ActionStateChangeListener(characterState);
+            }
+        }
+
         #endregion
     }
 }

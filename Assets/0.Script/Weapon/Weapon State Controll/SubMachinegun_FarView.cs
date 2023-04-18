@@ -17,22 +17,10 @@ namespace Urban_KimHyeonWoo
         [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
         Vector3 ViewOffsetValue = new Vector3(0.4f, -0.1f, 0);
 
-        #region EventTrigger
-        bool setCloseStateTrigger = false;
-        public void SetCloseState()
-        {
-            setCloseStateTrigger = true;
-        }
-        #endregion
         public override void CheckExitTransition()
-        {
+        {            
             if (CharacterActions.Wheelupdown.value > 0f)
             {
-                WeaponStateController.EnqueueTransition<SubMachinegun_CloseView>();
-            }
-            if (setCloseStateTrigger == true)
-            {
-                setCloseStateTrigger = false;
                 WeaponStateController.EnqueueTransition<SubMachinegun_CloseView>();
             }
         }
@@ -145,5 +133,6 @@ namespace Urban_KimHyeonWoo
             curLayerValue = Mathf.Lerp(curLayerValue, destValue, animChangeSpeed * dt);
             CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
         }
+
     }
 }

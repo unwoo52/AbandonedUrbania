@@ -19061,6 +19061,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: exitEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: enterEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: enterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1714592113}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: enterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SkillOn
+      objectReference: {fileID: 0}
+    - target: {fileID: 1306840254, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: enterEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Urban_KimHyeonWoo.WeaponStateController, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 1740900219, guid: d77c839416498b648bd8f660f864a81a, type: 3}
       propertyPath: reloadEvent.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -19253,6 +19273,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5962069268660161221, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: actionStateChangeListener
+      value: 
+      objectReference: {fileID: 1714592105}
     - target: {fileID: 5962069268710429891, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_RotationOffset.x
@@ -19397,7 +19422,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fb8fc4b77d5a0e49892e06c11a20978, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponViews: 0
   CharacterStateController: {fileID: 0}
+--- !u!114 &1714592113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5368642560627424452, guid: d77c839416498b648bd8f660f864a81a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1714592103}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1714592106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08aefda12cf340e44a5ace0cb11a103e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1717276523
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -24613,6 +24651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Rocket Launcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 4738832704986623414, guid: 280914c751dd47340a1d4366cb13d746,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4911735009884817856, guid: 280914c751dd47340a1d4366cb13d746,
         type: 3}

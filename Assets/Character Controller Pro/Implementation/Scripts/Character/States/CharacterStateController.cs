@@ -16,7 +16,10 @@ namespace Lightbug.CharacterControllerPro.Implementation
         void UpdateBehaviour(float dt);
         void PostUpdateBehaviour(float dt);
     }
-
+    public interface IActionStateChangeListener
+    {
+        void OnCharacterActionStateChanged(CharacterState state);
+    }
 
     /// <summary>
     /// This class handles all the involved states from the character, allowing an organized execution of events. It also contains extra information that may be required and shared between all the states.
@@ -24,10 +27,8 @@ namespace Lightbug.CharacterControllerPro.Implementation
     [AddComponentMenu("Character Controller Pro/Implementation/Character/Character State Controller")]
     public class CharacterStateController : MonoBehaviour
     {
-
         //mycode
         [HideInInspector] public bool IsFixedLookdir = false;
-
 
 
         [Tooltip("The state used to start the state machine. It is necessary for the state to be not-null, active and enabled. Otherwise, " + 
@@ -290,12 +291,14 @@ namespace Lightbug.CharacterControllerPro.Implementation
                     PreviousState = CurrentState;
                     CurrentState = nextState;
 
+                    //Adapter code
+                    NotifyActionStateChangeListeners();
+
                     return true;
                 }
             }
 
             return false;
-
         }
 
         bool CanCurrentStateOverrideAnimatorController => CurrentState.OverrideAnimatorController && Animator != null && CurrentState.RuntimeAnimatorController != null;
@@ -438,6 +441,24 @@ namespace Lightbug.CharacterControllerPro.Implementation
             CurrentState.UpdateIK(layerIndex);
         }
 
+        #endregion
+
+        #region Adapter
+        //WeaponState Adapter
+
+        //IActionStateChangeListener 인터페이스를 갖고 있는 오브젝트
+        [SerializeField] GameObject actionStateChangeListener;
+
+        void NotifyActionStateChangeListeners()
+        {
+            if (actionStateChangeListener == null) Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트가 없습니다.");
+            //adapter code
+            if (actionStateChangeListener.TryGetComponent(out IActionStateChangeListener StateCahngerListener))
+            {
+                StateCahngerListener.OnCharacterActionStateChanged(CurrentState);
+            }
+            else Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
+        }
         #endregion
 
     }
