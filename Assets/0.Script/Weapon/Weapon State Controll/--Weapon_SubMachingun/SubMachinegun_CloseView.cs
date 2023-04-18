@@ -25,7 +25,7 @@ public class SubMachinegun_CloseView : WeaponState
     {
         UpperAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Upper_Layer;
         weaponBlendTree = (float)AnimationLayerMaskIndex.WeaponBlendTree.Rifle / 10;
-        weaponViews = WeaponViews.Close;
+        weaponViews = WeaponStateType.Close;
     }
     #endregion
 
@@ -69,6 +69,12 @@ public class SubMachinegun_CloseView : WeaponState
         }
     }
 
+    #region weapon Swap Method
+    public override void EnqueueSelfState()
+    {
+        WeaponStateController.ForceState(this);
+    }
+    #endregion
 
     #region Adapter
     //CharacterState Adapter

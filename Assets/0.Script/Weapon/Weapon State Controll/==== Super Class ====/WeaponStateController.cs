@@ -1,3 +1,4 @@
+using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Demo;
 using Lightbug.CharacterControllerPro.Implementation;
 using System.Collections.Generic;
@@ -5,22 +6,38 @@ using UnityEngine;
 
 namespace Urban_KimHyeonWoo
 {    
-    public enum WeaponViews
+    public enum WeaponStateType
     {
-        Far, Close, Aim, None
+        None, Far, Close, Aim, Disable
     }
     public class WeaponStateController : MonoBehaviour, ISetWeaponDisable, ISetWeaponsAble
     {
         #region interface---------------
-        public WeaponViews SetWeaponDisable()
+        public WeaponStateType SetWeaponDisable()
         {
-            EnqueueTransition<SubMachinegun_Disable>();
-            return CurrentState.weaponViews;
-        }
-        public void SetWeaponsAble(WeaponViews weaponViews)
-        {
+            WeaponStateType returnStateType = default;
+            WeaponState[] weaponStates = gameObject.GetComponents<WeaponState>();
             //currWeaponView = weaponViews;
-            foreach (WeaponState weaponObject in FindObjectsOfType<WeaponState>())
+            foreach (WeaponState obj in weaponStates)
+            {
+                //weaponStates.Add(weaponObject);
+                if (obj.weaponViews == WeaponStateType.Disable)
+                {
+                    returnStateType = CurrentState.weaponViews;
+                    obj.EnqueueSelfState();
+                    break;
+                }
+            }
+
+            return returnStateType;
+        }
+        public void SetWeaponsAble(WeaponStateType weaponViews)
+        {
+            if(weaponViews == default) weaponViews = WeaponStateType.Far;
+
+            WeaponState[] weaponStates = gameObject.GetComponents<WeaponState>();
+            //currWeaponView = weaponViews;
+            foreach (WeaponState weaponObject in weaponStates)
             {
                 //weaponStates.Add(weaponObject);
                 if(weaponObject.weaponViews == weaponViews)
@@ -262,9 +279,11 @@ namespace Urban_KimHyeonWoo
 
             PreviousState = CurrentState;
             CurrentState = state;
-
-            PreviousState.ExitBehaviour(Time.deltaTime, CurrentState);
-
+            
+            if (PreviousState != null)
+            {
+                PreviousState.ExitBehaviour(Time.deltaTime, CurrentState);
+            }
             CurrentState.EnterBehaviour(Time.deltaTime, PreviousState);
         }
         #endregion

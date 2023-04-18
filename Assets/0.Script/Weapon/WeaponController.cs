@@ -28,8 +28,6 @@ namespace Urban_KimHyeonWoo
         [SerializeField] float skilltime = 1.2f;
         [SerializeField] int bulletcount = 30;
 
-        [SerializeField]
-        [Tooltip("재장전 시간")] float ReloadTime;
 
         [Header("사격 후 전투시간 (숨고르기 시간 개념)")]
         [SerializeField] float battletime = 0.2f;
@@ -87,20 +85,14 @@ namespace Urban_KimHyeonWoo
             if (currentBulletCooldown > 0f)
             {
                 currentBulletCooldown -= dt;
-            }
-
-            if (CharacterActions.Reload.value == true)
-            {
-                //if() 탄창이 꽉 차있지 않다면
-                ChangeWeaponFireState(WeaponFireState.Reload);
-            }
+            }            
         }
         #endregion
 
         #region Weapon State Machine
         public enum WeaponFireState
         {
-            CanFire, Reload, OnSkill
+            CanFire, Reload, OnSkill, Disable
         }
         public WeaponFireState currentState = WeaponFireState.CanFire;
         public void ChangeWeaponFireState(WeaponFireState state)
@@ -122,6 +114,8 @@ namespace Urban_KimHyeonWoo
                     break;
                 case WeaponFireState.OnSkill:
                     break;
+                case WeaponFireState.Disable:
+                    break;
                 default:
                     break;
             }
@@ -139,6 +133,8 @@ namespace Urban_KimHyeonWoo
                     break;
                 case WeaponFireState.OnSkill:
                     break;
+                case WeaponFireState.Disable:
+                    break;
                 default:
                     break;
             }
@@ -150,12 +146,21 @@ namespace Urban_KimHyeonWoo
                 case WeaponFireState.CanFire:
                     //fire
                     if (CharacterActions.Fire1.value == true)
+                    {
                         OrderFire();
+                    }                        
+                    if (CharacterActions.Reload.value == true)
+                    {
+                        //if() 탄창이 꽉 차있지 않다면
+                        ChangeWeaponFireState(WeaponFireState.Reload);
+                    }
                     break;
                 case WeaponFireState.Reload:
                     SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 1, dt);
                     break;
                 case WeaponFireState.OnSkill:
+                    break;
+                case WeaponFireState.Disable:
                     break;
                 default:
                     break;

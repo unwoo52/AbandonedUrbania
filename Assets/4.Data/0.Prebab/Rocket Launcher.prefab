@@ -11,6 +11,9 @@ GameObject:
   - component: {fileID: 4911735009884817856}
   - component: {fileID: 4795158255861007390}
   - component: {fileID: 4296172453504815667}
+  - component: {fileID: 2039053886961297320}
+  - component: {fileID: 3396886946194866273}
+  - component: {fileID: 8271906537326624112}
   m_Layer: 3
   m_Name: Rocket Launcher
   m_TagString: Untagged
@@ -48,15 +51,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletCooldown: 0.5
   maxDistance: 1000
-  BulletPrefab: {fileID: 0}
-  FireSound: {fileID: 0}
-  SkillEffectObject: {fileID: 0}
-  muzzleTransform: {fileID: 0}
+  BulletPrefab: {fileID: 1722250247140862, guid: a766446d065e6044e88569f7d46e640d,
+    type: 3}
+  FireSound: {fileID: 8300000, guid: 0bd05763df902854a80475577a26666a, type: 3}
+  SkillEffectObject: {fileID: 6497072022067581020, guid: 36b227cb49ef0954a908c8dd592f0a80,
+    type: 3}
+  muzzleTransform: {fileID: 6569150266551239184}
   hitableMask:
     serializedVersion: 2
-    m_Bits: 0
-  skilltime: 1.2
-  bulletcount: 30
+    m_Bits: 8
+  skilltime: 3
+  bulletcount: 1
   ReloadTime: 0
   battletime: 0.2
   currBattleTime: 0
@@ -76,13 +81,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08aefda12cf340e44a5ace0cb11a103e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialState: {fileID: 0}
-  weaponObject: {fileID: 0}
+  initialState: {fileID: 3396886946194866273}
+  weaponObject: {fileID: 770819464551448634}
   handPosition: {fileID: 0}
   backPosition: {fileID: 0}
-  camera3D: {fileID: 0}
   Cam: {fileID: 0}
-  controllCamera3D: {fileID: 0}
+--- !u!114 &2039053886961297320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738832704986623414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74306dfbdd6d7654099acd37dbf9cf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponViews: 0
+  CharacterStateController: {fileID: 0}
+  animChangeSpeed: 0.1
+  ZoomMinMax: {x: 5, y: 12}
+  ViewOffsetValue: {x: 0.4, y: -0.1, z: 0}
+--- !u!114 &3396886946194866273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738832704986623414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b47f904cfab3d51429afc00e31a1b5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponViews: 0
+  CharacterStateController: {fileID: 0}
+  animChangeSpeed: 0.1
+--- !u!114 &8271906537326624112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4738832704986623414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e52945fb2c4f32049841feb3caaa6011, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weaponViews: 0
+  CharacterStateController: {fileID: 0}
+  animChangeSpeed: 0.1
+  CloseZoomMinMax: {x: 0.7, y: 0.8}
+  CloseViewOffsetValue: {x: 0.3, y: -0.22, z: 0.27}
 --- !u!1 &4987953754036719740
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +250,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84fb74ce32f82bb4aa77815a616cce8c, type: 3}
+--- !u!1 &770819464551448634 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 758372765066494930, guid: 84fb74ce32f82bb4aa77815a616cce8c,
+    type: 3}
+  m_PrefabInstance: {fileID: 14856854913237992}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6325474271119902593 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6340031912117847145, guid: 84fb74ce32f82bb4aa77815a616cce8c,

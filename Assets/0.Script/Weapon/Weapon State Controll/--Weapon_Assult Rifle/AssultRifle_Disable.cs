@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Urban_KimHyeonWoo;
 namespace Urban_KimHyeonWoo
 {
-    public class SubMachinegun_Disable : WeaponState
+    public class AssultRifle_Disable : WeaponState
     {
         private void Start()
         {

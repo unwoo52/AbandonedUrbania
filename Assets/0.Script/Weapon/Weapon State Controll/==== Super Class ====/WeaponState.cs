@@ -8,7 +8,7 @@ namespace Urban_KimHyeonWoo
     public class WeaponState : MonoBehaviour
     {
 
-        [HideInInspector] public WeaponViews weaponViews;
+        public WeaponStateType weaponViews;
         [HideInInspector] public WeaponStateController WeaponStateController { get; private set; }
 
         protected WeaponController weaponController;
@@ -48,6 +48,11 @@ namespace Urban_KimHyeonWoo
             WeaponStateController = GetComponent<WeaponStateController>();
             CharacterStateController = this.GetComponentInBranch<CharacterActor, CharacterStateController>();
             weaponController = GetComponent<WeaponController>();
+        }
+        private void Start()
+        {
+            Debug.Log(WeaponStateController);
+            Debug.Log(this);
         }
         #endregion
 

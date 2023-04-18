@@ -416,6 +416,7 @@ namespace Lightbug.CharacterControllerPro.Demo
         [SerializeField]Transform LeftHand;
         public override void UpdateIK(int layerIndex)
         {
+            /*
             if (CharacterActor.IsGrounded)
             {
                 // Set the weight
@@ -424,7 +425,7 @@ namespace Lightbug.CharacterControllerPro.Demo
                 // Set the position
                 CharacterActor.Animator.SetIKPosition(AvatarIKGoal.LeftHand, LeftHand.position);
             }
-            
+            */
         }
 
         protected virtual void ProcessGravity(float dt)

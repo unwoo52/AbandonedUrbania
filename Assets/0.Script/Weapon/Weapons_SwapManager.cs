@@ -8,14 +8,16 @@ namespace Urban_KimHyeonWoo
 {
     public interface ISetWeaponDisable
     {
-        WeaponViews SetWeaponDisable();
+        WeaponStateType SetWeaponDisable();
     }
     public interface ISetWeaponsAble
     {
-        void SetWeaponsAble(WeaponViews weaponViews);
+        void SetWeaponsAble(WeaponStateType weaponViews);
     }
     public class Weapons_SwapManager : MonoBehaviour, IActionStateChangeListener
     {
+        [SerializeField]
+        [Tooltip("시작할 때 view 상태")] WeaponStateType InitViewType = WeaponStateType.Far;
         WeaponStateController currWeaponStateController;
 
         [SerializeField] List<GameObject> Slot;
@@ -26,57 +28,88 @@ namespace Urban_KimHyeonWoo
         private void Start()
         {
             currentSlot = InitSlot;
-            //SetAbleSlot(InitSlot);
+            if (InitViewType == default) InitViewType = WeaponStateType.Far;
+
+            
+            //get WeaponStateController
             if (Slot[currentSlot].TryGetComponent(out WeaponStateController weaponStateController))
             {
                 currWeaponStateController = weaponStateController;
             }
         }
 
-        void SetAbleSlot(int index)
+
+        void SwapWeapon(int index)
         {
             if (index == currentSlot) return;
+
+            GameObject previousWeapon = Slot[currentSlot];
+            GameObject currentWeapon = Slot[index];
             
-            WeaponViews views = default;
-            if(Slot[currentSlot].TryGetComponent(out ISetWeaponDisable setWeaponDisable))
+            WeaponStateType views = default;
+
+            if(previousWeapon.TryGetComponent(out ISetWeaponDisable setWeaponDisable))
             {
                 views = setWeaponDisable.SetWeaponDisable();
             }
 
-            currentSlot = index;
+            if (views == WeaponStateType.Disable) views = WeaponStateType.Far;
 
-            if (Slot[index].TryGetComponent(out ISetWeaponsAble setWeaponsAble))
+            if (currentWeapon.TryGetComponent(out ISetWeaponsAble setWeaponsAble))
             {
                 setWeaponsAble.SetWeaponsAble(views);
             }
-            if(Slot[index].TryGetComponent(out WeaponStateController weaponStateController))
+            if(currentWeapon.TryGetComponent(out WeaponStateController weaponStateController))
             {
                 currWeaponStateController = weaponStateController;
             }
-        }
 
+
+            currentSlot = index;
+        }
+        bool isInitWeapon = false;
         private void Update()
         {
-            /*
-            if (Input.GetButtonDown("Slot0"))
+            if(!isInitWeapon)
             {
-                SetAbleSlot(0);
+                if (Slot[currentSlot].TryGetComponent(out ISetWeaponsAble setWeaponsAble))
+                {
+                    setWeaponsAble.SetWeaponsAble(InitViewType);
+                }
+                isInitWeapon = true;
             }
-            else if (Input.GetButtonDown("slot1"))
+
+            if (Input.GetButtonDown("WeaponSlot 1"))
             {
-                SetAbleSlot(1);
+                SwapWeapon(0);
+            }
+            else if (Input.GetButtonDown("WeaponSlot 2"))
+            {
+                SwapWeapon(1);
 
             }
-            else if (Input.GetButtonDown("slot2"))
+            else if (Input.GetButtonDown("WeaponSlot 3"))
             {
-                SetAbleSlot(2);
+                SwapWeapon(2);
 
             }
-            else if (Input.GetButtonDown("slot3"))
+            else if (Input.GetButtonDown("WeaponSlot 4"))
             {
-                SetAbleSlot(3);
-            }*/
+                SwapWeapon(3);
+            }
         }
+
+        #region 
+
+        public void CallOnExitReload()
+        {
+            if(currWeaponStateController.TryGetComponent(out WeaponController weaponController))
+            {
+                weaponController.OnExitReload();
+            }
+        }
+
+        #endregion
 
         public void OnCharacterActionStateChanged(CharacterState state)
         {

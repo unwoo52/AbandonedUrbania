@@ -26,12 +26,14 @@ namespace Urban_KimHyeonWoo
         [Tooltip("캐릭터를 기준으로 어깨 너머 카메라의 위치.")]
         Vector3 ViewOffsetValue = new Vector3(0.4f, -0.1f, 0);
 
+        
         private void Start()
         {
-            UpperAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Upper_Layer;
-            FrontAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Front_Aim_Run;
-            SideAimRunLayerNum = (int)AnimationLayerMaskIndex.LayerDictionary.Side_Aim_Run;
-            weaponBlendTree = (float)AnimationLayerMaskIndex.WeaponBlendTree.Rifle / 10;
+            UpperAimRunLayerNum = (int)LayerDictionary.Upper_Layer;
+            FrontAimRunLayerNum = (int)LayerDictionary.Front_Aim_Run;
+            SideAimRunLayerNum = (int)LayerDictionary.Side_Aim_Run;
+            weaponBlendTree = (float)WeaponBlendTree.Rifle / 10;
+            weaponViews = WeaponStateType.Far;
         }
 
         public override void CheckExitTransition()
@@ -46,7 +48,7 @@ namespace Urban_KimHyeonWoo
             CharacterActor.Animator.SetFloat("BlendFloat_WeaponType", weaponBlendTree);
 
 
-            CharacterActor.Animator.SetLayerWeight(1, 0);
+            SetAnimControllerSetLayerWeight(ref curUpperLayerValue, UpperAimRunLayerNum, 0, dt);
 
             WeaponStateController.ChangeWeaponPos_Hand();
 
@@ -122,12 +124,12 @@ namespace Urban_KimHyeonWoo
             }
 
         }
-
+        #region weapon Swap Method
         public override void EnqueueSelfState()
         {
             WeaponStateController.ForceState(this);
         }
-
+        #endregion
         void SetAnimatorLayer_LateralFiring(float dt, bool isCanLateralFiring, float angle)
         {
             //뒤를 바라보는 방향이라 사격을 못할 때,

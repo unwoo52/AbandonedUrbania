@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Urban_KimHyeonWoo
 {
-    public class SubMachinegun_Disable : WeaponState
+    public class RocketLauncher_Disable : WeaponState
     {
         private void Start()
         {
@@ -13,6 +13,7 @@ namespace Urban_KimHyeonWoo
         public override void EnterBehaviour(float dt, WeaponState fromState)
         {
             CharacterActor.Animator.SetTrigger("Trigger_SwapWeapon");
+
             //총 위치를 등 뒤로 전환
             WeaponStateController.ChangeWeaponPos_Back();
 
@@ -34,4 +35,3 @@ namespace Urban_KimHyeonWoo
         #endregion
     }
 }
-

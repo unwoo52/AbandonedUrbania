@@ -128697,7 +128697,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 1.5
+  - time: 3.5666666
     functionName: ReloadEvent
     data: 
     objectReferenceParameter: {fileID: 0}
