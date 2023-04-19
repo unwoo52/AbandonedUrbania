@@ -19033,6 +19033,42 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1541189309}
     m_Modifications:
+    - target: {fileID: 1717887935, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: totalAmmo
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1717887935, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: WeaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: 30582855af3be8340b1e4ee2b494512b, type: 3}
+    - target: {fileID: 1717887935, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: weaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: 30582855af3be8340b1e4ee2b494512b, type: 3}
+    - target: {fileID: 1717887935, guid: d77c839416498b648bd8f660f864a81a, type: 3}
+      propertyPath: bulletCooldown
+      value: 0.11
+      objectReference: {fileID: 0}
+    - target: {fileID: 1885920377201976897, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: totalAmmo
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1885920377201976897, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: WeaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: a793b88e4940eae44a28f79907e3fab3, type: 3}
+    - target: {fileID: 1885920377201976897, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: weaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: a793b88e4940eae44a28f79907e3fab3, type: 3}
+    - target: {fileID: 1885920377201976897, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: bulletCooldown
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 5962069268090265685, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
       propertyPath: m_Name
@@ -19093,6 +19129,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: FireSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 5027a03cee1792c4aaba6ffe3e3ba014, type: 3}
+    - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: totalAmmo
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: WeaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: 3136148bee84ae14c8e3420c13b98794, type: 3}
+    - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: weaponImage
+      value: 
+      objectReference: {fileID: 2800000, guid: 3136148bee84ae14c8e3420c13b98794, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d77c839416498b648bd8f660f864a81a, type: 3}
 --- !u!1001 &1717276523
@@ -26822,6 +26878,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 9267621998085602, guid: 4a6950c7a5b7def4fa4851aac3342bb3, type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: a793b88e4940eae44a28f79907e3fab3, type: 3}
     - target: {fileID: 2521302078393882026, guid: 4a6950c7a5b7def4fa4851aac3342bb3,
         type: 3}
       propertyPath: m_AnchorMax.x
