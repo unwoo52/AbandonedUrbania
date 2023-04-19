@@ -1,21 +1,32 @@
 using Lightbug.CharacterControllerPro.Core;
 using Lightbug.CharacterControllerPro.Implementation;
 using Lightbug.Utilities;
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using Urban_KimHyeonWoop;
 
 namespace Urban_KimHyeonWoo
 {
-    //사격 장전 등의 상태를 조절하는 상태머신
-    public class WeaponController : MonoBehaviour
+    public interface ISetWeaponInfoUI
     {
-        [Header("Weapon Info")]
+        void SetWeaponInfoUI(GameObject uiObject);
+    }
+    [Serializable]
+    public class WeaponInfo
+    {
         [SerializeField] Texture weaponImage;
         public Texture WeaponImage => weaponImage;
 
         [SerializeField] int totalAmmo;
         public int TotalAmmo => totalAmmo;
+    }
+    //사격 장전 등의 상태를 조절하는 상태머신
+    public class WeaponController : MonoBehaviour, ISetWeaponInfoUI
+    {
+        [Header("Weapon Info")]
+        [SerializeField] WeaponInfo weaponInfo = new WeaponInfo();
 
         int currentAmmo;
         public int CurrentAmmo => currentAmmo;
@@ -82,6 +93,10 @@ namespace Urban_KimHyeonWoo
             CharacterActor = this.GetComponentInBranch<CharacterActor>();
             CharacterBrain = this.GetComponentInBranch<CharacterActor, CharacterBrain>();
         }
+        private void Start()
+        {
+            currentAmmo = weaponInfo.TotalAmmo;
+        }
         private void Update()
         {
             float dt = Time.deltaTime;
@@ -105,15 +120,15 @@ namespace Urban_KimHyeonWoo
         {
             CanFire, Reload, OnSkill, Disable
         }
-        public WeaponFireState currentState = WeaponFireState.CanFire;
-        public void ChangeWeaponFireState(WeaponFireState state)
+        public WeaponFireState previousState = WeaponFireState.CanFire;
+        public void ChangeWeaponFireState(WeaponFireState DestinyState)
         {
-            if (currentState == state) return;
-            ExitStateBehavior(currentState);
-            currentState = state;
-            EnterStateBehavior(currentState);
+            if (previousState == DestinyState) return;
+            if(!ExitStateBehavior(previousState)) return;
+            EnterStateBehavior(DestinyState, previousState);
+            previousState = DestinyState;
         }
-        void EnterStateBehavior(WeaponFireState state)
+        void EnterStateBehavior(WeaponFireState state, WeaponFireState previousState)
         {
             switch (state)
             {
@@ -126,14 +141,21 @@ namespace Urban_KimHyeonWoo
                 case WeaponFireState.OnSkill:
                     break;
                 case WeaponFireState.Disable:
+                    if(previousState == WeaponFireState.Reload)
+                    {
+                        //cancel animation
+                        CharacterActor.Animator.SetTrigger("Trigger_CancelReload");
+                    }
+                    //adatercode
+                    Adapter_EmptyWeaponInfoUI();
                     break;
                 default:
                     break;
             }
         }
-        void ExitStateBehavior(WeaponFireState state)
+        bool ExitStateBehavior(WeaponFireState previusState)
         {
-            switch (state)
+            switch (previusState)
             {
                 case WeaponFireState.CanFire:
                     break;
@@ -141,18 +163,27 @@ namespace Urban_KimHyeonWoo
                     //layer weight 설정
                     //애니메이션 실행을 위한 trigger 실행
                     isReload = false;
+                    currentAmmo = weaponInfo.TotalAmmo;
+                    Adapter_NotifyActionStateChangeListeners();
                     break;
                 case WeaponFireState.OnSkill:
                     break;
                 case WeaponFireState.Disable:
+                    //이전 state가 disable이고, 총알이 0일 때 (총을 변경했는데, 변경한 총의 잔탄이 0이라면 changerState를 취소하고, reload로 changeState 실행
+                    if(currentAmmo < 1)
+                    {
+                        ChangeWeaponFireState(WeaponFireState.Reload);
+                        return false;
+                    }
                     break;
                 default:
                     break;
             }
+            return true;
         }
         void StateMachine(float dt)
         {
-            switch (currentState)
+            switch (previousState)
             {
                 case WeaponFireState.CanFire:
                     //fire
@@ -208,6 +239,7 @@ namespace Urban_KimHyeonWoo
 
             // 쿨타임이 아직 남았으면 발사하지 않음
             if (currentBulletCooldown > 0f) return;
+            if (currentAmmo < 1) return;
 
             // 발사 쿨타임 초기화
             currentBulletCooldown = bulletCooldown;
@@ -216,6 +248,11 @@ namespace Urban_KimHyeonWoo
         void Bullet()
         {
             currBattleTime = battletime;
+
+            //
+            currentAmmo--;
+            //
+            Adapter_NotifyActionStateChangeListeners();
 
             //get ray
             Ray ray = Cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -249,6 +286,8 @@ namespace Urban_KimHyeonWoo
             GameObject effect = Instantiate(SkillEffectObject);
             effect.transform.position = hitPoint;
             effect.transform.rotation = Quaternion.LookRotation(direction) * new Quaternion(0, 270, 0, 0);
+
+            if (currentAmmo < 1) ChangeWeaponFireState(WeaponFireState.Reload);
         }
 
         IEnumerator ShootSkill(float shootTime, int bulletCount)
@@ -282,6 +321,47 @@ namespace Urban_KimHyeonWoo
         public bool IsFiredRecontly()
         {
             return currBattleTime > 0;
+        }
+        #endregion
+
+        #region Adapter
+        //WeaponState Adapter
+
+        [Header("Adapter Field")]
+        //IActionStateChangeListener 인터페이스를 갖고 있는 오브젝트
+        [SerializeField] GameObject WeaponInfoUI;
+        void Adapter_EmptyWeaponInfoUI()
+        {
+            WeaponInfoUI = null;
+        }
+
+        void Adapter_NotifyActionStateChangeListeners()
+        {            
+            if (WeaponInfoUI == null)
+            {
+                Debug.LogWarning("Weapon Slot이 변경된 사실을 Notify할 대상 오브젝트가 없습니다.");
+                return;
+            }
+                
+            //adapter code
+            if (WeaponInfoUI.TryGetComponent(out interF interfc))
+            {
+                interfc.netrF(currentAmmo);
+            }
+            else
+            {
+                Debug.LogWarning("Weapon Slot이 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
+                return;
+            } 
+        }
+
+        public void SetWeaponInfoUI(GameObject uiObject)
+        {
+            WeaponInfoUI = uiObject;
+            if(uiObject.TryGetComponent(out IGetWeaponInformation getWeaponInformation))
+            {
+                getWeaponInformation.GetWeaponinformation(weaponInfo, currentAmmo);
+            }
         }
         #endregion
     }

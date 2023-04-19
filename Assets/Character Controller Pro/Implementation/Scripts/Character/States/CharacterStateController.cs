@@ -446,18 +446,27 @@ namespace Lightbug.CharacterControllerPro.Implementation
         #region Adapter
         //WeaponState Adapter
 
+        [Header("Adapter Field")]
         //IActionStateChangeListener 인터페이스를 갖고 있는 오브젝트
         [SerializeField] GameObject actionStateChangeListener;
 
         void NotifyActionStateChangeListeners()
         {
-            if (actionStateChangeListener == null) Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트가 없습니다.");
+            if (actionStateChangeListener == null)
+            {
+                Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트가 없습니다.");
+                return;
+            }
             //adapter code
             if (actionStateChangeListener.TryGetComponent(out IActionStateChangeListener StateCahngerListener))
             {
                 StateCahngerListener.OnCharacterActionStateChanged(CurrentState);
             }
-            else Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
+            else
+            {
+                Debug.LogWarning("Character Action State가 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
+                return;
+            }
         }
         #endregion
 

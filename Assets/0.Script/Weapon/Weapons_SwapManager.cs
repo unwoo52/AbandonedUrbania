@@ -3,6 +3,7 @@ using Lightbug.CharacterControllerPro.Implementation;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Urban_KimHyeonWoop;
 
 namespace Urban_KimHyeonWoo
 {
@@ -64,6 +65,7 @@ namespace Urban_KimHyeonWoo
                 currWeaponStateController = weaponStateController;
             }
 
+            Adapter_NotifyActionStateChangeListeners(index);
 
             currentSlot = index;
         }
@@ -76,6 +78,7 @@ namespace Urban_KimHyeonWoo
                 {
                     setWeaponsAble.SetWeaponsAble(InitViewType);
                 }
+                Adapter_NotifyActionStateChangeListeners(currentSlot);
                 isInitWeapon = true;
             }
 
@@ -115,6 +118,34 @@ namespace Urban_KimHyeonWoo
         {
             currWeaponStateController.Notify_CharacterActionHasChanged(state);
         }
+
+        #region Adapter
+        //WeaponState Adapter
+
+        [Header("Adapter Field")]
+        [SerializeField] GameObject WeaponInfoUI;
+
+        void Adapter_NotifyActionStateChangeListeners(int Index)
+        {
+            if (WeaponInfoUI == null)
+            {
+                Debug.LogWarning("Weapon Slot이 변경된 사실을 Notify할 대상 오브젝트가 없습니다.");
+                return;
+            }
+
+            //adapter code
+            if (Slot[Index].TryGetComponent(out ISetWeaponInfoUI setWeaponInfoUI ))
+            {
+                //interface codes...
+                setWeaponInfoUI.SetWeaponInfoUI(WeaponInfoUI);
+            }
+            else
+            {
+                Debug.LogWarning("Weapon Slot이 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
+                return;
+            }
+        }
+        #endregion
     }
 }
 
