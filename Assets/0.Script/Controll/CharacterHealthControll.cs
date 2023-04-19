@@ -5,7 +5,7 @@ namespace Urban_KimHyeonWoo
     {
         void BindPlayer(bool setvalue);
     }
-    public class CharacterControll : MonoBehaviour, IBindPlayer, ITestDamageSystem
+    public class CharacterHealthControll : MonoBehaviour, IBindPlayer, IDamageSystem
     {
         private void Start()
         {

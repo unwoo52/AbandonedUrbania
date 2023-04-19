@@ -824,8 +824,10 @@ namespace Lightbug.CharacterControllerPro.Demo
                 if (!crouchParameters.notGroundedCrouch && !CharacterActor.IsGrounded)
                     wantToCrouch = false;
 
+                /*
                 if (CharacterActor.IsGrounded && wantToRun)
                     wantToCrouch = false;
+                */
             }
             else
             {

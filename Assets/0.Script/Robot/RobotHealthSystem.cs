@@ -4,7 +4,7 @@ using System.ComponentModel;
 using UnityEngine;
 using Urban_KimHyeonWoo;
 
-public class RobotHealthSystem : MonoBehaviour, ITestDamageSystem
+public class RobotHealthSystem : MonoBehaviour, IDamageSystem
 {
     [SerializeField] float hp = 1000f;
     [SerializeField] GameObject Explosion;

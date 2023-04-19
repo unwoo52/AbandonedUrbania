@@ -140,10 +140,10 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.3832497, g: 0.38717127, b: 0.38717127, a: 0}
+    - _BaseColor: {r: 0.38319948, g: 0.38712105, b: 0.38712105, a: 0}
     - _BaseColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.38324967, g: 0.38717124, b: 0.38717124, a: 0}
+    - _Color: {r: 0.38319945, g: 0.38712102, b: 0.38712102, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0.05136107, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}

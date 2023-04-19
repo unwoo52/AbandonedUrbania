@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace Urban_KimHyeonWoo
 {
-    public interface ITestDamageSystem
+    public interface IDamageSystem
     {
         void OnDam(float dmg);
     }
@@ -27,7 +27,7 @@ namespace Urban_KimHyeonWoo
         void Hit(GameObject gameObject, Vector3 vetor3)
         {
             Instantiate(Effect, vetor3, Quaternion.identity);
-            if (gameObject.TryGetComponent(out ITestDamageSystem testDamageSystem))
+            if (gameObject.TryGetComponent(out IDamageSystem testDamageSystem))
             {
                 testDamageSystem.OnDam(Damage);
             }

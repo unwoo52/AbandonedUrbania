@@ -27,14 +27,7 @@ namespace Urban_KimHyeonWoo
             slider.value = slider.value = lerp ? health : slider.value = health;
             if (backgroundSlider) backgroundSlider.value = backgroundSlider.value = lerp ? Mathf.Lerp(backgroundSlider.value, health, Time.deltaTime * smoothness) : backgroundSlider.value = health;
         }
-        [Header("Test Field")]
-        [SerializeField] float testHP;
 
-        [ContextMenu("SetHp")]
-        void SetHP()
-        {
-            UpdateHealth(testHP);
-        }
         public void UpdateHealth(float health)
         {
             this.health = health;

@@ -16410,6 +16410,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1454615171}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1460179618 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8247473095855489959, guid: 4a6950c7a5b7def4fa4851aac3342bb3,
+    type: 3}
+  m_PrefabInstance: {fileID: 3616866138903201487}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1463137521
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19214,6 +19220,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5962069268660161220, guid: d77c839416498b648bd8f660f864a81a,
+        type: 3}
+      propertyPath: crouchParameters.speedMultiplier
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7838842165132929784, guid: d77c839416498b648bd8f660f864a81a,
         type: 3}
@@ -27117,6 +27128,11 @@ PrefabInstance:
       propertyPath: reloadGuidUI
       value: 
       objectReference: {fileID: 457087912}
+    - target: {fileID: 3616866139425245352, guid: 4a6950c7a5b7def4fa4851aac3342bb3,
+        type: 3}
+      propertyPath: healthDisplay
+      value: 
+      objectReference: {fileID: 1460179618}
     - target: {fileID: 3616866139425245353, guid: 4a6950c7a5b7def4fa4851aac3342bb3,
         type: 3}
       propertyPath: m_Name
