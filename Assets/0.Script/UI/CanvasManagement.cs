@@ -33,8 +33,10 @@ public class CanvasManagement : MonoBehaviour
     [SerializeField] GameObject interactUI;
     [SerializeField] GameObject healthDisplay;
     [SerializeField] GameObject hitEffectImage;
+    [SerializeField] GameObject reloadGuidUI;
 
     public GameObject InteractUI => interactUI;
     public GameObject HealthDisplay => healthDisplay;
     public GameObject HitEffectImage => hitEffectImage;
+    public GameObject ReloadGuidUI => reloadGuidUI;
 }

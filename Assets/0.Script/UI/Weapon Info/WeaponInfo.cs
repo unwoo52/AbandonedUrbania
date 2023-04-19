@@ -4,15 +4,15 @@ using UnityEngine.UI;
 
 namespace Urban_KimHyeonWoop
 {
-    public interface interF
+    public interface ISetResidualAmmoUI
     {
-        void netrF(int curammo);
+        void SetResidualAmmoUI(int curammo);
     }
     public interface IGetWeaponInformation
     {
         void GetWeaponinformation(Urban_KimHyeonWoo.WeaponInfo weaponInfo, int currentAmmo);
     }
-    public class WeaponInfo : MonoBehaviour, interF, IGetWeaponInformation
+    public class WeaponInfo : MonoBehaviour, ISetResidualAmmoUI, IGetWeaponInformation
     {
         [SerializeField] RawImage weaponImage;
         [SerializeField] TMP_Text ammoCount;
@@ -24,14 +24,14 @@ namespace Urban_KimHyeonWoop
             ammoCount.text = currentAmmo.ToString();
         }
 
-        public void netrF(int curammo)
+        public void SetResidualAmmoUI(int curammo)
         {            
             ammoCount.text = curammo.ToString();
             if(curammo != 0)
             {
                 ammoCount.color = Color.white;
             }
-            else
+            else if(curammo == 0) 
             {                
                 ammoCount.color = Color.red;
             }

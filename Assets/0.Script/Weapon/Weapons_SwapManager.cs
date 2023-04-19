@@ -15,7 +15,7 @@ namespace Urban_KimHyeonWoo
     {
         void SetWeaponsAble(WeaponStateType weaponViews);
     }
-    public class Weapons_SwapManager : MonoBehaviour, IActionStateChangeListener
+    public class Weapons_SwapManager : MonoBehaviour, IActionStateChangeListener, IGetReloadTime
     {
         [SerializeField]
         [Tooltip("시작할 때 view 상태")] WeaponStateType InitViewType = WeaponStateType.Far;
@@ -144,6 +144,16 @@ namespace Urban_KimHyeonWoo
                 Debug.LogWarning("Weapon Slot이 변경된 사실을 Notify할 대상 오브젝트에 Listener 인터페이스가 없습니다.");
                 return;
             }
+        }
+
+        public float GetReloadTime()
+        {
+            if(Slot[currentSlot].TryGetComponent(out WeaponController weaponController))
+            {
+                return weaponController.WeaponInfo.ReloadTime;
+            }
+
+            return -1;
         }
         #endregion
     }

@@ -4,23 +4,21 @@ using UnityEngine.Events;
 public class PlayerAnimEvent : MonoBehaviour
 {
     [SerializeField] UnityEvent m_Event;
-    [SerializeField] UnityEvent reloadEvent;
+    [SerializeField] UnityEvent ReloadEndEvent;
+    [SerializeField] UnityEvent ReloadStartEvent;
     [SerializeField] Transform LeftHand;
     [SerializeField] Animator animator;
     public void EndRoll()
     {
         m_Event?.Invoke();
     }
-    public void ReloadEvent()
+    public void ReloadEnd()
     {
-        reloadEvent?.Invoke();
+        ReloadEndEvent?.Invoke();
     }
-    private void Update()
+    public void ReloadStart()
     {
+        ReloadStartEvent?.Invoke();
+    }
 
-    }
-    private void OnAnimatorIK(int layerIndex)
-    {
-        
-    }
 }

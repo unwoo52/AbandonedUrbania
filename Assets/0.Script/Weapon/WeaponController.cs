@@ -3,6 +3,7 @@ using Lightbug.CharacterControllerPro.Implementation;
 using Lightbug.Utilities;
 using System;
 using System.Collections;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 using Urban_KimHyeonWoop;
@@ -19,6 +20,9 @@ namespace Urban_KimHyeonWoo
         [SerializeField] Texture weaponImage;
         public Texture WeaponImage => weaponImage;
 
+        [SerializeField] float reloadSpeed;
+        public float ReloadTime => reloadSpeed;
+
         [SerializeField] int totalAmmo;
         public int TotalAmmo => totalAmmo;
     }
@@ -27,6 +31,7 @@ namespace Urban_KimHyeonWoo
     {
         [Header("Weapon Info")]
         [SerializeField] WeaponInfo weaponInfo = new WeaponInfo();
+        public WeaponInfo WeaponInfo => weaponInfo;
 
         int currentAmmo;
         public int CurrentAmmo => currentAmmo;
@@ -61,6 +66,7 @@ namespace Urban_KimHyeonWoo
         public bool IsReload => isReload;
         Coroutine CorReload;
         public bool FireLock = false;
+        float curReloadTime = 0;
 
 
         #region Character Controller Pro        -----------
@@ -74,8 +80,7 @@ namespace Urban_KimHyeonWoo
             }
         }
         #endregion
-
-
+        
         #region Unity Callbacks                 -----------
 
         private void Awake()
@@ -115,7 +120,7 @@ namespace Urban_KimHyeonWoo
         }
         #endregion
 
-        #region Weapon State Machine
+        #region Weapon FSM                      -----------
         public enum WeaponFireState
         {
             CanFire, Reload, OnSkill, Disable
@@ -124,36 +129,14 @@ namespace Urban_KimHyeonWoo
         public void ChangeWeaponFireState(WeaponFireState DestinyState)
         {
             if (previousState == DestinyState) return;
-            if(!ExitStateBehavior(previousState)) return;
-            EnterStateBehavior(DestinyState, previousState);
+
+            if (!ExitStateBehavior(previousState, DestinyState)) return;
+
+            if (!EnterStateBehavior(DestinyState, previousState)) return;
+
             previousState = DestinyState;
         }
-        void EnterStateBehavior(WeaponFireState state, WeaponFireState previousState)
-        {
-            switch (state)
-            {
-                case WeaponFireState.CanFire:
-                    break;
-                case WeaponFireState.Reload:
-                    CharacterActor.Animator.SetTrigger("Trigger_Reload");
-                    isReload = true;
-                    break;
-                case WeaponFireState.OnSkill:
-                    break;
-                case WeaponFireState.Disable:
-                    if(previousState == WeaponFireState.Reload)
-                    {
-                        //cancel animation
-                        CharacterActor.Animator.SetTrigger("Trigger_CancelReload");
-                    }
-                    //adatercode
-                    Adapter_EmptyWeaponInfoUI();
-                    break;
-                default:
-                    break;
-            }
-        }
-        bool ExitStateBehavior(WeaponFireState previusState)
+        bool ExitStateBehavior(WeaponFireState previusState, WeaponFireState destinyState )
         {
             switch (previusState)
             {
@@ -163,18 +146,44 @@ namespace Urban_KimHyeonWoo
                     //layer weight 설정
                     //애니메이션 실행을 위한 trigger 실행
                     isReload = false;
-                    currentAmmo = weaponInfo.TotalAmmo;
-                    Adapter_NotifyActionStateChangeListeners();
+                    Adapter_SetResidualAmmo();
                     break;
                 case WeaponFireState.OnSkill:
                     break;
                 case WeaponFireState.Disable:
                     //이전 state가 disable이고, 총알이 0일 때 (총을 변경했는데, 변경한 총의 잔탄이 0이라면 changerState를 취소하고, reload로 changeState 실행
-                    if(currentAmmo < 1)
+                    if(currentAmmo < 1 && destinyState != WeaponFireState.Reload)
                     {
                         ChangeWeaponFireState(WeaponFireState.Reload);
                         return false;
                     }
+                    break;
+                default:
+                    break;
+            }
+            return true;
+        }
+        bool EnterStateBehavior(WeaponFireState state, WeaponFireState previousState)
+        {
+            switch (state)
+            {
+                case WeaponFireState.CanFire:
+                    break;
+                case WeaponFireState.Reload:
+                    CorAddReloadTimeField = StartCoroutine(AddReloadTimeField());
+                    CharacterActor.Animator.SetFloat("Multipl_ReloadSpeed", 3.57f / weaponInfo.ReloadTime);
+                    CharacterActor.Animator.SetTrigger("Trigger_Reload");
+                    isReload = true;
+                    break;
+                case WeaponFireState.OnSkill:
+                    break;
+                case WeaponFireState.Disable:
+                    if (previousState == WeaponFireState.Reload)
+                    {
+                        CancelReload();
+                    }
+                    //adatercode
+                    Adapter_EmptyWeaponInfoUI();
                     break;
                 default:
                     break;
@@ -208,16 +217,41 @@ namespace Urban_KimHyeonWoo
                     break;
             }
         }
-        #endregion
 
-        #region Anim Event
-        public void OnExitReload()
+        void CancelReload()
         {
-            ChangeWeaponFireState(WeaponFireState.CanFire);
+            //cancel animation
+            CharacterActor.Animator.SetTrigger("Trigger_CancelReload");
+            //cancel reload guid gui
+            CencelReloadGuidUI();
+        }
+        Coroutine CorAddReloadTimeField;
+        IEnumerator AddReloadTimeField()
+        {
+            float time = 0f;
+
+            while (time < weaponInfo.ReloadTime)
+            {
+                time += Time.deltaTime;
+                curReloadTime = time;
+                yield return null;
+            }
         }
         #endregion
 
-        #region Weapon System
+        #region Anim Event                      -----------
+        public void OnExitReload()
+        {
+            ChangeWeaponFireState(WeaponFireState.CanFire);
+            StopCoroutine(CorAddReloadTimeField);
+            if(curReloadTime > weaponInfo.ReloadTime * 0.8f)
+                currentAmmo = weaponInfo.TotalAmmo;
+
+            Adapter_SetResidualAmmo();
+        }
+        #endregion
+
+        #region Weapon System                   -----------
 
         bool isSkillOn = false;
         public void SkillOn()
@@ -252,7 +286,7 @@ namespace Urban_KimHyeonWoo
             //
             currentAmmo--;
             //
-            Adapter_NotifyActionStateChangeListeners();
+            Adapter_SetResidualAmmo();
 
             //get ray
             Ray ray = Cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -304,7 +338,7 @@ namespace Urban_KimHyeonWoo
         }
         #endregion
 
-        #region AnimMethod
+        #region set Animator LayerWeight Method                      -----------
         [Tooltip("캐릭터의 애니메이터에서 상반신을 통제하는 upper layer의 번호")]
         [SerializeField] int UpperAimRunLayerNum = 1;
         float curUpperLayerValue = 0;
@@ -314,9 +348,10 @@ namespace Urban_KimHyeonWoo
             CharacterActor.Animator.SetLayerWeight(LayerNum, curLayerValue);
         }
 
+
         #endregion
 
-        #region public method
+        #region public method                   -----------
         /// <summary> 총을 발사한지 시간이 얼마 지나지 않았으면 true를 반환, 총을 쏘지 않은 평상시에는 false를 반환 </summary>
         public bool IsFiredRecontly()
         {
@@ -324,7 +359,7 @@ namespace Urban_KimHyeonWoo
         }
         #endregion
 
-        #region Adapter
+        #region Adapter                         -----------
         //WeaponState Adapter
 
         [Header("Adapter Field")]
@@ -335,7 +370,7 @@ namespace Urban_KimHyeonWoo
             WeaponInfoUI = null;
         }
 
-        void Adapter_NotifyActionStateChangeListeners()
+        void Adapter_SetResidualAmmo()
         {            
             if (WeaponInfoUI == null)
             {
@@ -344,9 +379,9 @@ namespace Urban_KimHyeonWoo
             }
                 
             //adapter code
-            if (WeaponInfoUI.TryGetComponent(out interF interfc))
+            if (WeaponInfoUI.TryGetComponent(out ISetResidualAmmoUI interfc))
             {
-                interfc.netrF(currentAmmo);
+                interfc.SetResidualAmmoUI(currentAmmo);
             }
             else
             {
@@ -363,7 +398,29 @@ namespace Urban_KimHyeonWoo
                 getWeaponInformation.GetWeaponinformation(weaponInfo, currentAmmo);
             }
         }
-        #endregion
-    }
 
+
+        GameObject ReloadGuidUI;
+        void CencelReloadGuidUI()
+        {
+            ReloadGuidUI = CanvasManagement.Instance.ReloadGuidUI;
+            if (ReloadGuidUI == null)
+            {
+                Debug.LogWarning("ui 표시를 취소할 대상 ui 오브젝트가 없습니다.");
+                return;
+            }
+
+            //adapter code
+            if (ReloadGuidUI.TryGetComponent(out ICancelReload cancelReload))
+            {
+                cancelReload.CancelReload();
+            }
+            else
+            {
+                Debug.LogWarning("ui 표시를 취소할 대상 ui 오브젝트에 ICancelReload 인터페이스가 없습니다.");
+                return;
+            }
+        }
+        #endregion        
+    }
 }
