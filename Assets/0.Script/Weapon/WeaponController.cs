@@ -3,12 +3,23 @@ using Lightbug.CharacterControllerPro.Implementation;
 using Lightbug.Utilities;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Urban_KimHyeonWoo
 {
     //사격 장전 등의 상태를 조절하는 상태머신
     public class WeaponController : MonoBehaviour
     {
+        [Header("Weapon Info")]
+        [SerializeField] Texture weaponImage;
+        public Texture WeaponImage => weaponImage;
+
+        [SerializeField] int totalAmmo;
+        public int TotalAmmo => totalAmmo;
+
+        int currentAmmo;
+        public int CurrentAmmo => currentAmmo;
+
         [Header("Bullet Field")]
         //bullet fire system field
         [SerializeField][Tooltip("발사 쿨타임")] float bulletCooldown = 0.5f;
