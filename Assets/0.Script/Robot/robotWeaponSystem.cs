@@ -73,7 +73,8 @@ namespace Urban_KimHyeonWoo
             IsTimeToShotWithCannonPos1 = !IsTimeToShotWithCannonPos1;
             GameObject CannonMuzzle = IsTimeToShotWithCannonPos1? CannonPos1 : CannonPos2;
             Instantiate(BigShotEffect, CannonMuzzle.transform.position, CannonMuzzle.transform.rotation);
-            CreateBullet(pos, BigCannonball, CannonMuzzle.transform, Inaccuracy);
+            //CreateBullet(pos, BigCannonball, CannonMuzzle.transform, Inaccuracy);
+            NoneTargetCreateBullet(pos, Cannonball, CannonMuzzle.transform, Inaccuracy);
         }
 
         public void ShotsmallCannon(Vector3 pos)
@@ -91,12 +92,32 @@ namespace Urban_KimHyeonWoo
             {
                 Instantiate(shotFlame, CannonMuzzle.transform.position, CannonMuzzle.transform.rotation);
             }
-            CreateBullet(pos, Cannonball, CannonMuzzle.transform, Inaccuracy);
+            //CreateBullet(pos, Cannonball, CannonMuzzle.transform, Inaccuracy);
+            NoneTargetCreateBullet(pos, Cannonball, CannonMuzzle.transform, Inaccuracy);
         }
         void CreateBullet(Vector3 targetPosition, GameObject gameObject, Transform CannonMuzzle , float inaccuracy)
         {
             GameObject bullet = Instantiate(gameObject);
             Vector3 direction = (targetPosition - CannonMuzzle.transform.position).normalized;
+            bullet.transform.position = CannonMuzzle.transform.position;
+
+            // 명중률을 떨어뜨리기 위해 방향 벡터를 랜덤하게 비틀어줍니다.
+            float angleX = Random.Range(-inaccuracy, inaccuracy);
+            float angleY = Random.Range(-inaccuracy, inaccuracy);
+            direction = Quaternion.AngleAxis(angleX, Vector3.right) * Quaternion.AngleAxis(angleY, Vector3.up) * direction;
+            /*
+            // 명중률을 떨어뜨리기 위해 방향 벡터를 랜덤하게 비틀어줍니다.
+            float angle = Random.Range(-inaccuracy, inaccuracy);
+            direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
+            */
+            bullet.transform.rotation = Quaternion.LookRotation(direction);
+        }
+
+
+        void NoneTargetCreateBullet(Vector3 targetPosition, GameObject gameObject, Transform CannonMuzzle, float inaccuracy)
+        {
+            GameObject bullet = Instantiate(gameObject);
+            Vector3 direction = (CannonMuzzle.transform.forward).normalized;
             bullet.transform.position = CannonMuzzle.transform.position;
 
             // 명중률을 떨어뜨리기 위해 방향 벡터를 랜덤하게 비틀어줍니다.

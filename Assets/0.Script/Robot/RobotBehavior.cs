@@ -15,7 +15,7 @@ namespace Urban_KimHyeonWoo
         }
 
         #endregion
-
+        [SerializeField] Light RobotLight;
         private List<GameObject> targets = new List<GameObject>();
         private float detectionInterval = 1f;
         //StartCoroutine(DetectTargets());
@@ -69,6 +69,7 @@ namespace Urban_KimHyeonWoo
             switch (currentState)
             {
                 case RobotState.Sleep:
+                    RobotLight.intensity = 1;
                     // Do sleep behavior
                     break;
 
@@ -157,6 +158,7 @@ namespace Urban_KimHyeonWoo
                     break;
 
                 case RobotState.Destroy:
+                    RobotLight.intensity = 0;
                     animator.SetTrigger("Trigger_Destroy");
                     // Do destroy behavior
                     break;

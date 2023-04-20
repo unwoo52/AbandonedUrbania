@@ -195,6 +195,11 @@ namespace Urban_KimHyeonWoo
             switch (previousState)
             {
                 case WeaponFireState.CanFire:
+                    //skill code
+                    if(Input.GetButtonDown("Skill e"))
+                    {
+                        isSkillOn = true;
+                    }
                     //fire
                     if (CharacterActions.Fire1.value == true)
                     {
@@ -332,7 +337,8 @@ namespace Urban_KimHyeonWoo
             // 총알 발사를 위해 bulletCount만큼 Bullet() 코루틴 함수를 실행한다
             for (int i = 0; i < bulletCount; i++)
             {
-                Bullet(); // 총알 발사
+                if(currentAmmo > 0)
+                    Bullet(); // 총알 발사
                 yield return new WaitForSeconds(interval); // 발사 주기만큼 대기
             }
         }

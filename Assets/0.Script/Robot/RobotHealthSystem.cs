@@ -15,7 +15,7 @@ public class RobotHealthSystem : MonoBehaviour, IDamageSystem
         {
             isDie = true;
             SetGroggyState();
-            Instantiate(Explosion);
+            Instantiate(Explosion, transform.position, Quaternion.identity);
         }
         hp -= dmg;
     }
