@@ -111,6 +111,11 @@ namespace Urban_KimHyeonWoo
             direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
             */
             bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+            if (bullet.TryGetComponent(out IProjectileOwner projectileOwner))
+            {
+                projectileOwner.GetProjectileOwner(this.gameObject);
+            }
         }
 
 
@@ -130,6 +135,11 @@ namespace Urban_KimHyeonWoo
             direction = Quaternion.AngleAxis(angle, Vector3.up) * direction;
             */
             bullet.transform.rotation = Quaternion.LookRotation(direction);
+
+            if(bullet.TryGetComponent(out IProjectileOwner projectileOwner) )
+            {
+                projectileOwner.GetProjectileOwner(this.gameObject);
+            }
         }
     }
 

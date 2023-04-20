@@ -112,10 +112,10 @@ Material:
     - _UVSec: 0
     - _ZWrite: 0
     m_Colors:
-    - _BaseColor: {r: 0.22918484, g: 0.22875834, b: 0.2624002, a: 0}
+    - _BaseColor: {r: 0.22879013, g: 0.22836363, b: 0.2620055, a: 0}
     - _BaseColorAddSubDiff: {r: 1, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
-    - _Color: {r: 0.22919801, g: 0.22877151, b: 0.26241338, a: 0}
+    - _Color: {r: 0.22894749, g: 0.22852099, b: 0.26216286, a: 0}
     - _ColorAddSubDiff: {r: 0, g: 0, b: 0, a: 0}
     - _EmissionColor: {r: 0.11320752, g: 0.11267352, b: 0.11267352, a: 1}
     - _SoftParticleFadeParams: {r: 0, g: 0.0038580245, b: 0, a: 0}

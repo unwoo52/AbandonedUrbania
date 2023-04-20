@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1832176547323422541}
   m_LocalRotation: {x: -0.000000029802266, y: -0.000000021579243, z: -0.7071068, w: -0.7071068}
-  m_LocalPosition: {x: -0.01562, y: 0.00005, z: 0.01393}
+  m_LocalPosition: {x: -0.01563, y: 0.00005, z: 0.01778}
   m_LocalScale: {x: 0.099999994, y: 0.099999934, z: 0.09999994}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -416,7 +416,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4224709340511546862}
-  m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -888,7 +888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   is2D: 0
   bodySize: {x: 2.54, y: 5.76}
-  mass: 50
+  mass: 2000
 --- !u!114 &4224709340721213688
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1081,7 +1081,7 @@ MonoBehaviour:
   - {fileID: 1000010254994808, guid: 9defeac88977c0d448aa4541073ee9e4, type: 3}
   bigCannonCooldown: 7
   smallCannonCooldown: 0.13
-  Inaccuracy: 1
+  Inaccuracy: 5
 --- !u!114 &4224709340721213694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1172,7 +1172,7 @@ MonoBehaviour:
   rotateTime: 1
   robotComponenetManager: {fileID: 0}
   rotationSpeed: 1
-  testvec: {x: 0, y: 0, z: 0}
+  testvec: {x: 0, y: 180, z: 90}
   shakebody: 0
 --- !u!114 &4224709340721213695
 MonoBehaviour:
@@ -1186,10 +1186,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01a87f38fff85384ca87d508713bd040, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RobotLight: {fileID: 0}
   aIFollowBehaviour: {fileID: 4224709340503760316}
   animator: {fileID: 7767508048453404794}
   WeaponInputKey: 0
-  detectionRange: 50
+  detectionRange: 30
   WeaponRange: 20
   WeaponincreaseRange: 5
   currentState: 0

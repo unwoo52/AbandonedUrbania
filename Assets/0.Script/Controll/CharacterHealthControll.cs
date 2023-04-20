@@ -25,7 +25,7 @@ namespace Urban_KimHyeonWoo
             else Debug.LogError("cannot find \"Actions\" Object!");
         }
 
-        public void OnDam(float dmg)
+        public void OnDam(float dmg, GameObject gameObject)
         {
             hp -= dmg;
             PlayDamageEffect();

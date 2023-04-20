@@ -190,3 +190,4 @@ MonoBehaviour:
     m_Bits: 8
   Effect: {fileID: 809592595256374293, guid: ac99af3f551957f43a5cbe49dbed9396, type: 3}
   Damage: 50
+  DmgRadius: 1

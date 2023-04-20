@@ -9,8 +9,9 @@ public class RobotHealthSystem : MonoBehaviour, IDamageSystem
     [SerializeField] float hp = 1000f;
     [SerializeField] GameObject Explosion;
     bool isDie= false;
-    public void OnDam(float dmg)
+    public void OnDam(float dmg, GameObject gameObject)
     {
+        if (gameObject == this.gameObject) return;
         if(dmg > hp && isDie == false)
         {
             isDie = true;

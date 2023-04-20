@@ -21,6 +21,7 @@ namespace Urban_KimHyeonWoop
         public void GetWeaponinformation(Urban_KimHyeonWoo.WeaponInfo weaponInfo, int currentAmmo)
         {
             weaponImage.texture = weaponInfo.WeaponImage;
+            totalAmmoCount.text = weaponInfo.TotalAmmo.ToString();
             ammoCount.text = currentAmmo.ToString();
         }
 
@@ -48,7 +49,12 @@ namespace Urban_KimHyeonWoop
                 TMP_Text[] tMP_Texts = GetComponentsInChildren<TMP_Text>();
                 foreach (var tmp in tMP_Texts)
                 {
-                    if (tmp.name == "CurrentAmmo") ammoCount = tmp; break;
+                    if (tmp.name == "CurrentAmmo")
+                    {
+                        ammoCount = tmp; 
+                        break;
+                    }
+                        
                 }
             }
             if(totalAmmoCount == null)
@@ -56,7 +62,12 @@ namespace Urban_KimHyeonWoop
                 TMP_Text[] tMP_Texts = GetComponentsInChildren<TMP_Text>();
                 foreach(var tmp in tMP_Texts) 
                 {
-                    if (tmp.name == "TotalAmmo") totalAmmoCount = tmp; break;
+                    if (tmp.name == "TotalAmmo")
+                    {
+                        totalAmmoCount = tmp; 
+                        break;
+                    }
+                        
                 }
             }
         }

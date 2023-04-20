@@ -321,6 +321,11 @@ namespace Urban_KimHyeonWoo
             bullet.transform.rotation = Quaternion.LookRotation(direction);
 
 
+            if (bullet.TryGetComponent(out IProjectileOwner projectileOwner))
+            {
+                projectileOwner.GetProjectileOwner(this.gameObject);
+            }
+
             //skill Effect
             GameObject effect = Instantiate(SkillEffectObject);
             effect.transform.position = hitPoint;
