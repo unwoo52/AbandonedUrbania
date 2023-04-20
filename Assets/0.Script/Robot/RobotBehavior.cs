@@ -5,8 +5,17 @@ using UnityEngine;
 
 namespace Urban_KimHyeonWoo
 {
-    public class RobotBehavior : MonoBehaviour
+    public class RobotBehavior : MonoBehaviour, IDrawAttention
     {
+        #region interface
+        public void OnDrawAttention(GameObject gameObject)
+        {
+            tv = gameObject.transform.position;
+            ChangeFSM(RobotState.Searching);
+        }
+
+        #endregion
+
         private List<GameObject> targets = new List<GameObject>();
         private float detectionInterval = 1f;
         //StartCoroutine(DetectTargets());
@@ -48,7 +57,7 @@ namespace Urban_KimHyeonWoo
         #region FSM
         public enum RobotState
         {
-            Sleep, WakeUp, SearchingTarget, Tracking, InBattle, OnControll, Destroy
+            Sleep, WakeUp, Wait, Searching, Tracking, InBattle, OnControll, Destroy
         }
         [SerializeField] RobotState currentState = RobotState.Sleep;
         public RobotState CurrentState => currentState;
@@ -63,9 +72,13 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.SearchingTarget:
+                case RobotState.Wait:
                     StopCoroutine(DetectTargetsCorutine);
                     // Do wait behavior
+                    break;
+
+                case RobotState.Searching:
+                    // Do sleep behavior
                     break;
 
                 case RobotState.Tracking:
@@ -79,7 +92,7 @@ namespace Urban_KimHyeonWoo
                 case RobotState.OnControll:
                     //임시 코드. 노트북 컨트롤로 실행한 로봇이 AnimEvent로 SearchingTarget전환되는것을 막기 위함
                     //현재 상태는 OnControll이고, 바꿀 상태가 SearchingTarget이면 즉시 return
-                    if (robotState == RobotState.SearchingTarget)
+                    if (robotState == RobotState.Wait)
                     {
                         return;
                     }
@@ -105,10 +118,14 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.SearchingTarget:
+                case RobotState.Wait:
                     aIFollowBehaviour.DisableFollowTarget();
                     if (DetectTargetsCorutine != null) StopCoroutine(DetectTargetsCorutine);
                     DetectTargetsCorutine = StartCoroutine(DetectTargets());
+                    break;
+
+                case RobotState.Searching:
+                    // Do sleep behavior
                     break;
 
                 case RobotState.Tracking:
@@ -161,8 +178,12 @@ namespace Urban_KimHyeonWoo
                     // Do sleep behavior
                     break;
 
-                case RobotState.SearchingTarget:
+                case RobotState.Wait:
                     // Do wait behavior
+                    break;
+
+                case RobotState.Searching:
+                    SearchingBehavior();
                     break;
 
                 case RobotState.Tracking:
@@ -192,6 +213,23 @@ namespace Urban_KimHyeonWoo
 
 
         #region FSMBehaviors
+        [SerializeField] float SearchingDistance = 10;
+        Vector3 tv;
+        void SearchingBehavior()
+        {
+            robotActions.looktarget(tv);
+
+            float distance = Vector3.Distance(transform.position, tv);
+
+            if (distance > SearchingDistance)
+            {
+                aIFollowBehaviour.IsTrackingState = true;
+            }
+            else
+            {
+                aIFollowBehaviour.IsTrackingState = false;
+            }                
+        }
         void TrackingBehavior()
         {
             robotActions.looktarget(trackTarget.transform.position);
@@ -202,9 +240,10 @@ namespace Urban_KimHyeonWoo
             }
             if (distance > detectionRange)
             {
-                ChangeFSM(RobotState.SearchingTarget);
+                ChangeFSM(RobotState.Wait);
             }
         }
+
         void InBattleBehavior()
         {
             robotActions.looktarget(trackTarget.transform.position);
@@ -218,7 +257,7 @@ namespace Urban_KimHyeonWoo
 
             if (targets.Count == 0)
             {
-                ChangeFSM(RobotState.SearchingTarget);
+                ChangeFSM(RobotState.Wait);
             }
         }
         void InControllBehavior()
@@ -242,7 +281,7 @@ namespace Urban_KimHyeonWoo
         }
         public void WakeUpRobot()
         {
-            ChangeFSM(RobotState.SearchingTarget);
+            ChangeFSM(RobotState.Wait);
         }
 
 
@@ -267,9 +306,24 @@ namespace Urban_KimHyeonWoo
                 {
                     if (!targets.Contains(player))
                     {
-                        targets.Add(player);
+                        // Check if there is no object between this object and player
+                        RaycastHit hit;
+                        Vector3 dir = player.transform.position - transform.position;
+                        Vector3 rayOrigin = transform.position + dir*10;
+                        if (Physics.Raycast(rayOrigin, (player.transform.position - rayOrigin).normalized, out hit, detectionRange, LayerMask.GetMask("Hitable")))
+                        {
+                            if (hit.transform.gameObject.layer != LayerMask.NameToLayer("Hitable"))
+                            {
+                                targets.Add(player);
+                            }
+                        }
+                        else
+                        {
+                            targets.Add(player);
+                        }
                     }
                 }
+
             }
         }
         IEnumerator DetectTargets()
@@ -288,7 +342,7 @@ namespace Urban_KimHyeonWoo
             }
         }
 
-
+        
     }
 
 }

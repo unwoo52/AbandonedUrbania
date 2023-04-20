@@ -9718,7 +9718,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13f4416fbd3672b45aba8f72cd699e81, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sphereRadius: 5
+  sphereRadius: 100
   distanceThreshold: 10
   AudioClip: {fileID: 8300000, guid: 45f360fd6d5254241abb940955a35517, type: 3}
 --- !u!82 &-1363535099998368306

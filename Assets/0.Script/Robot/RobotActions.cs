@@ -23,6 +23,9 @@ namespace Urban_KimHyeonWoo
 
         [SerializeField] Transform targetGameObject;
 
+        //curr
+        Quaternion currentLookDir;
+
 
         [Header("반동")]
         [SerializeField] private AnimationCurve recoilCurve;
@@ -47,7 +50,10 @@ namespace Urban_KimHyeonWoo
             // 코루틴을 시작합니다.
             shakeCoroutine = StartCoroutine(ShakeRobotBody());
             if (robotComponenetManager == null) robotComponenetManager = GetComponent<RobotComponenetManager>();
+
+            currentLookDir = robotComponenetManager.RobotBody.transform.rotation;
         }
+
 
         public void LookTarget_ControllWithInputManager(float horizonInput, float verticalInput, float controllSpeed)
         {
@@ -81,6 +87,9 @@ namespace Urban_KimHyeonWoo
         }
 
         //특정 포지션을 바라보는 함수
+        [Header("Rotate Controll")]
+        [SerializeField] float rotationSpeed = 1;
+        [SerializeField] Vector3 testvec ;
         public void looktarget(Vector3 pos)
         {
             Vector3 GunVec = robotComponenetManager.RobotBody.position;
@@ -93,8 +102,11 @@ namespace Urban_KimHyeonWoo
             float targetAngleX = Mathf.Atan(high / distance) * Mathf.Rad2Deg;
             float targetAngleY = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
 
+            Quaternion destQua = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);
+            //robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);
 
-            robotComponenetManager.RobotBody.transform.rotation = Quaternion.Euler(targetAngleX, targetAngleY + 180, 90);            
+
+            robotComponenetManager.RobotBody.transform.rotation = Quaternion.RotateTowards(robotComponenetManager.RobotBody.transform.rotation,destQua,rotationSpeed);
         }
 
 
