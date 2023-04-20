@@ -24,25 +24,8 @@ namespace Urban_KimHyeonWoo
         #endregion
         public List<GameObject> Players;
 
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                // 마우스가 존재하면
-                if (Input.mousePresent)
-                {
-                    // 마우스 숨기기
-                    Cursor.lockState = CursorLockMode.Locked;
-                    Cursor.visible = false;
-                }
-                else // 마우스가 존재하지 않으면
-                {
-                    // 마우스 보이기
-                    Cursor.lockState = CursorLockMode.None;
-                    Cursor.visible = true;
-                }
-            }
-        }
+        public List<GameObject> Robots;
+
     }
 
 }
